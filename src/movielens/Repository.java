@@ -44,7 +44,7 @@ public class Repository {
     };
 
     interface RepositoryQuery{
-        public void Callback(ResultSet rs, ResultSetMetaData rsmd, Object returnObj, int nRow, int nCol);
+        public Object Callback(ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol);
     }
     
     public static boolean connect(Driver driver, String hostname, int port, String dbName, String User, String Pass) {
@@ -116,7 +116,7 @@ public class Repository {
 //        return array2D;
 //    }
     
-    public static Object[][] QueryProcessor(String query, Object returnObj, RepositoryQuery rq){
+    public static Object QueryProcessor(String query, Object returnObj, RepositoryQuery rq){
         try{
             Message.EXECUTING.printMessage(query);
             ResultSet rs = query(query);
@@ -131,7 +131,9 @@ public class Repository {
             while (rs.next()) {
                 for (int i = 1; i <= nCols; i++) {
     //               array2D[counter][i] = rs.getObject(rsmd.getColumnName(i));
-                    rq.Callback(rs, rsmd, returnObj, counter, i);
+                    Object obj = rq.Callback(rs, rsmd, counter, i);
+                    if(obj != null)
+                        return obj;
                 }
             }
             return array2D;
@@ -262,7 +264,7 @@ public class Repository {
                 + " WHERE " + Keys.MOVIEID + " = " + id;
         
         QueryProcessor(query, null, 
-                (ResultSet rs, ResultSetMetaData rsmd, Object returnObj, int nRow, int nCol) -> 
+                (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> 
                 {
                     try{
                         movie.set(rsmd.getColumnName(nCol), rs.getObject(rsmd.getColumnName(nCol)));
@@ -276,6 +278,7 @@ public class Repository {
                     {
                         JOptionPane.showMessageDialog(null, ke.getMessage());
                     }
+                    return null;
                 }
         );  
         return movie;
@@ -289,55 +292,77 @@ public class Repository {
                 + " FROM " + Tables.GENRE 
                 + " WHERE " + Keys.MOVIEID + " = " + movieId;
         
-            QueryProcessor(query, genres, new RepositoryQuery() {
-                @Override
-                
-                public void Callback(ResultSet rs, ResultSetMetaData rsmd, Object returnObj, int nRow, int nCol) {
-                    try {
-                        Genre g = Genre.valueOf(((String)rs.getObject(Keys.GENRE)).replace("-", "_"));
-                        genres.add(g);
-                    }
-                    catch(SQLException e){
-                        int errorCode = e.getErrorCode();
-                        String errorMessage = e.getMessage();
-                        JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
-                    }
+            QueryProcessor(query, genres, (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> {
+                try {
+                    Genre g = Genre.valueOf(((String)rs.getObject(Keys.GENRE)).replace("-", "_"));
+                    genres.add(g);
                 }
-            });
+                catch(SQLException e){
+                    int errorCode = e.getErrorCode();
+                    String errorMessage = e.getMessage();
+                    JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
+                }
+                return null;
+        });
         
         return genres;
     }
     
     public static float findAverageRatingById(int movieId)
     {
-        Float rating = 0f;
+        float rating = 0f;
         String query = "SELECT " + "AVG(" + Keys.RATING + ")"
                     + " FROM " + Tables.RATING 
                     + " WHERE " + Keys.MOVIEID + " = " + movieId;
         
-        QueryProcessor(query, rating, new RepositoryQuery() {
-                @Override
-                
-                public void Callback(ResultSet rs, ResultSetMetaData rsmd, Object returnObj, int nRow, int nCol) {
-                    try {
-                        returnObj.
-                        returnObj = ((Double)rs.getObject(rsmd.getColumnName(1))).floatValue();
-                    }
-                    catch(SQLException e){
-                        int errorCode = e.getErrorCode();
-                        String errorMessage = e.getMessage();
-                        JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
-                    }
-                }
-            });
+        rating = ((Double)QueryProcessor(
+                    query, 
+                    rating, 
+                    (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) 
+                        -> {
+                            try {
+                                return rs.getObject(rsmd.getColumnName(1));
+                            }
+                            catch(SQLException e){
+                                int errorCode = e.getErrorCode();
+                                String errorMessage = e.getMessage();
+                                JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
+                            }
+                            return null;
+                        }
+                    )
+                ).floatValue();
         
         return rating;
     }
     
     public static Map<String, Integer> findTagsById(int movieId)
     {
-        Map<String, Integer> tagMap = new HashMap<String, Integer>();
-        
+        Map<String, Integer> tagMap = new HashMap<>();
+//        select Tag, count(*) from Tag Group By Tag
+        String query = 
+            "SELECT " 
+                + Keys.TAG + ", "
+                + "COUNT(*)"
+            + " FROM " 
+                + Tables.TAG 
+            + " WHERE " 
+                + Keys.MOVIEID + " = " + movieId
+            + " GROUP BY "
+                + Keys.TAG
+            + " ORDER BY COUNT(*) DESC";
+            
+        QueryProcessor(query, tagMap, (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> {
+                try {
+                    tagMap.put((String)rs.getObject(Keys.TAG), ((java.lang.Long)rs.getObject("COUNT(*)")).intValue());
+                }
+                catch(SQLException e){
+                    int errorCode = e.getErrorCode();
+                    String errorMessage = e.getMessage();
+                    JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
+                }
+                return null;
+        });
         return tagMap;
     }
     

@@ -8,6 +8,7 @@ import Data.Genre;
 import Data.Movie;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -83,6 +84,16 @@ public class MovieLens {
             {
                 System.out.println(genres.get(i));
             }
+            
+            Repository.insertRating(1, 1, 0);
+            Repository.insertRating(1, 2, 1);
+            Repository.insertRating(1, 3, 2);
+            Repository.insertRating(1, 4, 3);
+            Repository.insertRating(1, 5, 4);
+            Repository.insertRating(1, 6, 5);
+            Repository.insertRating(1, 7, 6);
+            
+            
             System.out.println(Repository.findAverageRatingById(1));
             
             Repository.insertTags(1, 2, new ArrayList<String>(){
@@ -112,6 +123,13 @@ public class MovieLens {
                     add("tech");
                     add("romance");
                 }
+            });
+            
+            Map<String, Integer> tagMap = Repository.findTagsById(1);
+            
+            tagMap.keySet().forEach(key -> {
+                System.out.println(key);
+                System.out.println(tagMap.get(key));
             });
             
 //            List<String> tags = Repository.findTagsById(1);
