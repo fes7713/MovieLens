@@ -9,5 +9,5 @@ package Data;
  * @author fes77
  */
 public interface SQLData {
-    public void set(String key, Object value) throws KeyException;
+    public void set(String key, Object... value) throws KeyException;
 }

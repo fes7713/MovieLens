@@ -7,8 +7,9 @@ package movielens;
 import Data.Genre;
 import Data.Movie;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -66,7 +67,7 @@ public class MovieLens {
             System.out.println((Genre.Sci_Fi + "").getClass().getSimpleName());
             Repository.insertGenres(
                     1, 
-                    new ArrayList<Genre>(){
+                    new HashSet<Genre>(){
                         {
                             add(Genre.Sci_Fi);
                             add(Genre.Action);
@@ -79,10 +80,10 @@ public class MovieLens {
                     }
             );
             
-            List<Genre> genres = Repository.findGenresById(1);
-            for(int i = 0; i < genres.size(); i++)
+            Set<Genre> genres = Repository.findGenresById(1);
+            for(Genre genre: genres)
             {
-                System.out.println(genres.get(i));
+                System.out.println(genre);
             }
             
             Repository.insertRating(1, 1, 0);
@@ -132,6 +133,8 @@ public class MovieLens {
                 System.out.println(tagMap.get(key));
             });
             
+            Repository.loadMovies(false, false);
+            System.out.println(movie.getTagMap());
 //            List<String> tags = Repository.findTagsById(1);
 //            for(String tag: tags)
 //            {

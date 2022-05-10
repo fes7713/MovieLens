@@ -5,13 +5,10 @@
 package Data;
 
 import Repository.Keys;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
-import javax.swing.JOptionPane;
 import movielens.Repository;
 
 /**
@@ -22,57 +19,30 @@ public class Movie implements SQLData{
     private int id;
     private String title;
     private Set<Genre> genres;
+    private Map<String, Integer> tagMap;
+    private float rating;
+    
+    public Movie() {
+        this(0, null, new HashSet<>());
+    }
     
     public Movie(int id, String title)
     {
-        this.id = id;
-        this.title = title;
-        genres = new HashSet<>();
+        this(id, title, new HashSet<>());
+        
     }
     
     public Movie(int id, String title, Set<Genre> genres)
     {
+        this(id, title, genres, new HashMap<>());
+    }
+
+    public Movie(int id, String title, Set<Genre> genres, Map<String, Integer> tagMap)
+    {
         this.id = id;
         this.title = title;
         this.genres = genres;
-    }
-
-    public Movie() {
-        id = -1;
-        title = null;
-        genres = new HashSet<>();
-    }
-    
-    public Movie findMovieById(int id)
-    {
-        try {
-            ResultSet rs = Repository.query("Select * from Movie");
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int nCols = rsmd.getColumnCount();
-
-            Vector<String> colNames = new Vector<>();
-
-            for (int i = 1; i <= nCols; i++) {
-                colNames.add(rsmd.getColumnName(i));
-            }
-
-            while (rs.next()) {
-                Object[] rowData = new Object[colNames.size()];
-                for (int i = 0; i < rowData.length; i++) {
-                    rowData[i] = rs.getObject(colNames.get(i));
-//                    System.out.println(rs.getObject(colNames.get(i).toString());
-                    System.out.println(rowData[i]);
-                }
-//                tableModel.addRow(rowData);
-            }
-
-        } catch (SQLException e) {
-            int errorCode = e.getErrorCode();
-            String errorMessage = e.getMessage();
-            JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
-        }
-        
-        return null;
+        this.tagMap = tagMap;
     }
 
     public int getId() {
@@ -84,16 +54,33 @@ public class Movie implements SQLData{
     }
 
     public Set<Genre> getGenres() {
+        if(genres == null || genres.isEmpty())
+            genres = Repository.findGenresById(id);
         return genres;
     }
 
+    public Map<String, Integer> getTagMap() {
+        if(tagMap == null || tagMap.isEmpty())
+            tagMap = Repository.findTagsById(id);
+        return tagMap;
+    }
+
+    public float getRating() {
+        if(rating == 0)
+            rating = Repository.findAverageRatingById(id);
+        return rating;
+    }
+
+
     @Override
-    public void set(String key, Object value) throws KeyException {
+    public void set(String key, Object... value) throws KeyException {
         switch(key)
         {
-            case Keys.MOVIEID-> id = (int)value;
-            case Keys.TITLE-> title = (String )value;
-            case Keys.GENRE-> genres.add((Genre)value);
+            case Keys.MOVIEID-> id = (int)value[0];
+            case Keys.TITLE-> title = (String )value[0];
+            case Keys.GENRE-> genres.add((Genre)value[0]);
+            case Keys.TAG-> tagMap.put((String)value[0], (Integer)value[1]);
+            case Keys.RATING-> rating = (Float)value[0];
             default -> throw new KeyException(key);
         }
     }

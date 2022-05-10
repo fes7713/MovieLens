@@ -11,6 +11,10 @@ import Data.Movie;
 import Repository.Keys;
 import Repository.Tables;
 import Resource.Message;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -20,8 +24,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.JOptionPane;
 
 
@@ -43,7 +49,7 @@ public class Repository {
         }
     };
 
-    interface RepositoryQuery{
+    interface QueryCallback{
         public Object Callback(ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol);
     }
     
@@ -116,7 +122,7 @@ public class Repository {
 //        return array2D;
 //    }
     
-    public static Object QueryProcessor(String query, Object returnObj, RepositoryQuery rq){
+    private static Object processQuery(String query, Object returnObj, QueryCallback rq){
         try{
             Message.EXECUTING.printMessage(query);
             ResultSet rs = query(query);
@@ -263,7 +269,7 @@ public class Repository {
                     + Tables.MOVIE
                 + " WHERE " + Keys.MOVIEID + " = " + id;
         
-        QueryProcessor(query, null, 
+        processQuery(query, null, 
                 (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> 
                 {
                     try{
@@ -284,15 +290,15 @@ public class Repository {
         return movie;
     }
     
-    public static List<Genre> findGenresById(int movieId)
+    public static Set<Genre> findGenresById(int movieId)
     {
-        List<Genre> genres = new ArrayList();
+        Set<Genre> genres = new HashSet();
         String query = 
                 "SELECT " + Keys.GENRE 
                 + " FROM " + Tables.GENRE 
                 + " WHERE " + Keys.MOVIEID + " = " + movieId;
         
-            QueryProcessor(query, genres, (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> {
+            processQuery(query, genres, (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> {
                 try {
                     Genre g = Genre.valueOf(((String)rs.getObject(Keys.GENRE)).replace("-", "_"));
                     genres.add(g);
@@ -315,7 +321,7 @@ public class Repository {
                     + " FROM " + Tables.RATING 
                     + " WHERE " + Keys.MOVIEID + " = " + movieId;
         
-        rating = ((Double)QueryProcessor(
+        rating = ((Double)processQuery(
                     query, 
                     rating, 
                     (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) 
@@ -352,7 +358,7 @@ public class Repository {
                 + Keys.TAG
             + " ORDER BY COUNT(*) DESC";
             
-        QueryProcessor(query, tagMap, (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> {
+        processQuery(query, tagMap, (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> {
                 try {
                     tagMap.put((String)rs.getObject(Keys.TAG), ((java.lang.Long)rs.getObject("COUNT(*)")).intValue());
                 }
@@ -366,13 +372,7 @@ public class Repository {
         return tagMap;
     }
     
-    // Load movies from files. Connect multiple files according to the arguments given to this function.
-    public static List<Movie> loadMovies(boolean rating, boolean tags)
-    {
-        List<Movie> movies = new ArrayList();
-        
-        return movies;
-    }
+    
     
     public static boolean insertMovie(Movie movie)
     {
@@ -430,11 +430,11 @@ public class Repository {
         return true;
     }
     
-    public static boolean insertGenres(int movieId, List<Genre> genres)
+    public static boolean insertGenres(int movieId, Set<Genre> genres)
     {
-        for(int i = 0; i < genres.size(); i++)
+        for(Genre genre: genres)
         {
-            if(insertGenre(movieId, genres.get(i)) != true)
+            if(insertGenre(movieId, genre) != true)
                 return false;
         }
         return true;
@@ -544,5 +544,29 @@ public class Repository {
         }
         return true;
     }
+    
+    // Load movies from files. Connect multiple files according to the arguments given to this function.
+    public static List<Movie> loadMovies(boolean rating, boolean tags)
+    {
+        List<Movie> movies = new ArrayList();
+        Path file = Paths.get("data/movies.csv");
+        String[] separated;
+        try{
+            List<String> text = Files.readAllLines(file); // UTF-8
+            text.remove(0);
+            
+            for(String t: text)
+            {
+                separated = t.split(",", 2);
+                movies.add(new Movie(Integer.parseInt(separated[0]), separated[1]));
+            }
+        } catch (IOException e) {
+            String errorMessage = e.getMessage();
+            JOptionPane.showMessageDialog(null, "IO Exception" + errorMessage);
+        }
+        
+        return movies;
+    }
+    
     
 }
