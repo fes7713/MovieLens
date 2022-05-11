@@ -6,15 +6,8 @@ package Output;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.image.CropImageFilter;
-import java.awt.image.FilteredImageSource;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Scanner;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -26,61 +19,31 @@ public class MovieCard extends javax.swing.JPanel {
      * Creates new form MovieCard
      */
     public MovieCard() {
+        super();
         initComponents();
-        try{
-            
-            URL url = new URL("https://image.tmdb.org/t/p/w600_and_h900_bestv2/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg");
-            ImageIcon imageOrigin = new ImageIcon(url);
-//            Image imageTrans = imageIcon.getImage(); // transform it 
-            int height = imageOrigin.getIconHeight();
-            int width = imageOrigin.getIconWidth();
-            int length = Math.min(height, width);
-            float aspectRatio = height /(float)width;
-//            float targetRatio = imageLabel.getHeight() / (float)imageLabel.getWidth();
-            float targetRatio = 1.5f;
-
-            
-            Image croppedImage;
-            if(aspectRatio > targetRatio)
-            {
-                System.out.println("Up");
-                croppedImage = 
-                        createImage(
-                                new FilteredImageSource(
-                                        imageOrigin.getImage().getSource(),
-                                        new CropImageFilter(0, (int)(height - width * targetRatio) / 2, width, (int)(width * targetRatio))
-                                )
-                        );
-            }
-            else{
-                System.out.println("Down");
-                croppedImage = 
-                        createImage(
-                            new FilteredImageSource(
-                                    imageOrigin.getImage().getSource(),
-                                    new CropImageFilter((int)(width - height / targetRatio) / 2, 0, (int)(height / targetRatio), height)
-                                )
-                        );
-
-            }
-            
-            System.out.println("Check");
-//            System.out.println(imageLabel.getWidth());
-//            System.out.println(imageLabel.getHeight());
-//            Image newimg = croppedImage.getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-//            ImageIcon newIcon = new ImageIcon(newimg);  // transform it back
-            
-            imageLabel.setIcon(new ImageIcon(croppedImage));
-//            image.setIcon(imageIcon);
-        }
-        catch(IOException e){
-            String errorMessage = e.getMessage();
-            JOptionPane.showMessageDialog(null, "IO Exception" + errorMessage);
-        }
+//        scaleImage(imageLabel);
+//        imageLabel = new JLabel();
+        
         
 //        ImageIcon icon = new ImageIcon("https://www.ilovepdf.com/img/ilovepdf/social/ja/imagepdf.png");
 //        Icon.setIcon(icon);
     }
+
+//    private void scaleImage(JLabel label){
+//        
+//        try {
+//            URL url = new URL("https://image.tmdb.org/t/p/w600_and_h900_bestv2/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg");
+//            ImageIcon icon = new ImageIcon(url);
+//            Image img = icon.getImage();
+//            Image imgScale = img.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
+//            ImageIcon scaledIcon = new ImageIcon(imgScale);
+//            label.setIcon(scaledIcon);
+//        } catch (MalformedURLException ex) {
+//            Logger.getLogger(MovieCard.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
+    
+   
     
     public static void main(String[] args)
     {
@@ -105,10 +68,11 @@ public class MovieCard extends javax.swing.JPanel {
     private void initComponents() {
 
         jDialog1 = new javax.swing.JDialog();
-        imageLabel = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        titleLable = new javax.swing.JLabel();
+        yearLabel = new javax.swing.JLabel();
+        durationLabel = new javax.swing.JLabel();
+        imagePanel = new Output.ImagePanel();
+        ratingCircle = new Output.RatingCircle();
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -123,17 +87,49 @@ public class MovieCard extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(51, 51, 51));
 
-        imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Output/download.jpg"))); // NOI18N
+        titleLable.setBackground(new java.awt.Color(255, 0, 51));
+        titleLable.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        titleLable.setForeground(new java.awt.Color(255, 153, 51));
+        titleLable.setText("Shawshanks");
+        titleLable.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 1));
 
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("jLabel2");
+        yearLabel.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        yearLabel.setForeground(new java.awt.Color(255, 255, 255));
+        yearLabel.setText("2021");
 
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("jLabel3");
+        durationLabel.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        durationLabel.setForeground(new java.awt.Color(255, 255, 255));
+        durationLabel.setText("123 mins");
 
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("jLabel3");
+        ratingCircle.setMaximumSize(new java.awt.Dimension(150, 150));
+
+        javax.swing.GroupLayout ratingCircleLayout = new javax.swing.GroupLayout(ratingCircle);
+        ratingCircle.setLayout(ratingCircleLayout);
+        ratingCircleLayout.setHorizontalGroup(
+            ratingCircleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 104, Short.MAX_VALUE)
+        );
+        ratingCircleLayout.setVerticalGroup(
+            ratingCircleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 132, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout imagePanelLayout = new javax.swing.GroupLayout(imagePanel);
+        imagePanel.setLayout(imagePanelLayout);
+        imagePanelLayout.setHorizontalGroup(
+            imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, imagePanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ratingCircle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        imagePanelLayout.setVerticalGroup(
+            imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, imagePanelLayout.createSequentialGroup()
+                .addContainerGap(427, Short.MAX_VALUE)
+                .addComponent(ratingCircle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -142,37 +138,38 @@ public class MovieCard extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(titleLable, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(yearLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(durationLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(yearLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(durationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(titleLable, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel imageLabel;
+    private javax.swing.JLabel durationLabel;
+    private Output.ImagePanel imagePanel;
     private javax.swing.JDialog jDialog1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private Output.RatingCircle ratingCircle;
+    private javax.swing.JLabel titleLable;
+    private javax.swing.JLabel yearLabel;
     // End of variables declaration//GEN-END:variables
 }

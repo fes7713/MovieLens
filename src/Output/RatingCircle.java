@@ -48,7 +48,7 @@ public class RatingCircle extends javax.swing.JPanel {
      * Creates new form RatingCircle
      */
     public RatingCircle() {
-        this(0);
+        this(7);
     }
     
     public RatingCircle(float rateOutOf10) {
@@ -209,18 +209,27 @@ public class RatingCircle extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(51, 51, 51));
         setOpaque(false);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                formMouseEntered(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 150, Short.MAX_VALUE)
+            .addGap(0, 166, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 150, Short.MAX_VALUE)
+            .addGap(0, 177, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formMouseEntered
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
