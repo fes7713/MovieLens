@@ -9,7 +9,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.LinearGradientPaint;
 import java.awt.RenderingHints;
+import java.awt.geom.Point2D;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
@@ -81,11 +83,22 @@ public class ImagePanel extends javax.swing.JPanel {
 //        System.out.println("Ratio:" + getHeight() / (float)getWidth() / ((sy2 - sy1)/(float)(sx2 - sx1)));
 //        
         g2d.drawImage(image, 0, 0, getWidth(), getHeight(), sx1, sy1, sx2, sy2, this);
+
+        Point2D start = new Point2D.Float(0, 0);
+        Point2D end = new Point2D.Float(0, getHeight());
+        float[] dist = {0.0f, 0.5f, 1f};
+        Color[] colors = {new Color(0, 0, 0, 0), new Color(0, 0, 0, 150), new Color(0, 0, 0, 220)};
+        LinearGradientPaint p =
+            new LinearGradientPaint(start, end, dist, colors);
+        g2d.setPaint(p);
+        g2d.fillRect(0, 0, getWidth(), getHeight()); 
     }
     
     public void setLink(String link)
     {
         this.link = link;
+        validate();
+        repaint();
     }
     
     public Image loadImage()

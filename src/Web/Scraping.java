@@ -4,6 +4,7 @@
  */
 package Web;
 
+import Resource.Message;
 import java.io.IOException;
 import movielens.Repository;
 import org.jsoup.Jsoup;
@@ -12,8 +13,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class Scraping {
-    public static final String IMDB_LINK = "http://www.imdb.com/title/";
-    public static final String TMDB_LINK = "https://www.themoviedb.org/movie/tt0";
+    public static final String IMDB_LINK = "http://www.imdb.com/title/tt0";
+    public static final String TMDB_LINK = "https://www.themoviedb.org/movie/";
+    public static final String TMDB_BASELINK = "https://www.themoviedb.org";
 
     // Nuulable
     public static Element getIMDBBodyById(int movieId)
@@ -26,6 +28,7 @@ public class Scraping {
         try {
             document = Jsoup.connect(IMDB_LINK + imdbId).get();
         } catch (IOException ex) {
+            Message.ERROR.printMessage(ex);
             return null;
         }
 
@@ -44,6 +47,7 @@ public class Scraping {
 //            document = Jsoup.connect("https://www.themoviedb.org/movie/862").get();
 
         } catch (IOException ex) {
+            Message.ERROR.printMessage(ex);
             return null;
         }
 
@@ -51,45 +55,88 @@ public class Scraping {
     }
     
     
-    public static int getReleaseYear(int movieId)
+    public static String getReleaseYearText(int movieId)
     {
         Element body = getTBDBBodyById(movieId);
-        Elements courses = body.getElementsByClass("release");
-//        for (Element course : courses) {
-//            System.out.println(course.text());
-//        }
-        return extractYear(courses.get(0).text());
+        if(body == null)
+        {
+            Message.NO_MATCH_ERROR.printMessage("Release Year for id[" + movieId +"] not found");
+            return "";
+        }
+        
+        Elements release = body.getElementsByClass("release");
+
+        return release.get(0).text();
+    }
+    
+    public static int getReleaseYear(int movieId)
+    {
+        return extractYear(getReleaseYearText(movieId));
+    }
+    
+    public static String getDurationText(int movieId)
+    {
+        Element body = getTBDBBodyById(movieId);
+        if(body == null)
+        {
+            Message.NO_MATCH_ERROR.printMessage("Duration for id[" + movieId +"] not found");
+            return "0 m";
+        }
+        return  body.getElementsByClass("runtime").get(0).text();
     }
     
     public static int getDuration(int movieId)
     {
-        Element body = getTBDBBodyById(movieId);
-        Elements courses = body.getElementsByClass("runtime");
-//        for (Element course : courses) {
-//            System.out.println(course.text());
-//        }
-        return conv2Mins(courses.get(0).text());
+        return conv2Mins(getDurationText(movieId));
     }
     
     private static int extractYear(String mon_day_year)
     {
-        return Integer.parseInt(mon_day_year.split("/")[2].split(" ")[0]);
+        try
+        {
+            return Integer.parseInt(mon_day_year.split("/")[2].split(" ")[0]);
+        }
+        catch(IllegalArgumentException e){
+            Message.ERROR.printMessage(e);
+            return 0;
+        }
     }
     
     private static int conv2Mins(String hours_mins)
     {
-        return Integer.parseInt(hours_mins.split("h")[0]) * 60 + Integer.parseInt(hours_mins.split("h")[1].replace("m", "").replace(" ", ""));
+        try
+        {
+            return Integer.parseInt(hours_mins.split("h")[0]) * 60 + Integer.parseInt(hours_mins.split("h")[1].replace("m", "").replace(" ", ""));
+        }
+        catch(IllegalArgumentException e){
+            Message.ERROR.printMessage(e);
+            return 0;
+        }
     }
     
-//    public static String getPictureURL(int movieId)
-//    {
-//        
-//    }
+   
+    
+    public static String getPictureURL(int movieId)
+    {
+        Element body = getTBDBBodyById(movieId);
+        if(body == null)
+        {
+            Message.NO_MATCH_ERROR.printMessage("Duration for id[" + movieId +"] not found");
+            return "https://www.lwf.org/images/emptyimg.png";
+        }
+        
+        Element poster = body.getElementsByClass("poster").first();
+        String url = poster.getElementsByTag("img").first().attr("data-src");
+        
+        Message.WEBSCRAPING.printMessage("PICTURE[" + TMDB_BASELINK + url + "]");
+        return TMDB_BASELINK + url;
+        
+    }
     
     
     
     public static void main(String[] args) throws IOException {
-//        Document document = Jsoup.connect("https://www.themoviedb.org/movie/862-toy-story").get();
+//        Document document = Jsoup.connect("https://www.themoviedb.org/movie/228150-fury").get();
 //        Element body = document.body();
 //        System.out.println(body.text());
 //        Elements courses = body.getElementsByClass("release");
@@ -97,11 +144,10 @@ public class Scraping {
 //            System.out.println(course.text());
 //        }
         Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
-
-        System.out.println(Scraping.getDuration(1));
-        System.out.println(Scraping.getReleaseYear(1));
-
+//
+//        System.out.println(Scraping.getDuration(1));
+//        System.out.println(Scraping.getReleaseYear(1));
         
-
+        System.out.println(Scraping.getPictureURL(2075));
     }
 }

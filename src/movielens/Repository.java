@@ -98,7 +98,7 @@ public class Repository {
 
     public static ResultSet query(String query) throws SQLException {
         if (con == null) {
-            System.out.println("No connection");
+            Message.ERROR.showMessage("No connection");
             return null;
         }
 
@@ -415,7 +415,7 @@ public class Repository {
             
         Object rtnObj = processQuery(query, (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> {
                 try {
-                    return rs.getObject(Keys.TMDBID);
+                    return rs.getObject(Keys.TMDBID, Integer.TYPE);
                 }
                 catch(SQLException e){
                     int errorCode = e.getErrorCode();
@@ -429,7 +429,47 @@ public class Repository {
         return (Integer)rtnObj;
     }
 
-    
+    public static List<Movie> findTopRatedMovies(int start, int size)
+    {
+        if(size <= 0)
+            return new ArrayList();
+        List<Movie> movies = new ArrayList();
+        List<Integer> ids = new ArrayList<>();
+        
+        Movie movie = new Movie();
+        String query = 
+                "SELECT " 
+                    + Keys.MOVIEID
+                + " FROM " 
+                    + Tables.RATING
+                + " GROUP BY " 
+                    + Keys.MOVIEID
+                + " ORDER BY "
+                    + "AVG(" + Keys.RATING + ") DESC, "
+                    + Keys.TIMESTAMP + " DESC"
+                + " LIMIT "
+                    + size
+                + " OFFSET "
+                    + start
+                ;
+
+        processQuery(query, 
+                (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> 
+                {
+                    try{
+                        int id = rs.getObject(Keys.MOVIEID, Integer.TYPE);
+                        movies.add(Repository.findMovieById(id));
+                    }
+                    catch(SQLException e){
+                        int errorCode = e.getErrorCode();
+                        String errorMessage = e.getMessage();
+                        JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
+                    }
+                    return null;
+                }
+        );  
+        return movies;
+    }
     
     public static boolean insertMovie(Movie movie)
     {
@@ -834,12 +874,17 @@ public class Repository {
         Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
             
             
-        Repository.loadMovies(false, false);
-//        System.out.println(Repository.insertLinks(2, 30, 50));
-        System.out.println(Repository.findImdbIdById(2));
-        System.out.println(Repository.findTmdbIdById(2));
-//        insertTagFromFile();
-
+//        Repository.loadMovies(false, false);
+////        System.out.println(Repository.insertLinks(2, 30, 50));
+//        System.out.println(Repository.findImdbIdById(2));
+//        System.out.println(Repository.findTmdbIdById(2));
+////        insertTagFromFile();
+//        List<Movie> movies = findTopRatedMovies(2, 10);
+//        
+//        for(Movie m: movies)
+//            System.out.println(m);
+    
+//        Repository.insertLinkFromFile();
     }
     
 }

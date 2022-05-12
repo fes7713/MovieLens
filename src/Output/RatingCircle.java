@@ -43,6 +43,7 @@ public class RatingCircle extends javax.swing.JPanel {
     private final static float INITIAL_PADDING_PERCENTAGE = .08f;
     private final static float INITIAL_CORNER_RADIUS_PERCENTAGE = .1f;
     private final static float INITIAL_FONT_PERCENTAGE = .47f;
+    private final static float INITIAL_FONT_PERCENTAGE_10 = .35f;
     
     /**
      * Creates new form RatingCircle
@@ -62,8 +63,7 @@ public class RatingCircle extends javax.swing.JPanel {
         bgColor = INITIAL_BG_COLOR;
         rateColor = INITAL_RATE_END_COLOR; 
         
-        this.rateOutOf10 = rateOutOf10;
-        rateColor = evalRateColor();
+        setRating(rateOutOf10);
     }
     
     private Color evalRateColor()
@@ -175,6 +175,10 @@ public class RatingCircle extends javax.swing.JPanel {
     {
         this.rateOutOf10 = rateOutOf10;
         rateColor = evalRateColor();
+        if(rateOutOf10 >= 10)
+            fontPercentage = INITIAL_FONT_PERCENTAGE_10;
+        else
+            fontPercentage = INITIAL_FONT_PERCENTAGE;
         repaint();
     }
     
@@ -184,7 +188,7 @@ public class RatingCircle extends javax.swing.JPanel {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(100, 200));
-        RatingCircle rateCircle = new RatingCircle();
+        RatingCircle rateCircle = new RatingCircle(7);
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(rateCircle);

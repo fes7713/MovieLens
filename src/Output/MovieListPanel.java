@@ -4,12 +4,14 @@
  */
 package Output;
 
+import Data.Movie;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JFrame;
+import movielens.Repository;
 
 /**
  *
@@ -27,15 +29,15 @@ public class MovieListPanel extends javax.swing.JPanel {
         removeAll();
 //        setMinimumSize(new Dimension(100, 235));
         GridLayout layout = (GridLayout) getLayout();
-        layout.setColumns(Math.max(getWidth() / 200, 1));
-        layout.setRows(Math.max(getHeight() / 400, 1));
+        layout.setColumns(Math.max(getWidth() / 230, 1));
+        layout.setRows(Math.max(getHeight() / 250, 1));
         movies = new LinkedList();
         updateMovies();
         
     }
 
     private void updateMovies() {
-        int nCols = Math.max(getWidth() / 200, 1);
+        int nCols = Math.max(getWidth() / 230, 1);
         int nRows = Math.max(getHeight() / 250, 1);
         int totalSize = nCols * nRows;
         int currentSize = getComponentCount();
@@ -48,11 +50,18 @@ public class MovieListPanel extends javax.swing.JPanel {
             return;
         }
         
-        for (int i = movies.size(); i < totalSize; i++) {
-            MovieCard card = new MovieCard();
+        List<Movie> addingMovies = Repository.findTopRatedMovies(movies.size(), totalSize - movies.size());
+        for (int i = 0; i < addingMovies.size(); i++) {
+            MovieCard card = new MovieCard(addingMovies.get(i));
+//            MovieCard card = new MovieCard();
             movies.add(card);
             System.out.println("Adding into list");
         }
+//        for (int i = movies.size(); i < totalSize; i++) {
+//            MovieCard card = new MovieCard(Repository.);
+//            movies.add(card);
+//            System.out.println("Adding into list");
+//        }
         
         for (int i = currentSize; i < totalSize; i++) {
             add(movies.get(i));
@@ -72,7 +81,7 @@ public class MovieListPanel extends javax.swing.JPanel {
     }
 
     public static void main(String[] args) {
-
+        Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(800, 300));

@@ -13,7 +13,9 @@ import javax.swing.JOptionPane;
 public enum Message {
     NO_MATCH_ERROR("There was no match for the request"),
     EXECUTED("Executed statement successfully"),
-    EXECUTING("Executing statement");
+    EXECUTING("Executing statement"),
+    ERROR("Error"),
+    WEBSCRAPING("Web scraping");
     private String msg;
     
     private Message(String msg)
@@ -34,6 +36,11 @@ public enum Message {
     public void printMessage(String extra)
     {
         System.out.println(msg + " : " + extra);
+    }
+    
+    public void printMessage(Exception ex)
+    {
+        System.out.println(msg + "[" + ex.getClass().getSimpleName()+ "]: " + ex.getMessage());
     }
     
     public void showMessage()
