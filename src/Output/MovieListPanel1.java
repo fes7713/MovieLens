@@ -19,26 +19,26 @@ import movielens.Repository;
  *
  * @author fes77
  */
-public class MovieListPanel extends javax.swing.JPanel {
+public class MovieListPanel1 extends javax.swing.JPanel {
 
     /**
      * Creates new form MovieListPanel
      */
     List<MovieCard> movies;
     ExecutorService executor;
-    public MovieListPanel() {
+    public MovieListPanel1() {
         initComponents();
         removeAll();
-
-//        GridLayout layout = (GridLayout) getLayout();
-//        layout.setColumns(Math.max(getWidth() / 230, 1));
-//        layout.setRows(Math.max(getHeight() / 250, 1));
-        
-        if(Repository.isConnected() == false)
-            Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
-        
+//        setMinimumSize(new Dimension(100, 235));
+        GridLayout layout = (GridLayout) getLayout();
+        layout.setColumns(Math.max(getWidth() / 230, 1));
+        layout.setRows(Math.max(getHeight() / 250, 1));
         movies = new LinkedList();
+        
         executor = Executors.newFixedThreadPool(5);
+        
+        updateMovies();
+        
     }
 
     private void updateMovies() {
@@ -47,9 +47,6 @@ public class MovieListPanel extends javax.swing.JPanel {
         int totalSize = nCols * nRows;
         int currentSize = getComponentCount();
         GridLayout layout = (GridLayout) getLayout();
-        layout.setColumns(Math.max(nCols, 1));
-        layout.setRows(Math.max(nRows, 1));
-        
         System.out.println("[B]Total ( " + nCols + ", " + nRows + ") " + totalSize);
         System.out.println("[B]Current " + currentSize);
         if(currentSize == totalSize)
@@ -58,23 +55,13 @@ public class MovieListPanel extends javax.swing.JPanel {
             return;
         }
         
-        int listSize = movies.size();
-        
-        List<Movie> addingMovies = Repository.findTopRatedMovies(listSize, (totalSize - listSize) * 2);
-        for (int i = 0; i < addingMovies.size() / 2; i++) {
-//            MovieCard card = new MovieCard(addingMovies.get(i));
-//            movies.add(card);
-            executor.execute(new ThreadPoolSample.MovieCardProducer(addingMovies.get(i), movies, this, true));
-            currentSize++;
-//            executor.execute(new ThreadPoolSample.MovieCardProducer(addingMovies.get(addingMovies.size() - i - 1), movies, this, false));
-            System.out.println("Adding[" + addingMovies.get(i).getId() +  "] into list");
+        List<Movie> addingMovies = Repository.findTopRatedMovies(movies.size(), totalSize - movies.size());
+        for (int i = 0; i < addingMovies.size(); i++) {
+            MovieCard card = new MovieCard(addingMovies.get(i));
+            movies.add(card);
+            System.out.println("Adding into list");
         }
 
-//        for (int i = addingMovies.size() / 2; i < addingMovies.size(); i++) {
-//            
-//            executor.execute(new ThreadPoolSample.MovieCardProducer(addingMovies.get(i), movies, this, false));
-//            System.out.println("Extra[" + addingMovies.get(i).getId() +  "] into list");
-//        }
         
         for (int i = currentSize; i < totalSize; i++) {
             add(movies.get(i));
@@ -87,17 +74,18 @@ public class MovieListPanel extends javax.swing.JPanel {
         
         System.out.println("[R]Current " + getComponentCount() + "\n\n\n");
 
-        
+        layout.setColumns(Math.max(nCols, 1));
+        layout.setRows(Math.max(nRows, 1));
         validate();
         repaint();
     }
 
     public static void main(String[] args) {
-//        Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
+        Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(800, 300));
-        MovieListPanel movieListPanel = new MovieListPanel();
+        MovieListPanel1 movieListPanel = new MovieListPanel1();
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieListPanel);
@@ -124,7 +112,6 @@ public class MovieListPanel extends javax.swing.JPanel {
         movieCard2 = new Output.MovieCard();
         movieCard4 = new Output.MovieCard();
 
-        setBackground(new java.awt.Color(51, 51, 51));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 formComponentResized(evt);
