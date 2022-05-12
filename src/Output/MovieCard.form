@@ -43,7 +43,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="imagePanel" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <Component id="titleLable" pref="375" max="32767" attributes="0"/>
+                      <Component id="titleLabel" pref="375" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="yearLabel" min="-2" pref="64" max="-2" attributes="0"/>
@@ -67,7 +67,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="durationLabel" min="-2" pref="20" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="titleLable" min="-2" pref="56" max="-2" attributes="0"/>
+                  <Component id="titleLabel" min="-2" pref="56" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
@@ -75,7 +75,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="titleLable">
+    <Component class="javax.swing.JLabel" name="titleLabel">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="33" green="0" red="ff" type="rgb"/>
@@ -93,6 +93,9 @@
           </Border>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="if(movie != null)&#xd;&#xa;    titleLabel.setText(movie.getTitle());"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="yearLabel">
       <Properties>

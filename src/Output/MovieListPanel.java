@@ -47,31 +47,20 @@ public class MovieListPanel extends javax.swing.JPanel {
             System.out.println("Return");
             return;
         }
-        else if (currentSize < totalSize) {
-            
-            for (int i = 0; i <= totalSize - movies.size(); i++) {
-                MovieCard card = new MovieCard();
-                movies.add(card);
-                System.out.println("Adding into list");
-            }
-
-            for (int i = 0; i < totalSize - currentSize; i++) {
-                add(movies.get(movies.size() - 1 - i));
-            }
-        } else {
-            
-            int n = movies.size();
-//            System.out.println("Diff " + (n - totalSize));
-//            System.out.println("Total " + totalSize);
-//            for (int i = 0; i < n - totalSize; i++) {
-//                MovieCard card = movies.remove(movies.size() - 1);
-//                System.out.println("Removing from list");
-//            }
-
-            for (int i = 0; i < getComponentCount() - totalSize; i++) {
-                remove(getComponentCount() - 1);
-            }
-//            System.out.println(movies.size());
+        
+        for (int i = movies.size(); i < totalSize; i++) {
+            MovieCard card = new MovieCard();
+            movies.add(card);
+            System.out.println("Adding into list");
+        }
+        
+        for (int i = currentSize; i < totalSize; i++) {
+            add(movies.get(i));
+        }
+        
+        for(int i = totalSize; i < currentSize; i++)
+        {
+            remove(movies.get(i));
         }
         
         System.out.println("[R]Current " + getComponentCount() + "\n\n\n");

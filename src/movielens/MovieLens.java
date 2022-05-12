@@ -133,8 +133,11 @@ public class MovieLens {
                 System.out.println(tagMap.get(key));
             });
             
-            Repository.loadMovies(false, false);
+//            Repository.loadMovies(false, false);
+            System.out.println(Repository.insertLinks(2, 30, 50));
             System.out.println(movie.getTagMap());
+            System.out.println(Repository.findImdbIdById(2));
+            System.out.println(Repository.findTmdbIdById(2));
 //            List<String> tags = Repository.findTagsById(1);
 //            for(String tag: tags)
 //            {

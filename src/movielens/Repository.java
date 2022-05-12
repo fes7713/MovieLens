@@ -23,6 +23,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +42,7 @@ public class Repository {
     static String USER;
     static String PASS; // change password if needed.
     static Connection con;
-    static enum Driver {
+    public static enum Driver {
         MySQL("mysql");
         private final String drivername;
         Driver(String drivername) {
@@ -122,7 +123,7 @@ public class Repository {
 //        return array2D;
 //    }
     
-    private static Object processQuery(String query, Object returnObj, QueryCallback rq){
+    private static Object processQuery(String query, QueryCallback rq){
         try{
             Message.EXECUTING.printMessage(query);
             ResultSet rs = query(query);
@@ -131,6 +132,12 @@ public class Repository {
 
             int nCols = rsmd.getColumnCount();
             int nRows = getRowCount(rs);
+            
+            if(nRows == 0)
+            {
+                Message.NO_MATCH_ERROR.printMessage();
+                return null;
+            }
             Object[][] array2D = new Object[nRows][nCols];
 
             int counter = 0;
@@ -269,7 +276,7 @@ public class Repository {
                     + Tables.MOVIE
                 + " WHERE " + Keys.MOVIEID + " = " + id;
         
-        processQuery(query, null, 
+        processQuery(query, 
                 (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> 
                 {
                     try{
@@ -298,7 +305,7 @@ public class Repository {
                 + " FROM " + Tables.GENRE 
                 + " WHERE " + Keys.MOVIEID + " = " + movieId;
         
-            processQuery(query, genres, (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> {
+            processQuery(query, (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> {
                 try {
                     Genre g = Genre.valueOf(((String)rs.getObject(Keys.GENRE)).replace("-", "_"));
                     genres.add(g);
@@ -316,14 +323,12 @@ public class Repository {
     
     public static float findAverageRatingById(int movieId)
     {
-        float rating = 0f;
         String query = "SELECT " + "AVG(" + Keys.RATING + ")"
                     + " FROM " + Tables.RATING 
                     + " WHERE " + Keys.MOVIEID + " = " + movieId;
         
-        rating = ((Double)processQuery(
-                    query, 
-                    rating, 
+        Object rtnObj = processQuery(
+                    query,
                     (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) 
                         -> {
                             try {
@@ -336,10 +341,10 @@ public class Repository {
                             }
                             return null;
                         }
-                    )
-                ).floatValue();
-        
-        return rating;
+                    );
+        if(rtnObj == null)
+            return 0;
+        return ((Double)rtnObj).floatValue();
     }
     
     public static Map<String, Integer> findTagsById(int movieId)
@@ -358,7 +363,7 @@ public class Repository {
                 + Keys.TAG
             + " ORDER BY COUNT(*) DESC";
             
-        processQuery(query, tagMap, (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> {
+        processQuery(query, (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> {
                 try {
                     tagMap.put((String)rs.getObject(Keys.TAG), ((java.lang.Long)rs.getObject("COUNT(*)")).intValue());
                 }
@@ -372,6 +377,58 @@ public class Repository {
         return tagMap;
     }
     
+    public static int findImdbIdById(int movieId)
+    {
+        String query = 
+            "SELECT " 
+                + Keys.IMDBID
+            + " FROM " 
+                + Tables.LINK 
+            + " WHERE " 
+                + Keys.MOVIEID + " = " + movieId;
+            
+        Object rtnObj = processQuery(query, (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> {
+                try {
+                    return rs.getObject(Keys.IMDBID);
+                }
+                catch(SQLException e){
+                    int errorCode = e.getErrorCode();
+                    String errorMessage = e.getMessage();
+                    JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
+                }
+                return 0;
+        });
+        if(rtnObj == null)
+            return 0;
+        return (Integer)rtnObj;
+    }
+    
+    public static int findTmdbIdById(int movieId)
+    {
+        String query = 
+            "SELECT " 
+                + Keys.TMDBID
+            + " FROM " 
+                + Tables.LINK 
+            + " WHERE " 
+                + Keys.MOVIEID + " = " + movieId;
+            
+        Object rtnObj = processQuery(query, (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> {
+                try {
+                    return rs.getObject(Keys.TMDBID);
+                }
+                catch(SQLException e){
+                    int errorCode = e.getErrorCode();
+                    String errorMessage = e.getMessage();
+                    JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
+                }
+                return 0;
+        });
+        if(rtnObj == null)
+            return 0;
+        return (Integer)rtnObj;
+    }
+
     
     
     public static boolean insertMovie(Movie movie)
@@ -384,9 +441,10 @@ public class Repository {
                             + Keys.TITLE + ")"
                         +  "Values(" 
                             + movie.getId() + ", "
-                            + "\"" + movie.getTitle() + "\")";
+                            + "\"" + movie.getTitle() + "\");";
              
             Statement st = con.createStatement();
+            Message.EXECUTING.printMessage(query);
             st.executeUpdate(query);
             Message.EXECUTED.printMessage(query);
         }
@@ -445,17 +503,17 @@ public class Repository {
         return "UNIX_TIMESTAMP(current_timestamp())";
     }
     
-    public static boolean insertRating(int movieId, int userId, float rating)
+    public static boolean insertRating(int userId, int movieId, float rating)
     {
-        return insertRating(movieId, userId, rating, currentTime()); 
+        return insertRating(userId, movieId, rating, currentTime()); 
     }
     
-    public static boolean insertRating(int movieId, int userId, float rating, int timestamp)
+    public static boolean insertRating(int userId, int movieId, float rating, int timestamp)
     {
-        return insertRating(movieId, userId, rating, timestamp + "");
+        return insertRating(userId, movieId, rating, timestamp + "");
     }
     
-    public static boolean insertRating(int movieId, int userId, float rating, String timestamp)
+    public static boolean insertRating(int userId, int movieId, float rating, String timestamp)
     {
         try {
             String query = 
@@ -484,30 +542,19 @@ public class Repository {
         return true;
     }
 
-    
-    public static boolean insertTag(int movieId, int userId, String tag)
-    {
-        return insertTag(movieId, userId, tag, currentTime());
-    }
-    
-    public static boolean insertTag(int movieId, int userId, String tag, int timestamp)
-    {
-        return insertTag(movieId, userId, tag, timestamp + "");
-    }
-    
-    public static boolean insertTag(int movieId, int userId, String tag, String timestamp)
+    public static boolean insertTag(int userId, int movieId, String tag, String timestamp)
     {
         try {
             String query = 
                     "INSERT IGNORE INTO " + Tables.TAG
                         + "(" 
-                            + Keys.MOVIEID + ", " 
                             + Keys.USERID + ", " 
+                            + Keys.MOVIEID + ", " 
                             + Keys.TAG + ", "
                             + Keys.TIMESTAMP + ")"
                         +  "Values(" 
-                            + movieId + ", "
                             + userId + ", "
+                            + movieId + ", "
                             + "\"" + tag + "\", "
                             + timestamp + ")";
             
@@ -525,28 +572,118 @@ public class Repository {
         return true;
     }
     
-    public static boolean insertTags(int movieId, int userId, List<String> tags)
+    public static boolean insertTag(int userId, int movieId, String tag)
     {
-        return insertTags(movieId, userId, tags, currentTime());
+        return insertTag(userId, movieId, tag, currentTime());
     }
     
-    public static boolean insertTags(int movieId, int userId, List<String> tags, int timestamp)
+    public static boolean insertTag(int userId, int movieId, String tag, int timestamp)
     {
-        return insertTags(movieId, userId, tags, timestamp + "");
+        return insertTag(userId, movieId, tag, timestamp + "");
     }
     
-    public static boolean insertTags(int movieId, int userId, List<String> tags, String timestamp)
+    public static boolean insertTags(int userId, int movieId, List<String> tags)
+    {
+        return insertTags(userId, movieId, tags, currentTime());
+    }
+    
+    public static boolean insertTags(int userId, int movieId, List<String> tags, int timestamp)
+    {
+        return insertTags(userId, movieId, tags, timestamp + "");
+    }
+    
+    public static boolean insertTags(int userId, int movieId, List<String> tags, String timestamp)
     {
         for(int i = 0; i < tags.size(); i++)
         {
-            if(insertTag(movieId, userId, tags.get(i)) != true)
+            if(insertTag(userId, movieId, tags.get(i)) != true)
                 return false;
         }
         return true;
     }
     
+    public static boolean insertLinks(int movieId, int imdbId, int tmdbId)
+    {
+        try {
+            String query = 
+                    "INSERT IGNORE INTO " + Tables.LINK
+                        + "(" 
+                            + Keys.MOVIEID + ", " 
+                            + Keys.IMDBID + ", " 
+                            + Keys.TMDBID + ")"
+                        +  "Values(" 
+                            + movieId + ", "
+                            + imdbId + ", "
+                            + tmdbId + ")";
+            
+                    
+            Statement st = con.createStatement();
+            st.executeUpdate(query);
+            Message.EXECUTED.printMessage(query);
+        }
+        catch(SQLException e){
+            int errorCode = e.getErrorCode();
+            String errorMessage = e.getMessage();
+            JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
+            return false;
+        }
+        return true;
+    }
+    
+    public static boolean insertLinks(int movieId, int imdbId)
+    {
+        try {
+            String query = 
+                    "INSERT IGNORE INTO " + Tables.LINK
+                        + "(" 
+                            + Keys.MOVIEID + ", " 
+                            + Keys.IMDBID + ")"
+                        +  "Values(" 
+                            + movieId + ", "
+                            + imdbId + ")";
+            
+                    
+            Statement st = con.createStatement();
+            st.executeUpdate(query);
+            Message.EXECUTED.printMessage(query);
+        }
+        catch(SQLException e){
+            int errorCode = e.getErrorCode();
+            String errorMessage = e.getMessage();
+            JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
+            return false;
+        }
+        return true;
+    }
+    
+    // If separated string array has length more than limit length, 
+    // concatenate strings more than limit to one string
+    private static String[] commaSeparator(String csv, int limit, int concatenatePos)
+    {
+        String[] separated = csv.split(",");
+        if(separated.length == limit)
+        {
+            if(separated[concatenatePos].contains("\""))
+                separated[concatenatePos] = separated[concatenatePos].replace("\"", "");
+            return separated;
+        }
+        else if(limit > separated.length)
+            throw new IllegalArgumentException("Limit cannot be bigger than the size of separated csv line lenth");
+        else
+        {
+            if(limit < concatenatePos)
+                throw new IllegalArgumentException("Concatenate position has to be bigger than limit");
+//            separated = csv.replace("\"", "").split(",");
+            List<String> separatedList = new ArrayList(Arrays.asList(separated));
+            while(separatedList.size() > limit)
+                separatedList.add(concatenatePos, separatedList.remove(concatenatePos) + "," + separatedList.remove(concatenatePos + 1));
+            separatedList.add(concatenatePos, separatedList.remove(concatenatePos).replace("\"", ""));
+            return separatedList.toArray(separated);
+            
+        }
+    }
     // Load movies from files. Connect multiple files according to the arguments given to this function.
-    public static List<Movie> loadMovies(boolean rating, boolean tags)
+    private static List<Movie> loadMovies(boolean rating, boolean tags)
     {
         List<Movie> movies = new ArrayList();
         Path file = Paths.get("data/movies.csv");
@@ -557,8 +694,8 @@ public class Repository {
             
             for(String t: text)
             {
-                separated = t.split(",", 2);
-                movies.add(new Movie(Integer.parseInt(separated[0]), separated[1]));
+                separated = commaSeparator(t, 3, 1);
+                movies.add(new Movie(Integer.parseInt(separated[0]), separated[1], separated[2].split("|")));
             }
         } catch (IOException e) {
             String errorMessage = e.getMessage();
@@ -568,5 +705,141 @@ public class Repository {
         return movies;
     }
     
+    public static void insertMoviesFromFile()
+    {
+        List<Movie> movies = loadMovies(false, false);
+        
+        insertMovies(movies);
+        for(Movie movie: movies)
+        {
+            insertGenres(movie.getId(), movie.getGenres());
+        }
+    }
+    
+    public static void insertRatingFromFile()
+    {
+        Path file = Paths.get("data/ratings.csv");
+        String[] separated;
+        try{
+            List<String> text = Files.readAllLines(file); // UTF-8
+            text.remove(0);
+            
+            for(String t: text)
+            {
+                separated = t.split(",");
+                insertRating(
+                        Integer.parseInt(separated[0]), 
+                        Integer.parseInt(separated[1]), 
+                        Float.parseFloat(separated[2]), 
+                        Integer.parseInt(separated[3])
+                );
+            }
+        } catch (IOException e) {
+            String errorMessage = e.getMessage();
+            JOptionPane.showMessageDialog(null, "IO Exception" + errorMessage);
+        }
+    }
+    
+    public static void insertTagFromFile()
+    {
+        Path file = Paths.get("data/tags.csv");
+        String[] separated;
+        try{
+            List<String> text = Files.readAllLines(file); // UTF-8
+            text.remove(0);
+            
+            for(String t: text)
+            {
+                separated = t.split(",");
+                insertTag(
+                        Integer.parseInt(separated[0]), 
+                        Integer.parseInt(separated[1]), 
+                        separated[2].replace("\"", ""),
+                        Integer.parseInt(separated[3])
+                );
+            }
+        } catch (IOException e) {
+            String errorMessage = e.getMessage();
+            JOptionPane.showMessageDialog(null, "IO Exception" + errorMessage);
+        }
+    }
+    
+    public static void insertLinkFromFile()
+    {
+
+        Path file = Paths.get("data/links.csv");
+        String[] separated;
+        try{
+            List<String> text = Files.readAllLines(file); // UTF-8
+            text.remove(0);
+            
+            for(String t: text)
+            {
+                separated = t.split(",");
+                switch (separated.length) {
+                    case 3:
+                        insertLinks(
+                                Integer.parseInt(separated[0]),
+                                Integer.parseInt(separated[1]),
+                                Integer.parseInt(separated[2])
+                        );  break;
+                    case 2:
+                        insertLinks(
+                                Integer.parseInt(separated[0]),
+                                Integer.parseInt(separated[1])
+                        );  break;
+                    default:
+                        throw new IllegalArgumentException("Invalid input for the insertLink() function");
+                }
+            }
+        } catch (IOException e) {
+            String errorMessage = e.getMessage();
+            JOptionPane.showMessageDialog(null, "IO Exception" + errorMessage);
+        }
+    }
+    
+//    public static Map<Movie> loadGenres(boolean rating, boolean tags)
+//    {
+//        List<Movie> movies = new ArrayList();
+//        Path file = Paths.get("data/movies.csv");
+//        String[] separated;
+//        try{
+//            List<String> text = Files.readAllLines(file); // UTF-8
+//            text.remove(0);
+//            
+//            for(String t: text)
+//            {
+//                separated = t.split(",", 2);
+//                movies.add(new Movie(Integer.parseInt(separated[0]), separated[1]));
+//            }
+//        } catch (IOException e) {
+//            String errorMessage = e.getMessage();
+//            JOptionPane.showMessageDialog(null, "IO Exception" + errorMessage);
+//        }
+//        
+//        return movies;
+//    }
+    
+    
+    
+    public static void main(String[] args) {
+//        JFrame frame = new JFrame("Test frame");
+//        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//        frame.setBounds(0, 0, 300, 300);
+//        frame.add(new MovieCard());
+//        frame.setVisible(true);
+        
+        
+        // TODO code application logic here
+        Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
+            
+            
+        Repository.loadMovies(false, false);
+//        System.out.println(Repository.insertLinks(2, 30, 50));
+        System.out.println(Repository.findImdbIdById(2));
+        System.out.println(Repository.findTmdbIdById(2));
+//        insertTagFromFile();
+
+    }
     
 }

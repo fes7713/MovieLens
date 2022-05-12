@@ -5,6 +5,7 @@
 package Data;
 
 import Repository.Keys;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -36,13 +37,50 @@ public class Movie implements SQLData{
     {
         this(id, title, genres, new HashMap<>());
     }
+    
+    public Movie(int id, String title, Genre[] genres)
+    {
+        this(id, title, genres, new HashMap<>());
+    }
+    
+    public Movie(int id, String title, String[] genres)
+    {
+        this(id, title, genres, new HashMap<>());
+    }
 
     public Movie(int id, String title, Set<Genre> genres, Map<String, Integer> tagMap)
     {
         this.id = id;
         this.title = title;
+//        if(title.charAt(0) == '\"')
+//            this.title = title.substring(1);
+//        if(title.charAt(title.length() - 1) == '\"')
+//            this.title = title.substring(0, title.length() - 1);
         this.genres = genres;
         this.tagMap = tagMap;
+    }
+    
+    public Movie(int id, String title, Genre[] genres, Map<String, Integer> tagMap)
+    {
+        this(id, title, new HashSet<>(Arrays.asList(genres)), new HashMap<>());
+        
+    }
+    
+    public Movie(int id, String title, String[] genres, Map<String, Integer> tagMap)
+    {
+        this(id, title, new HashSet<>(), tagMap);
+        for(int i = 0; i < genres.length; i++)
+        {
+            Genre genre;
+            try{
+                genre = Genre.valueOf(genres[i].replace("-", "_"));
+            }
+            catch(IllegalArgumentException e)
+            {
+                genre = Genre.None;
+            }
+            this.genres.add(genre);
+        }
     }
 
     public int getId() {

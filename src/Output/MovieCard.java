@@ -4,10 +4,12 @@
  */
 package Output;
 
+import Data.Movie;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Scanner;
 import javax.swing.JFrame;
+import movielens.Repository;
 
 /**
  *
@@ -18,33 +20,19 @@ public class MovieCard extends javax.swing.JPanel {
     /**
      * Creates new form MovieCard
      */
+    Movie movie;
     public MovieCard() {
         super();
         initComponents();
-//        scaleImage(imageLabel);
-//        imageLabel = new JLabel();
+    }
+    
+    public MovieCard(int movieId) {
+        super();
+        movie = Repository.findMovieById(movieId);
+        initComponents();
         
-        
-//        ImageIcon icon = new ImageIcon("https://www.ilovepdf.com/img/ilovepdf/social/ja/imagepdf.png");
-//        Icon.setIcon(icon);
     }
 
-//    private void scaleImage(JLabel label){
-//        
-//        try {
-//            URL url = new URL("https://image.tmdb.org/t/p/w600_and_h900_bestv2/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg");
-//            ImageIcon icon = new ImageIcon(url);
-//            Image img = icon.getImage();
-//            Image imgScale = img.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
-//            ImageIcon scaledIcon = new ImageIcon(imgScale);
-//            label.setIcon(scaledIcon);
-//        } catch (MalformedURLException ex) {
-//            Logger.getLogger(MovieCard.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
-    
-   
-    
     public static void main(String[] args)
     {
         
@@ -68,7 +56,9 @@ public class MovieCard extends javax.swing.JPanel {
     private void initComponents() {
 
         jDialog1 = new javax.swing.JDialog();
-        titleLable = new javax.swing.JLabel();
+        titleLabel = new javax.swing.JLabel();
+        if(movie != null)
+        titleLabel.setText(movie.getTitle());
         yearLabel = new javax.swing.JLabel();
         durationLabel = new javax.swing.JLabel();
         imagePanel = new Output.ImagePanel();
@@ -87,11 +77,11 @@ public class MovieCard extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(51, 51, 51));
 
-        titleLable.setBackground(new java.awt.Color(255, 0, 51));
-        titleLable.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
-        titleLable.setForeground(new java.awt.Color(255, 153, 51));
-        titleLable.setText("Shawshanks");
-        titleLable.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 1));
+        titleLabel.setBackground(new java.awt.Color(255, 0, 51));
+        titleLabel.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        titleLabel.setForeground(new java.awt.Color(255, 153, 51));
+        titleLabel.setText("Shawshanks");
+        titleLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 1));
 
         yearLabel.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         yearLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -140,7 +130,7 @@ public class MovieCard extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(titleLable, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                        .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(yearLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -158,7 +148,7 @@ public class MovieCard extends javax.swing.JPanel {
                         .addComponent(yearLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(durationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(titleLable, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -169,7 +159,7 @@ public class MovieCard extends javax.swing.JPanel {
     private Output.ImagePanel imagePanel;
     private javax.swing.JDialog jDialog1;
     private Output.RatingCircle ratingCircle;
-    private javax.swing.JLabel titleLable;
+    private javax.swing.JLabel titleLabel;
     private javax.swing.JLabel yearLabel;
     // End of variables declaration//GEN-END:variables
 }

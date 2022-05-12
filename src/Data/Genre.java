@@ -26,7 +26,8 @@ public enum Genre {
     Sci_Fi,
     Thriller,
     War,
-    Western;
+    Western,
+    None;
     
     
     public String toString()
