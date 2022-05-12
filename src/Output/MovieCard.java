@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.util.Scanner;
 import javax.swing.JFrame;
 import movielens.Repository;
+import org.jsoup.nodes.Element;
 
 /**
  *
@@ -22,6 +23,8 @@ public class MovieCard extends javax.swing.JPanel {
      * Creates new form MovieCard
      */
     Movie movie;
+    Element body;
+    
     public MovieCard() {
         super();
         initComponents();
@@ -35,15 +38,19 @@ public class MovieCard extends javax.swing.JPanel {
         super();
         movie = m;
         initComponents();
+        
+        
         if(movie != null)
         {
-            imagePanel.setLink(Scraping.getPictureURL(movie.getId()));
+            body = Scraping.getTBDBBodyById(movie.getId());
+            
+            imagePanel.setLink(Scraping.getPictureURL(body, movie.getId()));
             String title = movie.getTitle();
             if(title.length() > 23)
                 title = title.substring(0, 23) + "...";
             titleLabel.setText(title);  
-            yearLabel.setText(Scraping.getReleaseYearText(movie.getId()));  
-            durationLabel.setText(Scraping.getDurationText(movie.getId()));  
+            yearLabel.setText(Scraping.getReleaseYearText(body, movie.getId()));  
+            durationLabel.setText(Scraping.getDurationText(body, movie.getId()));  
             ratingCircle.setRating(Repository.findAverageRatingById(movie.getId()));
         }
     }
@@ -72,7 +79,7 @@ public class MovieCard extends javax.swing.JPanel {
 
         jDialog1 = new javax.swing.JDialog();
         titleLabel = new javax.swing.JLabel();
-        imagePanel = new Output.ImagePanel();
+        imagePanel = new Output.ZoomImagePanel();
         ratingCircle = new Output.RatingCircle();
         yearLabel = new javax.swing.JLabel();
         durationLabel = new javax.swing.JLabel();
@@ -111,10 +118,12 @@ public class MovieCard extends javax.swing.JPanel {
 
         yearLabel.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         yearLabel.setForeground(new java.awt.Color(255, 255, 255));
+        yearLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         yearLabel.setText("10/17/2014 (US) ");
 
         durationLabel.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         durationLabel.setForeground(new java.awt.Color(255, 255, 255));
+        durationLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         durationLabel.setText("123 mins");
 
         javax.swing.GroupLayout imagePanelLayout = new javax.swing.GroupLayout(imagePanel);
@@ -123,24 +132,23 @@ public class MovieCard extends javax.swing.JPanel {
             imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, imagePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(durationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(yearLabel))
+                .addGroup(imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(yearLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(durationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(ratingCircle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(ratingCircle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         imagePanelLayout.setVerticalGroup(
             imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, imagePanelLayout.createSequentialGroup()
-                .addContainerGap(347, Short.MAX_VALUE)
-                .addGroup(imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(ratingCircle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(imagePanelLayout.createSequentialGroup()
-                        .addComponent(yearLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(durationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(411, Short.MAX_VALUE)
+                .addComponent(yearLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(durationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, imagePanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(ratingCircle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

@@ -54,40 +54,49 @@ public class Scraping {
         return document.body();
     }
     
-    
-    public static String getReleaseYearText(int movieId)
-    {
-        Element body = getTBDBBodyById(movieId);
-        if(body == null)
-        {
-            Message.NO_MATCH_ERROR.printMessage("Release Year for id[" + movieId +"] not found");
-            return "";
-        }
-        
-        Elements release = body.getElementsByClass("release");
-
-        return release.get(0).text();
-    }
-    
     public static int getReleaseYear(int movieId)
     {
         return extractYear(getReleaseYearText(movieId));
     }
     
+    public static String getReleaseYearText(int movieId)
+    {
+        Element body = getTBDBBodyById(movieId);
+        return getReleaseYearText(body, movieId);
+    }
+    
+    public static String getReleaseYearText(Element tbdbbody, int movieId)
+    {
+        if(tbdbbody == null)
+        {
+            Message.NO_MATCH_ERROR.printMessage("Release Year for id[" + movieId +"] not found");
+            return "";
+        }
+        
+        Elements release = tbdbbody.getElementsByClass("release");
+
+        return release.get(0).text();
+    }
+
+    public static int getDuration(int movieId)
+    {
+        return conv2Mins(getDurationText(movieId));
+    }
+    
     public static String getDurationText(int movieId)
     {
         Element body = getTBDBBodyById(movieId);
-        if(body == null)
+        return getDurationText(body, movieId);
+    }
+    
+    public static String getDurationText(Element tbdbbody, int movieId)
+    {
+        if(tbdbbody == null)
         {
             Message.NO_MATCH_ERROR.printMessage("Duration for id[" + movieId +"] not found");
             return "0 m";
         }
-        return  body.getElementsByClass("runtime").get(0).text();
-    }
-    
-    public static int getDuration(int movieId)
-    {
-        return conv2Mins(getDurationText(movieId));
+        return  tbdbbody.getElementsByClass("runtime").get(0).text();
     }
     
     private static int extractYear(String mon_day_year)
@@ -115,17 +124,21 @@ public class Scraping {
     }
     
    
-    
     public static String getPictureURL(int movieId)
     {
         Element body = getTBDBBodyById(movieId);
-        if(body == null)
+        return getPictureURL(body, movieId);
+    }
+    
+    public static String getPictureURL(Element tbdbBody, int movieId)
+    {
+        if(tbdbBody == null)
         {
             Message.NO_MATCH_ERROR.printMessage("Duration for id[" + movieId +"] not found");
             return "https://www.lwf.org/images/emptyimg.png";
         }
         
-        Element poster = body.getElementsByClass("poster").first();
+        Element poster = tbdbBody.getElementsByClass("poster").first();
         String url = poster.getElementsByTag("img").first().attr("data-src");
         
         Message.WEBSCRAPING.printMessage("PICTURE[" + TMDB_BASELINK + url + "]");

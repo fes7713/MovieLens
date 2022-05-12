@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.util.Scanner;
 import javax.swing.JFrame;
 import movielens.Repository;
+import org.jsoup.nodes.Element;
 
 /**
  *
@@ -22,6 +23,8 @@ public class MovieCard1 extends javax.swing.JPanel {
      * Creates new form MovieCard
      */
     Movie movie;
+    Element body;
+    
     public MovieCard1() {
         super();
         initComponents();
@@ -35,6 +38,7 @@ public class MovieCard1 extends javax.swing.JPanel {
         super();
         movie = m;
         initComponents();
+        body = Scraping.getTBDBBodyById(m.getId());
         if(movie != null)
         {
             imagePanel.setLink(Scraping.getPictureURL(movie.getId()));
