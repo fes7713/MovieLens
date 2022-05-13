@@ -39,7 +39,7 @@ public class MovieCard extends javax.swing.JPanel {
         movie = m;
         initComponents();
         
-        
+        setPreferredSize(new Dimension(230, 500));
         if(movie != null)
         {
             body = Scraping.getTBDBBodyById(movie.getId());
@@ -96,6 +96,7 @@ public class MovieCard extends javax.swing.JPanel {
         );
 
         setBackground(new java.awt.Color(51, 51, 51));
+        setMinimumSize(new java.awt.Dimension(230, 250));
 
         titleLabel.setBackground(new java.awt.Color(255, 0, 51));
         titleLabel.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N

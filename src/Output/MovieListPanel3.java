@@ -6,13 +6,11 @@ package Output;
 
 import Data.Movie;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import movielens.Repository;
 
@@ -20,22 +18,18 @@ import movielens.Repository;
  *
  * @author fes77
  */
-public class MovieListPanel extends javax.swing.JPanel {
+public class MovieListPanel3 extends javax.swing.JPanel {
 
     /**
      * Creates new form MovieListPanel
      */
-    List<MovieCard> movies;
+    List<Movie> movies;
+      List<MovieCard> cards;
     ExecutorService executor;
-    int unit;
-    int size;
-    int nCols;
-    int nRows;
-    
-    
+
     boolean debug = false;
     
-    public MovieListPanel()
+    public MovieListPanel3()
     {
         initComponents();
         removeAll();
@@ -43,118 +37,76 @@ public class MovieListPanel extends javax.swing.JPanel {
             Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
         
         debug = true;
-        for(int i = 0; i < 20; i++)
+        for(int i = 0; i < 4; i++)
         {
             add(new MovieCard(new Movie(0, "Sample Movie")));
         }
         
         
-//        GridLayout layout = (GridLayout) getLayout();
-//        layout.setColumns(Math.max(getWidth() / 230, 1));
-//        layout.setRows(Math.max(getHeight() / 250, 1));
-        unit = 20;
+        BoxLayout layout = (BoxLayout) getLayout();
+        
     }
     
-    public MovieListPanel(int size, int threadSize) {
+    public MovieListPanel3(int start, int size, int threadSize)
+    {
         initComponents();
         removeAll();
 
-//        GridLayout layout = (GridLayout) getLayout();
-//        layout.setColumns(Math.max(getWidth() / 230, 1));
-//        layout.setRows(Math.max(getHeight() / 250, 1));
-        
         if(Repository.isConnected() == false)
             Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
         
-        movies = new LinkedList();
+        movies = Repository.findTopRatedMovies(start, size);
         executor = Executors.newFixedThreadPool(threadSize);
-        this.unit = size;
-        loadMovieCards();
-        validate();
-        repaint();
     }
     
-    public int getRows()
-    {
-        return nRows;
-    }
-    
-    public int getCols()
-    {
-        return nCols;
-    }
-    
-    public void setParent(Container parent)
-    {
-//        this.parent = parent;
-    }
-    
-    public boolean isIdle()
-    {
-        return size == movies.size();
-    }
-    
-    public void loadMovieCards()
-    {
-        int listSize = movies.size();
-        List<Integer> addingMovies = Repository.findTopRatedMovieIds(size, unit);
-        size += unit;
-        System.out.println(addingMovies.size() +"adasdasdasdasd");
+    public MovieListPanel3(List<Movie> movies, int threadSize) {
+        initComponents();
+        removeAll();
+        if(Repository.isConnected() == false)
+            Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
         
-        for (int i = 0; i < addingMovies.size(); i++) {
+        movies = movies;
+        executor = Executors.newFixedThreadPool(threadSize);
+    }
 
-            executor.execute(new MovieCardProducer(addingMovies.get(i), movies, this, true));
-            System.out.println("Adding[" + i +  "] into list");
-        }
-    }
-    
-    public void updateMovies() {
-       
-            
-            nCols = Math.max(Math.min(getWidth(), getParent().getWidth()) / 230, 1);
+    private void updateMovies() {
 
-            
-//        int nCols = 2;
-        nRows = size / nCols + (size % nCols == 0 ? 0 : 1);
-
-
-//        int totalSize = nCols * nRows;
-        int totalSize = unit;
-        int currentSize = getComponentCount();
-        GridLayout layout = (GridLayout) getLayout();
-        layout.setColumns(Math.max(nCols, 1));
-        layout.setRows(Math.max(nRows, 1));
-        setPreferredSize(new Dimension(230 * nCols, 250 * nRows));
-//        setSize(new Dimension(230 * nCols, 250 * nRows));
-
-        
-//        if(parent != null)
-//            parent.setPreferredSize(new Dimension(230 * nCols, 250 * nRows + 100));
-        System.out.println(getPreferredSize().toString());
-        System.out.println(getSize().toString());
-        System.out.println("[B]Total ( " + nCols + ", " + nRows + ") " + totalSize);
-        System.out.println("[B]Current " + currentSize);
-        
-        if(debug)
-            return;
-        
-        
-        if(currentSize == totalSize)
-        {
-            System.out.println("Return");
-            return;
-        }
-        
+//        for (int i = 0; i < addingMovies.size(); i++) {
+////            MovieCard card = new MovieCard(addingMovies.get(i));
+////            movies.add(card);
+//            executor.execute(new ThreadPoolSample.MovieCardProducer(addingMovies.get(i), movies, this, true));
+//            currentSize++;
+////            executor.execute(new ThreadPoolSample.MovieCardProducer(addingMovies.get(addingMovies.size() - i - 1), movies, this, false));
+//            System.out.println("Adding[" + addingMovies.get(i).getId() +  "] into list");
+//        }
+//
+////        for (int i = addingMovies.size() / 2; i < addingMovies.size(); i++) {
+////            
+////            executor.execute(new ThreadPoolSample.MovieCardProducer(addingMovies.get(i), movies, this, false));
+////            System.out.println("Extra[" + addingMovies.get(i).getId() +  "] into list");
+////        }
+//        
+//        for (int i = currentSize; i < totalSize; i++) {
+//            add(movies.get(i));
+//        }
+//        
+//        for(int i = totalSize; i < currentSize; i++)
+//        {
+//            remove(movies.get(i));
+//        }
+//        
         System.out.println("[R]Current " + getComponentCount() + "\n\n\n");
 
+        
         validate();
         repaint();
     }
+
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(800, 300));
-        MovieListPanel movieListPanel = new MovieListPanel(10, 5);
+        MovieListPanel3 movieListPanel = new MovieListPanel3();
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieListPanel);
@@ -182,13 +134,12 @@ public class MovieListPanel extends javax.swing.JPanel {
         movieCard4 = new Output.MovieCard();
 
         setBackground(new java.awt.Color(51, 51, 51));
-        setPreferredSize(null);
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 formComponentResized(evt);
             }
         });
-        setLayout(new java.awt.GridLayout(1, 0));
+        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.X_AXIS));
         add(movieCard1);
         add(movieCard3);
         add(movieCard2);

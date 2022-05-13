@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.IntStream;
 import javax.swing.JOptionPane;
 
 
@@ -42,6 +43,8 @@ public class Repository {
     static String USER;
     static String PASS; // change password if needed.
     static Connection con;
+
+    
     public static enum Driver {
         MySQL("mysql");
         private final String drivername;
@@ -138,7 +141,7 @@ public class Repository {
                 Message.NO_MATCH_ERROR.printMessage();
                 return null;
             }
-            Object[][] array2D = new Object[nRows][nCols];
+//            Object[][] array2D = new Object[nRows][nCols];
 
             int counter = 0;
             while (rs.next()) {
@@ -149,7 +152,7 @@ public class Repository {
                         return obj;
                 }
             }
-            return array2D;
+            return null;
         }
         catch(SQLException e){
             int errorCode = e.getErrorCode();
@@ -339,7 +342,7 @@ public class Repository {
                                 String errorMessage = e.getMessage();
                                 JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
                             }
-                            return null;
+                            return 0;
                         }
                     );
         if(rtnObj == null)
@@ -469,6 +472,47 @@ public class Repository {
                 }
         );  
         return movies;
+    }
+    
+    public static List<Integer> findTopRatedMovieIds(int start, int size)
+    {
+        if(size <= 0)
+            return new ArrayList();
+        List<Integer> ids = new ArrayList<>();
+        
+        Movie movie = new Movie();
+        String query = 
+                "SELECT " 
+                    + Keys.MOVIEID
+                + " FROM " 
+                    + Tables.RATING
+                + " GROUP BY " 
+                    + Keys.MOVIEID
+                + " ORDER BY "
+                    + "AVG(" + Keys.RATING + ") DESC, "
+                    + Keys.TIMESTAMP + " DESC"
+                + " LIMIT "
+                    + size
+                + " OFFSET "
+                    + start
+                ;
+
+        processQuery(query, 
+                (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> 
+                {
+                    try{
+                        int id = rs.getObject(Keys.MOVIEID, Integer.TYPE);
+                        ids.add(id);
+                    }
+                    catch(SQLException e){
+                        int errorCode = e.getErrorCode();
+                        String errorMessage = e.getMessage();
+                        JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
+                    }
+                    return null;
+                }
+        );  
+        return ids;
     }
     
     public static boolean insertMovie(Movie movie)
@@ -838,28 +882,16 @@ public class Repository {
         }
     }
     
-//    public static Map<Movie> loadGenres(boolean rating, boolean tags)
-//    {
-//        List<Movie> movies = new ArrayList();
-//        Path file = Paths.get("data/movies.csv");
-//        String[] separated;
-//        try{
-//            List<String> text = Files.readAllLines(file); // UTF-8
-//            text.remove(0);
-//            
-//            for(String t: text)
-//            {
-//                separated = t.split(",", 2);
-//                movies.add(new Movie(Integer.parseInt(separated[0]), separated[1]));
-//            }
-//        } catch (IOException e) {
-//            String errorMessage = e.getMessage();
-//            JOptionPane.showMessageDialog(null, "IO Exception" + errorMessage);
-//        }
-//        
-//        return movies;
-//    }
-    
+    public static List<Movie> provideTestMovies(int size) {
+        List<Movie> movies = new ArrayList<>();
+        
+        IntStream.range(0, size).forEach(n ->
+        {
+            movies.add(new Movie(0, "Sample Movie"));
+        });
+        
+        return movies;
+    }
     
     
     public static void main(String[] args) {

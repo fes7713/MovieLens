@@ -20,11 +20,12 @@ import movielens.Repository;
  *
  * @author fes77
  */
-public class MovieListPanel extends javax.swing.JPanel {
+public class MovieListPanel4 extends javax.swing.JPanel {
 
     /**
      * Creates new form MovieListPanel
      */
+    Container parent;
     List<MovieCard> movies;
     ExecutorService executor;
     int unit;
@@ -35,7 +36,7 @@ public class MovieListPanel extends javax.swing.JPanel {
     
     boolean debug = false;
     
-    public MovieListPanel()
+    public MovieListPanel4()
     {
         initComponents();
         removeAll();
@@ -55,7 +56,7 @@ public class MovieListPanel extends javax.swing.JPanel {
         unit = 20;
     }
     
-    public MovieListPanel(int size, int threadSize) {
+    public MovieListPanel4(int size, int threadSize) {
         initComponents();
         removeAll();
 
@@ -86,15 +87,10 @@ public class MovieListPanel extends javax.swing.JPanel {
     
     public void setParent(Container parent)
     {
-//        this.parent = parent;
+        this.parent = parent;
     }
     
-    public boolean isIdle()
-    {
-        return size == movies.size();
-    }
-    
-    public void loadMovieCards()
+    private void loadMovieCards()
     {
         int listSize = movies.size();
         List<Integer> addingMovies = Repository.findTopRatedMovieIds(size, unit);
@@ -103,16 +99,28 @@ public class MovieListPanel extends javax.swing.JPanel {
         
         for (int i = 0; i < addingMovies.size(); i++) {
 
-            executor.execute(new MovieCardProducer(addingMovies.get(i), movies, this, true));
+            executor.execute(new MovieCardProducer(addingMovies.get(i), movies, null, true));
             System.out.println("Adding[" + i +  "] into list");
         }
+        
     }
     
     public void updateMovies() {
-       
+        
+        if(parent == null)
             
             nCols = Math.max(Math.min(getWidth(), getParent().getWidth()) / 230, 1);
-
+        else
+        {
+            nCols = Math.max(Math.min(getWidth(), parent.getWidth()) / 230, 1);
+            if(getWidth() > parent.getWidth())
+            {
+                System.out.println("Smaller : " + parent.getWidth() / 230);
+            }
+            else{
+                System.out.println("Biigger : " + parent.getWidth() / 230);
+            }
+        }
             
 //        int nCols = 2;
         nRows = size / nCols + (size % nCols == 0 ? 0 : 1);
@@ -125,6 +133,8 @@ public class MovieListPanel extends javax.swing.JPanel {
         layout.setColumns(Math.max(nCols, 1));
         layout.setRows(Math.max(nRows, 1));
         setPreferredSize(new Dimension(230 * nCols, 250 * nRows));
+        if(parent == null)
+            getParent().setMaximumSize(new Dimension(parent.getWidth(), nRows * 250));
 //        setSize(new Dimension(230 * nCols, 250 * nRows));
 
         
@@ -154,7 +164,7 @@ public class MovieListPanel extends javax.swing.JPanel {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(800, 300));
-        MovieListPanel movieListPanel = new MovieListPanel(10, 5);
+        MovieListPanel4 movieListPanel = new MovieListPanel4(10, 5);
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieListPanel);
@@ -182,7 +192,6 @@ public class MovieListPanel extends javax.swing.JPanel {
         movieCard4 = new Output.MovieCard();
 
         setBackground(new java.awt.Color(51, 51, 51));
-        setPreferredSize(null);
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 formComponentResized(evt);
