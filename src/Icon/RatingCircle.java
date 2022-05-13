@@ -1,0 +1,159 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Icon;
+
+import static Icon.BaseIcon.INITIAL_LINE_THICKNESS_PERCENTAGE;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.util.Scanner;
+import javax.swing.JFrame;
+
+/**
+ *
+ * @author fes77
+ */
+public class RatingCircle extends BaseIcon {
+    private float rateOutOf10;
+    
+    protected float lineThickness;
+    protected float fontPercentage;
+
+    public Color rateColor;
+
+    public final static Color INITAL_RATE_START_COLOR = new Color(147, 33, 208);
+    public final static Color INITAL_RATE_END_COLOR = new Color(35, 219, 194);
+
+    private final static float INITIAL_FONT_PERCENTAGE = .47f;
+    private final static float INITIAL_FONT_PERCENTAGE_10 = .35f;
+    
+    /**
+     * Creates new form RatingCircle
+     */
+    public RatingCircle() {
+        this(7);
+    }
+    
+    public RatingCircle(float rateOutOf10) {
+        super();
+        fontPercentage = INITIAL_FONT_PERCENTAGE;
+        lineThickness = INITIAL_LINE_THICKNESS_PERCENTAGE;
+        
+        rateColor = INITAL_RATE_END_COLOR; 
+        color = rateColor.darker().darker().darker();
+        setRating(rateOutOf10);
+    }
+    
+    private Color evalRateColor()
+    {
+        float[] startColorHSV = Color.RGBtoHSB(INITAL_RATE_START_COLOR.getRed(), INITAL_RATE_START_COLOR.getGreen(), INITAL_RATE_START_COLOR.getBlue(), null);
+        float[] endColorHSV = Color.RGBtoHSB(INITAL_RATE_END_COLOR.getRed(), INITAL_RATE_END_COLOR.getGreen(), INITAL_RATE_END_COLOR.getBlue(), null);
+        float h = (1 - startColorHSV[0] + endColorHSV[0]) * Math.max(Math.min(rateOutOf10, 8), 2)/ 10 - 1 + startColorHSV[0];
+        if(h < 0)
+            h += 1;
+        
+        return Color.getHSBColor(h, startColorHSV[1], startColorHSV[2]);
+    }
+    
+    public void drawStringCenter(Graphics g,String text,int x,int y){
+         FontMetrics fm = g.getFontMetrics();
+	 Rectangle rectText = fm.getStringBounds(text, g).getBounds();
+	 x=x-rectText.width/2;
+	 y=y-rectText.height/2+fm.getMaxAscent();
+		
+         g.drawString(text, x, y);
+    }
+    
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        int height = getHeight();
+        int width = getWidth();
+        int length = height < width ? height : width;
+        int margin = (int)(length * marginPercentage);
+        int padding = (int)(length * paddingPercentage);
+        int thickness = (int)(length * lineThickness);
+        int fontSize = (int)(length * fontPercentage);
+        
+        int bgSize = length - 2 *  margin;
+        int outerSize = length - 2 * (padding + margin);
+        
+        int bgStartX = width / 2 - length / 2 + margin;
+        int bgStartY = height / 2 - length / 2 + margin;
+        int outerStartX = width / 2 - length / 2 + padding + margin;
+        int outerStartY = height / 2 - length / 2 + padding + margin;
+        
+        int rateAngle = (int)(-360 * rateOutOf10 / 10);
+        
+        g2d.setColor(rateColor);
+        g2d.drawArc(outerStartX + thickness / 2, outerStartY + thickness / 2, outerSize - thickness, outerSize - thickness, 90, rateAngle);
+
+        
+        Font fm = new Font("caribri" , Font.PLAIN , fontSize);
+        g2d.setFont(fm);
+        g2d.setColor(Color.WHITE);
+        drawStringCenter(g, Math.round(rateOutOf10) + "", bgStartX + (int)(bgSize / 80f * 29), bgStartY + bgSize / 2);
+
+        fm = new Font("caribri" , Font.PLAIN , fontSize/ 3);
+        g2d.setFont(fm);
+        drawStringCenter(g, "/ 10", bgStartX + (int)(bgSize / 20f * 13), bgStartY + (int)(bgSize / 20f * 9));
+        
+        // Guid Lines/
+        // Uncomment it to show lines
+//        g2d.setColor(Color.BLACK);
+//        g2d.drawLine(
+//                bgStartX + bgSize / 2 + (int)(Math.cos(Math.toRadians(-rateAngle - 90)) * (innerSize + thickness) / 2), 
+//                0, 
+//                bgStartX + bgSize / 2 + (int)(Math.cos(Math.toRadians(-rateAngle - 90)) * (innerSize + thickness) / 2), 
+//                height
+//        );
+//        
+//        g2d.drawLine(
+//                0, 
+//                bgStartY + bgSize / 2 + (int)(Math.sin(Math.toRadians(-rateAngle - 90)) * (innerSize + thickness) / 2), 
+//                width, 
+//                bgStartY + bgSize / 2 + (int)(Math.sin(Math.toRadians(-rateAngle - 90)) * (innerSize + thickness) / 2)
+//        );
+
+    }
+    
+    public void setRating(float rateOutOf10)
+    {
+        this.rateOutOf10 = rateOutOf10;
+        rateColor = evalRateColor();
+        if(rateOutOf10 >= 10)
+            fontPercentage = INITIAL_FONT_PERCENTAGE_10;
+        else
+            fontPercentage = INITIAL_FONT_PERCENTAGE;
+        repaint();
+    }
+    
+    
+    public static void main(String[] args)
+    {
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(new Dimension(100, 200));
+        RatingCircle rateCircle = new RatingCircle(7);
+//            cell.setBackground(new Color(34, 34, 34));
+        frame.setBackground(new Color(34, 34, 34));
+        frame.add(rateCircle);
+        frame.setVisible(true);
+        Scanner sk = new Scanner(System.in);
+        while(true)
+        {
+            rateCircle.setRating(sk.nextInt());
+        }
+        
+        
+    }
+}

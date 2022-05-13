@@ -146,6 +146,25 @@ public class Scraping {
         
     }
     
+    public static String getOverview(int movieId)
+    {
+        Element body = getTBDBBodyById(movieId);
+        return getOverview(body, movieId);
+    }
+    
+    public static String getOverview(Element tbdbBody, int movieId)
+    {
+        if(tbdbBody == null)
+        {
+            Message.NO_MATCH_ERROR.printMessage("Duration for id[" + movieId +"] not found");
+            return "https://www.lwf.org/images/emptyimg.png";
+        }
+        
+        Element overview = tbdbBody.getElementsByClass("overview").first();
+        return overview.text();
+        
+    }
+    
     
     
     public static void main(String[] args) throws IOException {
@@ -162,5 +181,6 @@ public class Scraping {
 //        System.out.println(Scraping.getReleaseYear(1));
         
         System.out.println(Scraping.getPictureURL(2075));
+        System.out.println(Scraping.getOverview(1));
     }
 }

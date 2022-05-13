@@ -515,6 +515,37 @@ public class Repository {
         return ids;
     }
     
+    public static int findRateCountById(int movieId)
+    {
+        String query = 
+                "SELECT " 
+                    + "COUNT(*)"
+                + " FROM " 
+                    + Tables.RATING
+                + " WHERE " 
+                    + Keys.MOVIEID + " = " + movieId;
+                
+
+        Object count  = processQuery(query, 
+                (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> 
+                {
+                    try{
+                        int id = rs.getObject("COUNT(*)", Integer.TYPE);
+                        return id;
+                    }
+                    catch(SQLException e){
+                        int errorCode = e.getErrorCode();
+                        String errorMessage = e.getMessage();
+                        JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
+                    }
+                    return null;
+                }
+        );  
+        if(count == null)
+            return 0;
+        return (Integer)count;
+    }
+    
     public static boolean insertMovie(Movie movie)
     {
         try {
@@ -905,7 +936,7 @@ public class Repository {
         // TODO code application logic here
         Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
             
-            
+        System.out.println(Repository.findRateCountById(1));
 //        Repository.loadMovies(false, false);
 ////        System.out.println(Repository.insertLinks(2, 30, 50));
 //        System.out.println(Repository.findImdbIdById(2));
