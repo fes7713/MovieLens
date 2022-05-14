@@ -11,9 +11,7 @@ import java.awt.event.MouseEvent;
  *
  * @author fes77
  */
-public interface Clickable {
-    public void onHoverPaint(Graphics2D g2d);
+public interface Clickable extends Hoverable{
     public void onClickPaint(Graphics2D g2d);
-    public void onHoverAction(MouseEvent e);
     public void onClickAction(MouseEvent e);
 }

@@ -20,7 +20,7 @@ import javax.swing.JFrame;
  *
  * @author fes77
  */
-public class RatingCircle extends BaseIcon {
+public class RatingCircle extends HoverableIcon {
     private float rateOutOf10;
     
     protected float lineThickness;
@@ -42,7 +42,7 @@ public class RatingCircle extends BaseIcon {
     }
     
     public RatingCircle(float rateOutOf10) {
-        super();
+        super(AnimationType.DESC_GROW);
         fontPercentage = INITIAL_FONT_PERCENTAGE;
         lineThickness = INITIAL_LINE_THICKNESS_PERCENTAGE;
         
@@ -80,36 +80,40 @@ public class RatingCircle extends BaseIcon {
         int width = getWidth();
         int length = height < width ? height : width;
         int margin = (int)(length * marginPercentage);
-        int padding = (int)(length * paddingPercentage);
+//        int padding = (int)(length * paddingPercentage);
         int thickness = (int)(length * lineThickness);
         int fontSize = (int)(length * fontPercentage);
         
         int bgSize = length - 2 *  margin;
-        int outerSize = length - 2 * (padding + margin);
+        int outerSize = length - 2 * (thickness + margin);
         
         int bgStartX = width / 2 - length / 2 + margin;
         int bgStartY = height / 2 - length / 2 + margin;
-        int outerStartX = width / 2 - length / 2 + padding + margin;
-        int outerStartY = height / 2 - length / 2 + padding + margin;
+        int outerStartX = width / 2 - length / 2 + thickness + margin;
+        int outerStartY = height / 2 - length / 2 + thickness + margin;
         
         int rateAngle = (int)(-360 * rateOutOf10 / 10);
         
-        // bg arc
-        g2d.setColor(color.darker());
-//            g2d.setColor(color.darker().darker().darker());
-            g2d.drawOval(
+        System.out.println(rateAngle + " " + getZoomRatio());
+        // Rating arc
+        g2d.setColor(rateColor);
+        if(isHover())
+        {
+            g2d.drawArc(
                     (int)(outerStartX + thickness / 2), 
                     (int)(outerStartY + thickness / 2), 
                     (int)(outerSize - thickness), 
-                    (int)(outerSize - thickness));
-        
-        // Rating arc
-        g2d.setColor(rateColor);
-        g2d.drawArc(
-                (int)(outerStartX + thickness / 2), 
-                (int)(outerStartY + thickness / 2), 
-                (int)(outerSize - thickness), 
-                (int)(outerSize - thickness), 90, rateAngle);
+                    (int)(outerSize - thickness), 90, (int)(-360 * rateOutOf10 * getZoomRatio() / 10));
+        }
+        else{
+            g2d.drawArc(
+                    (int)(outerStartX + thickness / 2), 
+                    (int)(outerStartY + thickness / 2), 
+                    (int)(outerSize - thickness), 
+                    (int)(outerSize - thickness), 90,  rateAngle );
+        }
+            
+            
 //        if(hover)
 //            g2d.drawArc(
 //                            bgStartX + (int)(thickness * 1000f / zoomCounter), 

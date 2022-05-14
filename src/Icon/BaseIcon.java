@@ -25,7 +25,7 @@ public class BaseIcon extends javax.swing.JPanel {
     Thread thread;
     
     protected float marginPercentage;
-    protected float paddingPercentage;
+//    protected float paddingPercentage;
     protected float lineThicknessPercentage;
 
     
@@ -36,9 +36,9 @@ public class BaseIcon extends javax.swing.JPanel {
 
     public final static Color INITIAL_BG_COLOR = new Color(8,28,34);
 
-    protected final static float INITIAL_LINE_THICKNESS_PERCENTAGE = .07f;
+    protected final static float INITIAL_LINE_THICKNESS_PERCENTAGE = .065f;
     protected final static float INITIAL_MARGINE_PERCENTAGE = .01f;
-    protected final static float INITIAL_PADDING_PERCENTAGE = .08f;
+//    protected final static float INITIAL_PADDING_PERCENTAGE = .08f;
    
     
     /**
@@ -49,7 +49,7 @@ public class BaseIcon extends javax.swing.JPanel {
         bgColor = INITIAL_BG_COLOR;
         
         marginPercentage = INITIAL_MARGINE_PERCENTAGE;
-        paddingPercentage = INITIAL_PADDING_PERCENTAGE;
+//        paddingPercentage = INITIAL_PADDING_PERCENTAGE;
         lineThicknessPercentage = INITIAL_LINE_THICKNESS_PERCENTAGE;
         color = Color.RED;
         
@@ -65,20 +65,21 @@ public class BaseIcon extends javax.swing.JPanel {
         int width = getWidth();
         int length = height < width ? height : width;
         int margin = (int)(length * marginPercentage);
-        int padding = (int)(length * paddingPercentage);
+//        int padding = (int)(length * lineThicknessPercentage);
         int thickness = (int)(length * lineThicknessPercentage);
         
         int bgSize = length - 2 *  margin;
-        int outerSize = length - 2 * (padding + margin);
+        int outerSize = length - 2 * (thickness + margin);
         
         int bgStartX = width / 2 - length / 2 + margin;
         int bgStartY = height / 2 - length / 2 + margin;
-        int outerStartX = width / 2 - length / 2 + padding + margin;
-        int outerStartY = height / 2 - length / 2 + padding + margin;
+        int outerStartX = width / 2 - length / 2 + thickness + margin;
+        int outerStartY = height / 2 - length / 2 + thickness + margin;
         
         g2d.setColor(bgColor);
         g2d.fillOval(bgStartX, bgStartY, bgSize, bgSize);
-        
+//        g2d.setColor(Color.BLACK);
+//        g2d.fillOval(outerStartX, outerStartY, outerSize, outerSize);
         
         BasicStroke wideStroke = new BasicStroke(thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
         g2d.setStroke(wideStroke);
