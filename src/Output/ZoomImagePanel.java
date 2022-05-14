@@ -78,13 +78,11 @@ public class ZoomImagePanel extends ImagePanel{
         if(zoomFlag)
             g2d.drawImage(image, 0, 0, getWidth(), getHeight(), sx1, sy1, sx2, sy2, this);
         else
+        {
             g2d.drawImage(image, 
                     (int)(width * MARGIN_PERCENTAGE), (int)(height * MARGIN_PERCENTAGE), 
                     (int)(width * (1 -  MARGIN_PERCENTAGE)), (int)(height * (1 - MARGIN_PERCENTAGE)), 
                     sx1, sy1, sx2, sy2, this);
-        
-        if(zoomFlag == false)
-        {
             Point2D start = new Point2D.Float(
                     (int)(width * MARGIN_PERCENTAGE), 
                     (int)(height * MARGIN_PERCENTAGE));
@@ -99,6 +97,7 @@ public class ZoomImagePanel extends ImagePanel{
             g2d.fillRect((int)(width * MARGIN_PERCENTAGE), (int)(height * MARGIN_PERCENTAGE), 
                     (int)(width * (1 - 2 * MARGIN_PERCENTAGE)), (int)(height * (1 - 2 * MARGIN_PERCENTAGE))); 
         }
+
         
     }
     

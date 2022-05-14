@@ -14,7 +14,7 @@ import javax.swing.JFrame;
  *
  * @author fes77
  */
-public class FavoriteIcon extends BaseIcon{
+public class FavoriteIcon extends ClickableIcon{
 
     /**
      * Creates new form FavoriteIcon

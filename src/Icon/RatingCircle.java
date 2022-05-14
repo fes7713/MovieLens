@@ -47,7 +47,7 @@ public class RatingCircle extends BaseIcon {
         lineThickness = INITIAL_LINE_THICKNESS_PERCENTAGE;
         
         rateColor = INITAL_RATE_END_COLOR; 
-        color = rateColor.darker().darker().darker();
+        color = rateColor.darker().darker();
         setRating(rateOutOf10);
     }
     
@@ -94,10 +94,32 @@ public class RatingCircle extends BaseIcon {
         
         int rateAngle = (int)(-360 * rateOutOf10 / 10);
         
-        g2d.setColor(rateColor);
-        g2d.drawArc(outerStartX + thickness / 2, outerStartY + thickness / 2, outerSize - thickness, outerSize - thickness, 90, rateAngle);
-
+        // bg arc
+        g2d.setColor(color.darker());
+//            g2d.setColor(color.darker().darker().darker());
+            g2d.drawOval(
+                    (int)(outerStartX + thickness / 2), 
+                    (int)(outerStartY + thickness / 2), 
+                    (int)(outerSize - thickness), 
+                    (int)(outerSize - thickness));
         
+        // Rating arc
+        g2d.setColor(rateColor);
+        g2d.drawArc(
+                (int)(outerStartX + thickness / 2), 
+                (int)(outerStartY + thickness / 2), 
+                (int)(outerSize - thickness), 
+                (int)(outerSize - thickness), 90, rateAngle);
+//        if(hover)
+//            g2d.drawArc(
+//                            bgStartX + (int)(thickness * 1000f / zoomCounter), 
+//                            bgStartY + (int)(thickness * 1000f / zoomCounter), 
+//                            bgSize - (int)(thickness * 2 * 1000f / zoomCounter), 
+//                            bgSize - (int)(thickness * 2 * 1000f / zoomCounter), 90, rateAngle);
+        
+            
+
+        // Rating strings
         Font fm = new Font("caribri" , Font.PLAIN , fontSize);
         g2d.setFont(fm);
         g2d.setColor(Color.WHITE);

@@ -15,7 +15,7 @@ import javax.swing.JFrame;
  *
  * @author fes77
  */
-public class PlayIcon extends BaseIcon {
+public class PlayIcon extends ClickableIcon {
 
     /**
      * Creates new form PlayIcon
