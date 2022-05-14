@@ -6,9 +6,7 @@ package Icon;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import javax.swing.JFrame;
 
 /**
@@ -37,44 +35,36 @@ public class PlayIcon extends ClickableIcon {
         this.color = color;
     }
 
-   @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
-        Graphics2D g2d = (Graphics2D)g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        int height = getHeight();
-        int width = getWidth();
-        int length = height < width ? height : width;
-
+    @Override
+    protected void drawIcon(Graphics2D g2d, int width, int height, int length, int thickness, float zoomRatio) {
         int lengthCircle = (int)(length * (1 - PADDING_CIRCLE_PERCENTAGE));
         int triangleHeight = (int)(lengthCircle / 3  * 1.732f);
-
+        float shift = length * MAX_SHIFT_PERCENTAGE * zoomRatio;
         
         g2d.fillPolygon(
                 new int[]{
-                    (int)(width / 2 - lengthCircle / 3),
-                    (int)(width / 2 - lengthCircle / 3),
-                    (int)(width / 2 + triangleHeight)}
+                    (int)(width / 2 - lengthCircle / 3 - shift),
+                    (int)(width / 2 - lengthCircle / 3 - shift),
+                    (int)(width / 2 + triangleHeight - shift)}
                 ,             
                 new int[]{
-                    (int)(height / 2 - lengthCircle / 2),
-                    (int)(height / 2 + lengthCircle / 2),
-                    (int)(height / 2)},
+                    (int)(height / 2 - lengthCircle / 2 - shift),
+                    (int)(height / 2 + lengthCircle / 2 - shift),
+                    (int)(height / 2 - shift)},
                 3);
         
         g2d.drawPolygon(
                 new int[]{
-                    (int)(width / 2 - lengthCircle / 3),
-                    (int)(width / 2 - lengthCircle / 3),
-                    (int)(width / 2 + triangleHeight)}
+                    (int)(width / 2 - lengthCircle / 3 - shift),
+                    (int)(width / 2 - lengthCircle / 3 - shift),
+                    (int)(width / 2 + triangleHeight - shift)}
                 ,             
                 new int[]{
-                    (int)(height / 2 - lengthCircle / 2),
-                    (int)(height / 2 + lengthCircle / 2),
-                    (int)(height / 2)},
+                    (int)(height / 2 - lengthCircle / 2 - shift),
+                    (int)(height / 2 + lengthCircle / 2 - shift),
+                    (int)(height / 2 - shift)},
                 3);
-       
-        } 
+    }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame();

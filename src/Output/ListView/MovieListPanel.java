@@ -99,7 +99,6 @@ public class MovieListPanel extends javax.swing.JPanel {
         int listSize = movies.size();
         List<Integer> addingMovies = Repository.findTopRatedMovieIds(size, unit);
         size += unit;
-        System.out.println(addingMovies.size() +"adasdasdasdasd");
         
         for (int i = 0; i < addingMovies.size(); i++) {
 

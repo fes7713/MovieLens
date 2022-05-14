@@ -10,11 +10,14 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -28,17 +31,36 @@ public class ImagePanel extends javax.swing.JPanel {
      * Creates new form ImagePanel
      */
     
-    protected String link;
+    protected URL url;
     protected Image image;
+    protected Thread loadingAnimation;
+    protected int loadingCounter;
+    boolean loading = false;
 
+    public final static Color INITAL_CIRCLE_COLOR = new Color(38, 166, 209);
+    
     public ImagePanel() {
-        this("https://image.tmdb.org/t/p/w600_and_h900_bestv2/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg");
+//        try {
+//            //        this("data/Sample movie.jpg");
+//            image = ImageIO.read(new File("data/Sample movie.jpg"));
+//        } catch (IOException ex) {
+//            Logger.getLogger(ImagePanel.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+    
+        initComponents();
+        loadingAnimation = new Thread();
     }
     
     public ImagePanel(String link) {
         setLink(link);
         initComponents();
-        
+        loadImage();
+        loadingAnimation = new Thread();
+    }
+    
+    public ImagePanel(Image image) {
+        this.image = image;
+        loadingAnimation = new Thread();
     }
     
     protected void paintComponent_clear(Graphics g)
@@ -52,15 +74,38 @@ public class ImagePanel extends javax.swing.JPanel {
         Graphics2D g2d = (Graphics2D)g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
-        image = loadImage();
+        int width = getWidth();
+        int height = getHeight();
+        int length = height < width ? height : width;
         
-        if(image == null)
+        
+        if(image == null || loadingAnimation.isAlive())
+        {
+//            loadImage();
+//            if(image == null)
+//                throw new NullPointerException("Could not get image");
+            
+            System.out.println("Hello");
+            Color color = INITAL_CIRCLE_COLOR;
+            float outerRadius = length / 3f;
+            float circleRadius = length / 4f;
+            for(int i = 2; i < 5; i++)
+            {
+                int angle = 5 * i + 1 * loadingCounter / 2;
+                int x = (int)(width / 2 + outerRadius * Math.cos(Math.toRadians(angle * i)));
+                int y = (int)(height / 2 + outerRadius * Math.sin(Math.toRadians(angle * i)));
+                int radius = (int)(circleRadius /  i);
+                g2d.setColor(color);
+                g2d.fillOval(x - radius / 2, y - radius / 2, radius, radius);
+                color = color.brighter().brighter();
+            }
             return;
+            
+        }
         int imageHeight = image.getHeight(this);
         int imageWidth = image.getWidth(this);
         
-        int width = getWidth();
-        int height = getHeight();
+        
         
         float aspectRatio = imageHeight /(float)imageWidth;
         float targetRatio = getHeight() / (float)getWidth();
@@ -115,41 +160,104 @@ public class ImagePanel extends javax.swing.JPanel {
 //            g2d.fillRect((int)(width * MARGIN_PERCENTAGE), (int)(height * MARGIN_PERCENTAGE), 
 //                    (int)(width * (1 - 2 * MARGIN_PERCENTAGE)), (int)(height * (1 - 2 * MARGIN_PERCENTAGE))); 
 //        }
-        
     }
     
     public void setLink(String link)
     {
-        this.link = link;
-        validate();
-        repaint();
-    }
-    
-    public Image loadImage()
-    {
-        URL url;
         try {
             url = new URL(link);
         } catch (MalformedURLException ex) {
             Logger.getLogger(ImagePanel.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error");
-            return null;
+            throw new IllegalArgumentException("Invalid link: " + link);
         }
-        ImageIcon icon = new ImageIcon(url);
-        return icon.getImage();
+        loadImage();
+        validate();
+        repaint();
+    }
+    
+    public void setLink(URL url)
+    {
+        this.url = url;
+        loadImage();
+        validate();
+        repaint();
+    }
+    
+    public void loadImage()
+    {
+        loading = true;
+        loadingAnimation = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                loadingCounter = 0;
+                while(loading)
+                {
+                    loadingCounter ++;
+                    try {
+                        sleep(1);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ImagePanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    repaint();
+                }
+                System.out.println("Animation end");
+                loadingCounter = 0;
+            }
+        };
+        loadingAnimation.start();
+        
+        Thread thread = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                ImageIcon icon;
+                if(url != null)
+                    icon = new ImageIcon(url);
+                else
+                {
+                    try {
+                        icon = new ImageIcon(new URL("data/Sample movie.jpg"));
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(ImagePanel.class.getName()).log(Level.SEVERE, null, ex);
+                        throw new IllegalArgumentException("Invalid link: " + "data/Sample movie.jpg");
+                    }
+                }
+                image = icon.getImage();
+                loading = false;
+                System.out.println("Finished loading pic");
+                try {
+                    loadingAnimation.join();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ImagePanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        };
+        thread.start();
+        
     }
     
     public static void main(String[] args)
     {
-        
+        Image image;
+                try {
+            //        this("data/Sample movie.jpg");
+            image = ImageIO.read(new File("data/Sample movie.jpg"));
+        } catch (IOException ex) {
+            Logger.getLogger(ImagePanel.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(500, 500));
-        ImagePanel image = new ImagePanel("https://image.tmdb.org/t/p/w600_and_h900_bestv2/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg");
+        ImagePanel imagePanel = new ImagePanel(image);
         
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
-        frame.add(image);
+        frame.add(imagePanel);
         frame.setVisible(true);
         
         Scanner sk = new Scanner(System.in);

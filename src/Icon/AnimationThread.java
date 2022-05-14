@@ -114,6 +114,22 @@ public class AnimationThread extends Thread{
                 speed = -180.3;
                 acc = 0.85;
             }
+            case DESC_GROW_SLOW -> {
+                // 48 frames
+                start = 0;
+                target = 1000;
+//                speed = 10;
+                speed = 20;
+//                acc = 0.99215;
+                acc = 0.9828;
+            }
+            case DESC_SHRINK_SLOW -> {
+                // 48 frames
+                start = 0;
+                target = -1000;
+                speed = -10;
+                acc = 0.985;   
+            }
 
             default -> throw new AssertionError(animationType.name());
         }
@@ -147,7 +163,7 @@ public class AnimationThread extends Thread{
             
             System.out.println("Speed [frame]" + speed + "[" + frames + "]");
             frames ++ ;
-            if(frames > 200)
+            if(frames > 1000)
                 throw new IllegalArgumentException("Animation takes too many frames [" + frames + "]");
         }
         

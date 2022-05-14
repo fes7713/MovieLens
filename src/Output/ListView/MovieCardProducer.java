@@ -29,7 +29,7 @@ public class MovieCardProducer implements Runnable {
         @Override
         public void run() {
             Movie movie = Repository.findMovieById(movieId);
-            MovieCard card = new MovieCard(movie);
+            MovieCard card = new MovieCard();
             
             synchronized(rtnList)
             {
@@ -47,6 +47,7 @@ public class MovieCardProducer implements Runnable {
     //                System.out.println("Container size : " + container.getComponentCount());
                 }
             }
+            card.setMovie(movie);
         }
 }
     

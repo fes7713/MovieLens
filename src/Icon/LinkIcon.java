@@ -8,6 +8,11 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -19,59 +24,70 @@ public class LinkIcon extends ClickableIcon{
     public static final Color INITIAL_LINK_COLOR = new Color(209, 169, 38);
     public static float PADDING_RECT_PERCENTAGE = 0.7f;
     public static float ARROW_PERCENTAGE = 0.22f;
-    public static float MAX_SHIFT_PERCENTAGE = 0.03f;
+        URL url;
     
     public LinkIcon()
     {
         super();
         color = INITIAL_LINK_COLOR;
-        
+//        try {
+//            url = new URL("https://www.google.co.jp/a");
+//        } catch (MalformedURLException ex) {
+//            Logger.getLogger(LinkIcon.class.getName()).log(Level.SEVERE, null, ex);
+            color = color.darker();
+//        }
     }
-
-    @Override
-    protected void drawIconShadow(Graphics2D g2d, int width, int height, int length, int thickness, float zoomRatio) {
-       float lengthRect = (length * (1 - PADDING_RECT_PERCENTAGE));
-        float lengthArrow =(length * ARROW_PERCENTAGE);
-        float shift = length * MAX_SHIFT_PERCENTAGE * zoomRatio;
-        
-        BasicStroke wideStroke = new BasicStroke((int)(thickness / 4f * 3), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
-        g2d.setStroke(wideStroke);
-
-        // Top and right
-        g2d.drawLine(
-                (int)(width / 2 + lengthRect / 2 - shift), 
-                (int)(height / 2 + lengthRect / 2 - shift), 
-                (int)(width / 2 + lengthRect / 2 - shift), 
-                (int)(height / 2 - lengthRect / 2 - shift)
-        );
-        g2d.drawLine(
-                (int)(width / 2 + lengthRect / 2 - shift), 
-                (int)(height / 2 - lengthRect / 2 - shift), 
-                (int)(width / 2 - lengthRect / 2 - shift), 
-                (int)(height / 2 - lengthRect / 2 - shift)
-        );
-        
-        // bottom and left
-        g2d.setStroke(new BasicStroke((int)(thickness / 4f * 3), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-        g2d.drawLine(
-                (int)(width / 2d - lengthRect / 2d - shift), 
-                (int)(height / 2d + lengthRect / 2d - shift),
-                (int)(width / 2d - lengthRect / 2d - shift),
-                (int)(height / 2d - lengthRect / 2d - shift)
-        );
-        g2d.drawLine(
-                (int)(width / 2d + lengthRect / 2d - shift),
-                (int)(height / 2d + lengthRect / 2d - shift),
-                (int)(width / 2d - lengthRect / 2d - shift), 
-                (int)(height / 2d + lengthRect / 2d - shift)
-        );
-        
-        
+    
+    public LinkIcon(URL url)
+    {
+        super();
+        color = INITIAL_LINK_COLOR;
+        this.url = url;
+        if(url == null)
+        {
+            try {
+                url = new URL("https://www.google.co.jp/");
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(LinkIcon.class.getName()).log(Level.SEVERE, null, ex);
+                color = color.darker();
+            }
+        }
+    }
+    
+    public LinkIcon(String url)
+    {
+        super();
+        color = INITIAL_LINK_COLOR;
+        try {
+            this.url = new URL(url);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(LinkIcon.class.getName()).log(Level.SEVERE, null, ex);
+            color = color.darker();
+        }
+    }
+    
+    public void setLink(String url)
+    {
+        try {
+            this.url = new URL(url);
+            color = INITIAL_LINK_COLOR;
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(LinkIcon.class.getName()).log(Level.SEVERE, null, ex);
+            color = INITIAL_LINK_COLOR.darker();
+        }
+        validate();
+        repaint();
 
     }
     
+    public void setLink(URL url)
+    {
+        this.url = url;
+        color = INITIAL_LINK_COLOR;
+        validate();
+        repaint();
+    }
     
-
     @Override
     protected void drawIcon(Graphics2D g2d, int width, int height, int  length, int  thickness, float zoomRatio)
     {
@@ -82,21 +98,7 @@ public class LinkIcon extends ClickableIcon{
         
         BasicStroke wideStroke = new BasicStroke((int)(thickness / 4f * 3), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND);
         g2d.setStroke(wideStroke);
-        
-//        g2d.drawLine(width / 2 - lengthRect / 2, height / 2 + lengthRect / 2, width / 2 - lengthRect / 2, height / 2 - lengthRect / 2);
-//        g2d.drawLine(width / 2 + lengthRect / 2, height / 2 + lengthRect / 2, width / 2 + lengthRect / 2, height / 2 + lengthRect / 6);
-//        
-//        g2d.drawLine(width / 2 + lengthRect / 2, height / 2 + lengthRect / 2, width / 2 - lengthRect / 2, height / 2 + lengthRect / 2);
-//        g2d.drawLine(width / 2 - lengthRect / 6, height / 2 - lengthRect / 2, width / 2 - lengthRect / 2, height / 2 - lengthRect / 2);
-        
-
-        // right
-//        g2d.drawLine(
-//                (int)(width / 2 + lengthRect / 2 - shift), 
-//                (int)(height / 2 + lengthRect / 2 - shift), 
-//                (int)(width / 2 + lengthRect / 2 - shift), 
-//                (int)(height / 2 - shift)
-//        );
+       
         
         // right 
         g2d.fillPolygon(
@@ -134,25 +136,6 @@ public class LinkIcon extends ClickableIcon{
                 4
         );
         
-        // Top
-//        g2d.drawLine(
-//                (int)(width / 2 - shift), 
-//                (int)(height / 2 - lengthRect / 2 - shift), 
-//                (int)(width / 2 - lengthRect / 2 - shift), 
-//                (int)(height / 2 - lengthRect / 2 - shift)
-//        );
-        
-        // Diagonal center with bg color
-//        g2d.setStroke(new BasicStroke((int)(thickness * 2.5f), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
-//        g2d.setColor(bgColor);
-//        g2d.drawLine(
-//                (int)(width / 2d - lengthRect / 2d - shift + thickness * 2.5f), 
-//                (int)(height / 2d + lengthRect / 2d - shift - thickness * 2.5f), 
-//                (int)(width / 2d + lengthArrow / 2d + lengthHead / Math.sqrt(2) - shift), 
-//                (int)(height / 2d - lengthArrow / 2d - lengthHead / Math.sqrt(2) - shift)
-//        );
-        
-        g2d.setColor(color);
         
         wideStroke = new BasicStroke((int)(thickness / 4f * 3), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
         g2d.setStroke(wideStroke);
@@ -234,10 +217,16 @@ public class LinkIcon extends ClickableIcon{
         
         g2d.setStroke(new BasicStroke((int)(1), BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
         // Uncomment it to show lines
-        g2d.setColor(Color.BLACK);
-        g2d.drawLine(0, height / 2, width, height / 2);
-        g2d.drawLine(width / 2, 0, width / 2, height );
+//        g2d.setColor(Color.BLACK);
+//        g2d.drawLine(0, height / 2, width, height / 2);
+//        g2d.drawLine(width / 2, 0, width / 2, height );
     }
+
+    @Override
+    public void onClickAction(MouseEvent e) {
+        Browser.BrowserSupport.openWebpage(url);
+    }
+    
     
 
     public static void main(String[] args) {

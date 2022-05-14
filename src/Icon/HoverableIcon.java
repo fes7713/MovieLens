@@ -22,7 +22,7 @@ public class HoverableIcon extends BaseIcon implements Hoverable{
     private int zoomCounter;
     private AnimationType animationType;
     
-    protected static float MAX_ICON_SHIFT_WITH_HOVBER = 0.22f;
+    public static float MAX_SHIFT_PERCENTAGE = 0.02f;
     
     
     public HoverableIcon()
@@ -42,7 +42,7 @@ public class HoverableIcon extends BaseIcon implements Hoverable{
         });
         
         hover = false;
-        zoomCounter = 1000;
+        zoomCounter = 0;
         animationType = type;
         color = Color.WHITE;
     }
@@ -64,7 +64,7 @@ public class HoverableIcon extends BaseIcon implements Hoverable{
     
     protected void drawIcon(Graphics2D g2d, int width, int height, int  length, int  thickness, float zoomRatio)
     {
-        System.out.println("Empty icon");
+//        System.out.println("Empty icon");
     }
     
     protected void drawIconShadow(Graphics2D g2d, int width, int height, int  length, int  thickness, float zoomRatio)
@@ -91,7 +91,7 @@ public class HoverableIcon extends BaseIcon implements Hoverable{
         onHoverPaint(g2d);
         
         g2d.setColor(color.darker().darker());
-        drawIconShadow(g2d, width, height,  length,  thickness, 0);
+        drawIconShadow(g2d, width, height,  length,  thickness, -getZoomRatio());
         g2d.setColor(color);
         drawIcon(g2d, width, height,  length,  thickness, getZoomRatio());
         
@@ -109,8 +109,6 @@ public class HoverableIcon extends BaseIcon implements Hoverable{
         int bgStartX = width / 2 - length / 2 + margin;
         int bgStartY = height / 2 - length / 2 + margin;
 
-        
-        System.out.println("Hover");
 
         g2d.drawOval(
                     (int)(bgStartX + thickness * 4 / 2 - thickness * getZoomRatio()), 
@@ -162,7 +160,7 @@ public class HoverableIcon extends BaseIcon implements Hoverable{
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(1000, 800));
-        HoverableIcon movieListPanel = new HoverableIcon(AnimationType.ACC_GROW_FAST);
+        HoverableIcon movieListPanel = new HoverableIcon(AnimationType.DESC_GROW_SLOW);
 
         frame.add(movieListPanel);
         frame.setVisible(true);

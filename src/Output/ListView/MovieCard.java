@@ -5,6 +5,7 @@
 package Output.ListView;
 
 import Data.Movie;
+import Output.StackView.MovieStackedPanel;
 import Web.Scraping;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -36,14 +37,20 @@ public class MovieCard extends javax.swing.JPanel {
     
     public MovieCard(Movie m) {
         super();
-        movie = m;
         initComponents();
+        
+        setMovie(m);
+    }
+
+    public void setMovie(Movie m)
+    {
+        movie = m;
         
         setPreferredSize(new Dimension(230, 500));
         if(movie != null)
         {
-            body = Scraping.getTBDBBodyById(movie.getId());
             
+            body = Scraping.getTBDBBodyById(movie.getId());
             imagePanel.setLink(Scraping.getPictureURL(body, movie.getId()));
             String title = movie.getTitle();
             if(title.length() > 23)
@@ -54,7 +61,7 @@ public class MovieCard extends javax.swing.JPanel {
             ratingCircle.setRating(Repository.findAverageRatingById(movie.getId()));
         }
     }
-
+    
     public static void main(String[] args)
     {
         Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
@@ -97,6 +104,11 @@ public class MovieCard extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(51, 51, 51));
         setMinimumSize(new java.awt.Dimension(230, 250));
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         titleLabel.setBackground(new java.awt.Color(255, 0, 51));
         titleLabel.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
@@ -173,6 +185,14 @@ public class MovieCard extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        if(MovieStackedPanel.STACK_PANEL != null && movie != null)
+        {
+            System.out.println("Adding movie detail pane to stack");
+            MovieStackedPanel.STACK_PANEL.addMovie(movie.getId());
+        }
+    }//GEN-LAST:event_formMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

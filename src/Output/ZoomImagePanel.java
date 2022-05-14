@@ -4,12 +4,15 @@
  */
 package Output;
 
+import Output.ListView.MovieCard;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LinearGradientPaint;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.Scanner;
 import javax.swing.JFrame;
@@ -24,7 +27,21 @@ public class ZoomImagePanel extends ImagePanel{
     private final static float MARGIN_PERCENTAGE = 0.06f;
     
     public ZoomImagePanel() {
-        this("https://image.tmdb.org/t/p/w600_and_h900_bestv2/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg");
+//        this("https://image.tmdb.org/t/p/w600_and_h900_bestv2/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg");
+        super();
+        zoomFlag = false;
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                formMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                formMouseExited(evt);
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                formMouseClicked(evt);
+            }
+        });
     }
     
     public ZoomImagePanel(String link) {
@@ -37,6 +54,10 @@ public class ZoomImagePanel extends ImagePanel{
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 formMouseExited(evt);
             }
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                formMouseClicked(evt);
+            }
         });
     }
 
@@ -46,15 +67,38 @@ public class ZoomImagePanel extends ImagePanel{
         Graphics2D g2d = (Graphics2D)g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
-        image = loadImage();
+        int width = getWidth();
+        int height = getHeight();
+        int length = height < width ? height : width;
         
-        if(image == null)
+        
+        if(image == null || loadingAnimation.isAlive())
+        {
+//            loadImage();
+//            if(image == null)
+//                throw new NullPointerException("Could not get image");
+            
+            Color color = INITAL_CIRCLE_COLOR;
+            float outerRadius = length / 3f;
+            float circleRadius = length / 4f;
+            for(int i = 2; i < 5; i++)
+            {
+                int angle = 5 * i + 1 * loadingCounter / 2;
+                int x = (int)(width / 2 + outerRadius * Math.cos(Math.toRadians(angle * i)));
+                int y = (int)(height / 2 + outerRadius * Math.sin(Math.toRadians(angle * i)));
+                int radius = (int)(circleRadius /  i);
+                g2d.setColor(color);
+                g2d.fillOval(x - radius / 2, y - radius / 2, radius, radius);
+                color = color.brighter().brighter();
+            }
             return;
+            
+        }
+        
+        
         int imageHeight = image.getHeight(this);
         int imageWidth = image.getWidth(this);
         
-        int width = getWidth();
-        int height = getHeight();
         
         float aspectRatio = imageHeight /(float)imageWidth;
         float targetRatio = getHeight() / (float)getWidth();
@@ -74,9 +118,11 @@ public class ZoomImagePanel extends ImagePanel{
             sx1 = (int)(imageWidth - imageHeight / targetRatio) / 2;
             sx2 = (int)(imageHeight / targetRatio) + sx1;
         }
-
+        System.out.println(zoomFlag);
         if(zoomFlag)
+        {
             g2d.drawImage(image, 0, 0, getWidth(), getHeight(), sx1, sy1, sx2, sy2, this);
+        }
         else
         {
             g2d.drawImage(image, 
@@ -131,5 +177,23 @@ public class ZoomImagePanel extends ImagePanel{
 
     private void formMouseExited(java.awt.event.MouseEvent evt) {                                 
         setZoomFlag(false);
-    }                                              
+    }
+    
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {                                 
+        
+        Component parent = getParent();
+        if(parent instanceof MovieCard)
+        {
+            parent.dispatchEvent(
+                    new MouseEvent(
+                            parent,
+                            evt.getID(),
+                            evt.getWhen(),
+                            evt.getModifiers(),
+                            evt.getX(),
+                            evt.getY(),
+                            evt.getClickCount(),
+                            evt.isPopupTrigger()));
+        }
+    }
 }

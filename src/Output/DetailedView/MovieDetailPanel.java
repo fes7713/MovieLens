@@ -29,6 +29,7 @@ public class MovieDetailPanel extends javax.swing.JPanel {
     public MovieDetailPanel(Movie movie) {
         initComponents();
         this.movie = movie;
+        prepareDetailedMovie();
     }
     
     public MovieDetailPanel(int movieId) {
@@ -37,6 +38,7 @@ public class MovieDetailPanel extends javax.swing.JPanel {
         if(Repository.isConnected() == false)
             Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
         movie = Repository.findMovieById(movieId);
+        prepareDetailedMovie();
     }
     
     public void setMovie(Movie movie)
@@ -94,6 +96,11 @@ public class MovieDetailPanel extends javax.swing.JPanel {
         repaint();
     }
     
+    public void setLinks(String imdbUrl, String tmdbUrl)
+    {
+        imdbLinkIcon.setLink(imdbUrl);
+        tmdbLinkIcon.setLink(tmdbUrl);
+    }
     
     public void prepareDetailedMovie()
     {
@@ -111,6 +118,14 @@ public class MovieDetailPanel extends javax.swing.JPanel {
         
         setRating(Repository.findAverageRatingById(id));
         setRatingCount(Repository.findRateCountById(id));
+        int imdbId = Repository.findImdbIdById(id);
+        int tmdbId = Repository.findTmdbIdById(id);
+        String imdbLink = null, tmdbLink = null;
+        if(imdbId != 0)
+            imdbLink = Scraping.IMDB_LINK + imdbId;
+        if(tmdbId != 0)
+            tmdbLink = Scraping.TMDB_LINK + tmdbId;
+        setLinks(imdbLink, tmdbLink);
         validate();
         repaint();
     }
@@ -122,6 +137,8 @@ public class MovieDetailPanel extends javax.swing.JPanel {
         movie = Repository.findMovieById(movieId);
         prepareDetailedMovie();
     }
+    
+    
     
 
     public static void main(String[] args) {

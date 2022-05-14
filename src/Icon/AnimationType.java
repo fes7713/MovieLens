@@ -19,7 +19,9 @@ public enum AnimationType {
     ACC_SHRINK_FAST,
     DESC_GROW,
     DESC_GROW_FAST,
+    DESC_GROW_SLOW,
     DESC_SHRINK,
-    DESC_SHRINK_FAST;
+    DESC_SHRINK_FAST,
+    DESC_SHRINK_SLOW;
     
 }
