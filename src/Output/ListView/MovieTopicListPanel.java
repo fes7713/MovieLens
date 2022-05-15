@@ -7,6 +7,8 @@ package Output.ListView;
 import Data.Genre;
 import Data.Movie;
 import Output.ScrollView.Scroll;
+import Output.StackView.MovieStackedPanel;
+import Repository.SearchMovies;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JFrame;
@@ -25,35 +27,84 @@ public class MovieTopicListPanel extends javax.swing.JPanel {
     Movie movie;
     Genre genre;
     String tag;
+    String search;
     Scroll type;
+    int size;
+    
     public MovieTopicListPanel() {
         
 //        relatedMoviesScrollPanel.scrollRectToVisible(focused);
 
-        movie = new Movie(1, "Toy Story");
+//        movie = new Movie(1, "Toy Story");
         type = Scroll.LINEAR;
+        initComponents();
+        prepareTopic();
+    }
+    
+    public MovieTopicListPanel(Scroll type) {
+        
+//        relatedMoviesScrollPanel.scrollRectToVisible(focused);
+
+//        movie = new Movie(1, "Toy Story");
+        this.type = type;
+        initComponents();
+        prepareTopic();
+    }
+    
+    public MovieTopicListPanel(Scroll type, int size) {
+        
+//        relatedMoviesScrollPanel.scrollRectToVisible(focused);
+
+//        movie = new Movie(1, "Toy Story");
+        this.size = size;
+        this.type = type;
         initComponents();
         prepareTopic();
     }
     
     // Related video to movie
     public MovieTopicListPanel(Scroll type, Movie m) {
+        this(type, m, 5);
+    }
+    
+    public MovieTopicListPanel(Scroll type, Genre g) {
+        this(type, g, 5);
+    }
+    
+    public MovieTopicListPanel(Scroll type, String tag) {
+        this(type, tag, 5);
+    }
+    
+    public MovieTopicListPanel(Scroll type, Movie m, int size) {
         this.type = type;
+        this.size = size;
         movie = m;
         initComponents();
         prepareTopic();
     }
     
-    public MovieTopicListPanel(Scroll type, Genre g) {
+    public MovieTopicListPanel(Scroll type, Genre g, int size) {
         this.type = type;
+        this.size = size;
         genre = g;
         initComponents();
         prepareTopic();
     }
     
-    public MovieTopicListPanel(Scroll type, String tag) {
+    public MovieTopicListPanel(Scroll type, String tag, int size) {
         this.type = type;
         this.tag = tag;
+        this.size = size;
+        initComponents();
+        prepareTopic();
+    }
+    
+    public MovieTopicListPanel(Scroll type, String tag, int size, boolean search ) {
+        this.type = type;
+//        this.tag = tag;
+        this.size = size;
+        this.search = tag ;
+        System.out.println("aaaa");
         initComponents();
         prepareTopic();
     }
@@ -64,8 +115,11 @@ public class MovieTopicListPanel extends javax.swing.JPanel {
             topicLabel.setText("Similar movies to " + movie.getTitle());
         else if(genre != null)
             topicLabel.setText("Genre: " + genre);
+        
         else if(tag != null)
             topicLabel.setText("Tag: " + tag);
+        else if(search != null)
+            topicLabel.setText("Search for " + search);
         else
             topicLabel.setText("Top rated movies");
         
@@ -105,9 +159,10 @@ public class MovieTopicListPanel extends javax.swing.JPanel {
         jSplitPane1 = new javax.swing.JSplitPane();
         controlePanel = new javax.swing.JPanel();
         topicLabel = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        searchField = new javax.swing.JTextField();
+        searchIcon1 = new Icon.SearchIcon(searchField);
         movieScrollPanel1 = new Output.ScrollView.MovieScrollPanel(
-            5, 4, type, (int start, int size)->{
+            size, 6, type, (int start, int size)->{
                 if(movie != null)
                 {
                     return SearchMovies.genreMostMatch(movie.getId(), start, size);
@@ -116,10 +171,13 @@ public class MovieTopicListPanel extends javax.swing.JPanel {
                 {
                     return SearchMovies.searchByGenre(genre, start, size);
                 }
+
                 else if(tag != null)
                 {
                     return SearchMovies.searchByTag(tag, start, size);
                 }
+                else if(search != null)
+                return SearchMovies.searchByName(search, start, size);
                 return SearchMovies.topRated(start, size);
             });
 
@@ -144,9 +202,27 @@ public class MovieTopicListPanel extends javax.swing.JPanel {
             topicLabel.setForeground(new java.awt.Color(255, 255, 255));
             topicLabel.setText("Topic");
 
-            jLabel2.setBackground(new java.awt.Color(51, 51, 51));
-            jLabel2.setForeground(new java.awt.Color(51, 153, 255));
-            jLabel2.setText("More movies");
+            searchField.setBackground(new java.awt.Color(51, 51, 51));
+            searchField.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+            searchField.setForeground(new java.awt.Color(255, 255, 255));
+            searchField.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+            searchField.setOpaque(true);
+            searchField.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    searchFieldActionPerformed(evt);
+                }
+            });
+
+            javax.swing.GroupLayout searchIcon1Layout = new javax.swing.GroupLayout(searchIcon1);
+            searchIcon1.setLayout(searchIcon1Layout);
+            searchIcon1Layout.setHorizontalGroup(
+                searchIcon1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 100, Short.MAX_VALUE)
+            );
+            searchIcon1Layout.setVerticalGroup(
+                searchIcon1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 54, Short.MAX_VALUE)
+            );
 
             javax.swing.GroupLayout controlePanelLayout = new javax.swing.GroupLayout(controlePanel);
             controlePanel.setLayout(controlePanelLayout);
@@ -154,18 +230,25 @@ public class MovieTopicListPanel extends javax.swing.JPanel {
                 controlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(controlePanelLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(topicLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 973, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(topicLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 632, Short.MAX_VALUE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jLabel2)
+                    .addComponent(searchIcon1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap())
             );
             controlePanelLayout.setVerticalGroup(
                 controlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(topicLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
+                .addGroup(controlePanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(topicLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, controlePanelLayout.createSequentialGroup()
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2)
-                    .addContainerGap())
+                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18))
+                .addGroup(controlePanelLayout.createSequentialGroup()
+                    .addComponent(searchIcon1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE))
             );
 
             movieScrollPanel1.setBackground(new java.awt.Color(51, 51, 51));
@@ -174,10 +257,10 @@ public class MovieTopicListPanel extends javax.swing.JPanel {
             this.setLayout(layout);
             layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(movieScrollPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(movieScrollPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 999, Short.MAX_VALUE)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addGap(19, 19, 19)
-                    .addComponent(controlePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addContainerGap()
+                    .addComponent(controlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
             layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,19 +268,38 @@ public class MovieTopicListPanel extends javax.swing.JPanel {
                     .addContainerGap()
                     .addComponent(controlePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(movieScrollPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE))
+                    .addComponent(movieScrollPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE))
             );
         }// </editor-fold>//GEN-END:initComponents
+
+    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
+        if(MovieStackedPanel.STACK_PANEL != null)
+        {
+                
+//            Component parent = getParent().getParent().getParent().getParent().getParent();
+//            System.out.println(parent.getClass().getSimpleName());
+            
+//            if(parent instanceof MovieScrollDetailPanel)
+//            {
+                MovieStackedPanel.STACK_PANEL.reset(new MovieTopicListPanel(Scroll.GRID, searchField.getText(), 22, true));
+               searchField.setText("");
+                
+//            }
+                
+                
+        }
+    }//GEN-LAST:event_searchFieldActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel controlePanel;
     private Icon.CrossIcon crossIcon2;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
     private Output.ScrollView.MovieScrollPanel movieScrollPanel1;
+    private javax.swing.JTextField searchField;
+    private Icon.SearchIcon searchIcon1;
     private javax.swing.JLabel topicLabel;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,6 +4,7 @@
  */
 package Output.ListView;
 
+import Repository.SearchMovies;
 import Data.Movie;
 import Output.GridView.MovieCard;
 import Output.GridView.MovieCardProducer;
@@ -109,10 +110,14 @@ public abstract class MovieListView  extends javax.swing.JPanel{
             return;
         }
         
+        // TODO May need to rtemove this latyer
+        setPreferredSize(null);
         int listSize = movies.size();
 //        List<Integer> addingMovies = search(size, unit);
         List<Integer> addingMovies = Repository.findTopRatedMovieIds(size, unit);
         size += unit;
+        
+        
         
         for (int i = 0; i < addingMovies.size(); i++) {
 
@@ -136,6 +141,8 @@ public abstract class MovieListView  extends javax.swing.JPanel{
     }
     
     public void updateMovies() {
+        // This is very important code to fix the issue where new loaded movies do not show on screen when screen is scrolled to the end.
+        setPreferredSize(new Dimension(size * 230, 400));
 //       
 //            
 //            nCols = Math.max(Math.min(getWidth(), getParent().getWidth()) / 230, 1);

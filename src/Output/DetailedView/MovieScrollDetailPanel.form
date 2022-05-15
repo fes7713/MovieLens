@@ -21,7 +21,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="scrollPane" alignment="0" max="32767" attributes="0"/>
+          <Component id="scrollPane" alignment="0" pref="1880" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -34,16 +34,23 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
         <Container class="javax.swing.JPanel" name="jPanel1">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="33" green="33" red="33" type="rgb"/>
+            </Property>
+          </Properties>
 
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
+                  <Component id="movieDetailPanel1" pref="1120" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="movieDetailPanel1" pref="1120" max="32767" attributes="0"/>
-                          <Component id="movieTopicListPanel1" pref="0" max="32767" attributes="0"/>
+                          <Component id="tagGenrePanel2" max="32767" attributes="0"/>
+                          <Component id="movieTopicListPanel1" alignment="0" pref="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -51,15 +58,19 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="movieDetailPanel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="tagGenrePanel2" min="-2" pref="499" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="movieTopicListPanel1" min="-2" pref="572" max="-2" attributes="0"/>
-                      <EmptySpace pref="18" max="32767" attributes="0"/>
+                      <Component id="movieTopicListPanel1" pref="762" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
             <Component class="Output.DetailedView.MovieDetailPanel" name="movieDetailPanel1">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new Output.DetailedView.MovieDetailPanel(movieId)"/>
+              </AuxValues>
             </Component>
             <Component class="Output.ListView.MovieTopicListPanel" name="movieTopicListPanel1">
               <Properties>
@@ -67,6 +78,14 @@
                   <Dimension value="[4600, 400]"/>
                 </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new Output.ListView.MovieTopicListPanel(Scroll.LINEAR, Repository.findMovieById(movieId))"/>
+              </AuxValues>
+            </Component>
+            <Component class="Output.DetailedView.TagGenrePanel" name="tagGenrePanel2">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new Output.DetailedView.TagGenrePanel(movieId)"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>

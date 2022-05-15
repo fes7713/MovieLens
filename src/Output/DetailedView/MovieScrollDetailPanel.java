@@ -4,9 +4,11 @@
  */
 package Output.DetailedView;
 
+import Output.ScrollView.Scroll;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JFrame;
+import movielens.Repository;
 
 /**
  *
@@ -17,15 +19,21 @@ public class MovieScrollDetailPanel extends javax.swing.JPanel {
     /**
      * Creates new form MovieScrollDetailPanel
      */
+    int movieId;
     public MovieScrollDetailPanel() {
         initComponents();
     }
-    
+
+    public MovieScrollDetailPanel(int movieId) {
+        this.movieId = movieId;
+        initComponents();
+    }
+
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(1600, 1000));
-        MovieScrollDetailPanel movieListPanel = new MovieScrollDetailPanel();
+        MovieScrollDetailPanel movieListPanel = new MovieScrollDetailPanel(1);
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieListPanel);
@@ -50,10 +58,13 @@ public class MovieScrollDetailPanel extends javax.swing.JPanel {
 
         scrollPane = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
-        movieDetailPanel1 = new Output.DetailedView.MovieDetailPanel();
-        movieTopicListPanel1 = new Output.ListView.MovieTopicListPanel();
+        movieDetailPanel1 = new Output.DetailedView.MovieDetailPanel(movieId);
+        movieTopicListPanel1 = new Output.ListView.MovieTopicListPanel(Scroll.LINEAR, Repository.findMovieById(movieId));
+        tagGenrePanel2 = new Output.DetailedView.TagGenrePanel(movieId);
 
         scrollPane.getVerticalScrollBar().setUnitIncrement(25);
+
+        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
 
         movieTopicListPanel1.setPreferredSize(new java.awt.Dimension(4600, 400));
 
@@ -61,19 +72,22 @@ public class MovieScrollDetailPanel extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addComponent(movieDetailPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1120, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(movieDetailPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1120, Short.MAX_VALUE)
+                    .addComponent(tagGenrePanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(movieTopicListPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(0, 0, 0))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(movieDetailPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tagGenrePanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(movieTopicListPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 572, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addComponent(movieTopicListPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 762, Short.MAX_VALUE))
         );
 
         scrollPane.setViewportView(jPanel1);
@@ -86,7 +100,7 @@ public class MovieScrollDetailPanel extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollPane)
+            .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1880, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -96,5 +110,6 @@ public class MovieScrollDetailPanel extends javax.swing.JPanel {
     private Output.DetailedView.MovieDetailPanel movieDetailPanel1;
     private Output.ListView.MovieTopicListPanel movieTopicListPanel1;
     private javax.swing.JScrollPane scrollPane;
+    private Output.DetailedView.TagGenrePanel tagGenrePanel2;
     // End of variables declaration//GEN-END:variables
 }

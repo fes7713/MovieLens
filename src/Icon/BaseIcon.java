@@ -56,6 +56,20 @@ public class BaseIcon extends javax.swing.JPanel {
         thread = new Thread();
     }
     
+    protected void drawBackground(Graphics2D g2d, int width, int height, int  length, int  margin)
+    {
+        int bgSize = length - 2 *  margin;
+        
+        int bgStartX = width / 2 - length / 2 + margin;
+        int bgStartY = height / 2 - length / 2 + margin;
+        g2d.setColor(bgColor);
+        g2d.fillOval(bgStartX, bgStartY, bgSize, bgSize);
+//        g2d.setColor(Color.BLACK);
+//        g2d.fillOval(outerStartX, outerStartY, outerSize, outerSize);
+        
+        
+    }
+    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
@@ -65,28 +79,15 @@ public class BaseIcon extends javax.swing.JPanel {
         int width = getWidth();
         int length = height < width ? height : width;
         int margin = (int)(length * marginPercentage);
-//        int padding = (int)(length * lineThicknessPercentage);
+
         int thickness = (int)(length * lineThicknessPercentage);
         
-        int bgSize = length - 2 *  margin;
-        int outerSize = length - 2 * (thickness + margin);
+        drawBackground(g2d, width, height, length, margin);
         
-        int bgStartX = width / 2 - length / 2 + margin;
-        int bgStartY = height / 2 - length / 2 + margin;
-        int outerStartX = width / 2 - length / 2 + thickness + margin;
-        int outerStartY = height / 2 - length / 2 + thickness + margin;
-        
-        g2d.setColor(bgColor);
-        g2d.fillOval(bgStartX, bgStartY, bgSize, bgSize);
-//        g2d.setColor(Color.BLACK);
-//        g2d.fillOval(outerStartX, outerStartY, outerSize, outerSize);
         
         BasicStroke wideStroke = new BasicStroke(thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
         g2d.setStroke(wideStroke);
         g2d.setColor(color);
-        
-        
-
     }
 
 //    public abstract void clickAction(java.awt.event.MouseEvent e);

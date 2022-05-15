@@ -5,7 +5,7 @@
 package Output.ScrollView;
 
 import Output.ListView.MovieListView;
-import Output.ListView.SearchMovies;
+import Repository.SearchMovies;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JFrame;
@@ -56,6 +56,8 @@ public class MovieScrollPanel extends javax.swing.JPanel {
             case LINEAR -> {
                 initComponents(new Output.ListView.MovieSingleListPanel(20, 4, sm));
                 movieListPanel.setPreferredSize(new Dimension(20 * 230, 400));
+                movieListPanel.setPreferredSize(null);
+
                 movieScrollPane.getHorizontalScrollBar().addAdjustmentListener((e) -> {
                     int extent = movieScrollPane.getHorizontalScrollBar().getModel().getExtent();
                     int value = movieScrollPane.getHorizontalScrollBar().getValue()+extent;

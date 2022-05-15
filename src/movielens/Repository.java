@@ -410,6 +410,35 @@ public class Repository {
         return tagMap;
     }
     
+    public static List<String>  findTagsByIdOrdered(int movieId)
+    {
+        List<String> tagList = new ArrayList<>();
+//        select Tag, count(*) from Tag Group By Tag
+        String query = 
+            "SELECT " 
+                + " DISTINCT " + Keys.TAG
+            + " FROM " 
+                + Tables.TAG 
+            + " WHERE " 
+                + Keys.MOVIEID + " = " + movieId
+            + " GROUP BY "
+                + Keys.TAG
+            + " ORDER BY COUNT(*) DESC";
+            
+        processQuery(query, (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> {
+                try {
+                    tagList.add((String)rs.getObject(Keys.TAG));
+                }
+                catch(SQLException e){
+                    int errorCode = e.getErrorCode();
+                    String errorMessage = e.getMessage();
+                    JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
+                }
+                return null;
+        });
+        return tagList;
+    }
+    
     public static int findImdbIdById(int movieId)
     {
         String query = 
@@ -993,7 +1022,8 @@ public class Repository {
 //            System.out.println(m);
     
 //        Repository.insertLinkFromFile();
-        Repository.insertGenresFromFile();
+//        Repository.insertGenresFromFile();
+        System.out.println(Repository.findTagsByIdOrdered(1));
     }
     
 }

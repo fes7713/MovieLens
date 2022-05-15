@@ -6,7 +6,7 @@ package Output.GridView;
 
 import Data.Movie;
 import Output.ListView.MovieListView;
-import Output.ListView.SearchMovies;
+import Repository.SearchMovies;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;

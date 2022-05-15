@@ -5,10 +5,12 @@
 package Output.StackView;
 
 import Output.DetailedView.MovieDetailPanel;
-import Output.ListView.SearchMovies;
-import Output.ScrollView.MovieScrollPanel;
+import Output.DetailedView.MovieScrollDetailPanel;
+import Output.ListView.MovieTopicListPanel;
 import Output.ScrollView.Scroll;
+import Repository.SearchMovies;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.util.Scanner;
 import java.util.Stack;
@@ -39,7 +41,8 @@ public class MovieStackedPanel extends javax.swing.JPanel {
     
     public MovieStackedPanel(Scroll type, SearchMovies sm) {
         initComponents();
-        add(new MovieScrollPanel(type, sm));
+//        add(new MovieScrollPanel(type, sm));
+        add(new MovieTopicListPanel(Scroll.GRID, 22));
         layout = (CardLayout)getLayout();
         movieStack = new Stack<>();
         STACK_PANEL = this;
@@ -105,13 +108,13 @@ public class MovieStackedPanel extends javax.swing.JPanel {
     
     public void addMovie(int movieId)
     {
-        MovieDetailPanel panel = new MovieDetailPanel(movieId);
+        MovieScrollDetailPanel panel = new MovieScrollDetailPanel(movieId);
         movieStack.push(panel);
 //        layout.addLayoutComponent(panel, panel.toString());
 ////        layout.show(this, panel.toString());
 //        layout.next(this);
         add(panel);
-        layout.next(this);
+        layout.last(this);
     }
     
     public void previous()
@@ -123,6 +126,48 @@ public class MovieStackedPanel extends javax.swing.JPanel {
         }
         JPanel tagFirst = movieStack.pop();
         layout.removeLayoutComponent(tagFirst);
+        
+    }
+    
+    public void removeComponent()
+    {
+        layout.removeLayoutComponent(this);
+    }
+    
+    public void removeTop()
+    {
+        JPanel panel = movieStack.pop();
+        MovieStackedPanel.STACK_PANEL.remove(panel);
+        System.out.println("Removing top");
+    }
+    
+    public void reset()
+    {
+        removeAll();
+        add(new MovieTopicListPanel(Scroll.GRID, 22));
+        validate();
+        repaint();
+    }
+    
+    public void reset(JPanel panel)
+    {
+        removeAll();
+        add(panel);
+        validate();
+        repaint();
+    }
+    
+    public void backHome()
+    {
+//        while(movieStack.size() > 1)
+//            removeTop();
+        layout.first(this);
+    }
+    
+    public Component peekTop()
+    {
+        return movieStack.peek();
+        
         
     }
     

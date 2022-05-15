@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package Output.ListView;
+package Repository;
 
 /**
  *
@@ -14,8 +14,6 @@ package Output.ListView;
  */
 
 import Data.Genre;
-import Repository.Keys;
-import Repository.Tables;
 import java.util.List;
 import movielens.Repository;
 
@@ -137,17 +135,76 @@ public interface SearchMovies {
     };
     public static List<Integer> searchByGenre(Genre genre, int start, int size)
     {
-        String query = "";
+        String query = 
+                " SELECT "
+                    + Tables.GENRE + "." + Keys.MOVIEID
+                + " FROM " 
+                    + Tables.GENRE 
+                        + " LEFT OUTER JOIN "
+                    + Tables.RATING
+                        + " ON "
+                    + Tables.GENRE + "." + Keys.MOVIEID
+                        + " = "
+                    + Tables.RATING + "." + Keys.MOVIEID
+                + " WHERE "
+                    + Keys.GENRE
+                        + " = "
+                    + "\"" + genre.toString() + "\""
+                + " GROUP BY "
+                    + Tables.GENRE + "." + Keys.MOVIEID
+                + " ORDER BY "
+                    + " AVG(" + Keys.RATING + ") DESC, "
+                    + " COUNT(*) DESC";
+//         Genre.movieId, AVG(rating), COUNT(*) FROM Genre LEFT OUTER JOIN Rating ON Genre.movieId = Rating.movieId 
+//                 WHERE genre = "Action" GROUP BY Genre.movieId ORDER BY AVG(rating) DESC, COUNT(*) DESC;
         return Repository.findMovieByQuery(query, start, size);
     };
     public static List<Integer> searchByTag(String tag, int start, int size)
     {
-        String query = "";
+        String query = 
+                " SELECT "
+                    + Tables.TAG + "." + Keys.MOVIEID
+                + " FROM " 
+                    + Tables.TAG 
+                        + " LEFT OUTER JOIN "
+                    + Tables.RATING
+                        + " ON "
+                    + Tables.TAG + "." + Keys.MOVIEID
+                        + " = "
+                    + Tables.RATING + "." + Keys.MOVIEID
+                + " WHERE "
+                    + Keys.TAG
+                        + " = "
+                    + "\"" + tag + "\""
+                + " GROUP BY "
+                    + Tables.TAG + "." + Keys.MOVIEID
+                + " ORDER BY "
+                    + " AVG(" + Keys.RATING + ") DESC, "
+                    + " COUNT(*) DESC";
         return Repository.findMovieByQuery(query, start, size);
     };
     public static List<Integer> searchByName(String name, int start, int size)
     {
-        String query = "";
+        String query = 
+                " SELECT "
+                    + Tables.MOVIE + "." + Keys.MOVIEID
+                + " FROM " 
+                    + Tables.MOVIE 
+                        + " LEFT OUTER JOIN "
+                    + Tables.RATING
+                        + " ON "
+                    + Tables.MOVIE + "." + Keys.MOVIEID
+                        + " = "
+                    + Tables.RATING + "." + Keys.MOVIEID
+                + " WHERE "
+                    + Keys.TITLE
+                        + " LIKE "
+                    + "\"%" + name + "%\""
+                + " GROUP BY "
+                    + Tables.MOVIE + "." + Keys.MOVIEID
+                + " ORDER BY "
+                    + " AVG(" + Keys.RATING + ") DESC, "
+                    + " COUNT(*) DESC";
         return Repository.findMovieByQuery(query, start, size);
     };
     

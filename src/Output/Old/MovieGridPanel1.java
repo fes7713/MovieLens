@@ -6,7 +6,7 @@ package Output.Old;
 
 import Data.Movie;
 import Output.GridView.MovieCard;
-import Output.ListView.SearchMovies;
+import Repository.SearchMovies;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;

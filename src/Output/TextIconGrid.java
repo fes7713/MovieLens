@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package Output.ListView;
+package Output;
 
-import Repository.SearchMovies;
+import Icon.TextIcon;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JFrame;
@@ -14,32 +14,25 @@ import movielens.Repository;
  *
  * @author fes77
  */
-public class MovieSingleListPanel extends MovieListView {
+public class TextIconGrid extends javax.swing.JPanel {
 
     /**
-     * Creates new form MovieSingleListPanel
+     * Creates new form TextIconGrid
      */
-    public MovieSingleListPanel() {
-        super();
-        
+    public TextIconGrid() {
+        initComponents();
+        for(int i = 0; i < 20; i++)
+            add(new TextIcon("A", TextIcon.evalRateColor(i/2f)));
     }
-
-    public MovieSingleListPanel(int size, int threadSize) {
-        super(size, threadSize);
-    }
-
-    public MovieSingleListPanel(int size, int threadSize, SearchMovies sm) {
-        super(size, threadSize, sm);
-    }
-
+    
+    
     
     public static void main(String[] args) {
+        Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(new Dimension(800, 300));
-        MovieSingleListPanel movieListPanel = new MovieSingleListPanel(10, 5, (int start, int size)->{
-            return Repository.findTopRatedMovieIds(start, size);
-        });
+        frame.setSize(new Dimension(800, 500));
+        TextIconGrid movieListPanel = new TextIconGrid();
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieListPanel);
@@ -58,9 +51,9 @@ public class MovieSingleListPanel extends MovieListView {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    protected void initComponents() {
+    private void initComponents() {
 
-        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.X_AXIS));
+        setLayout(new java.awt.GridLayout(0, 4, 5, 5));
     }// </editor-fold>//GEN-END:initComponents
 
 
