@@ -2,9 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package Output.ListView;
+package Output.GridView;
 
 import Data.Movie;
+import Output.ListView.MovieListView;
+import Output.ListView.SearchMovies;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -20,17 +22,22 @@ import movielens.Repository;
  *
  * @author fes77
  */
-public class MovieListPanel2 extends javax.swing.JPanel {
+public class MovieGridPanel1 extends MovieListView implements SearchMovies{
 
     /**
-     * Creates new form MovieListPanel
+     * Creates new form MovieGridPanel
      */
     List<MovieCard> movies;
     ExecutorService executor;
-
+    int unit;
+    int size;
+    int nCols;
+    int nRows;
+    SearchMovies searchAction;
+    
     boolean debug = false;
     
-    public MovieListPanel2()
+    public MovieGridPanel1()
     {
         initComponents();
         removeAll();
@@ -38,18 +45,25 @@ public class MovieListPanel2 extends javax.swing.JPanel {
             Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
         
         debug = true;
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < 20; i++)
         {
             add(new MovieCard(new Movie(0, "Sample Movie")));
         }
         
         
-        GridLayout layout = (GridLayout) getLayout();
-        layout.setColumns(Math.max(getWidth() / 230, 1));
-        layout.setRows(Math.max(getHeight() / 250, 1));
+//        GridLayout layout = (GridLayout) getLayout();
+//        layout.setColumns(Math.max(getWidth() / 230, 1));
+//        layout.setRows(Math.max(getHeight() / 250, 1));
+        unit = 20;
     }
     
-    public MovieListPanel2(int threadSize) {
+    public MovieGridPanel1(int size, int threadSize) {
+        this(size, threadSize, (int start, int unitSize)->{
+            return SearchMovies.topRated(start, size);
+        });
+    }
+    
+    public MovieGridPanel1(int size, int threadSize, SearchMovies sm) {
         initComponents();
         removeAll();
 
@@ -62,37 +76,96 @@ public class MovieListPanel2 extends javax.swing.JPanel {
         
         movies = new LinkedList();
         executor = Executors.newFixedThreadPool(threadSize);
+        this.unit = size;
+        searchAction = sm;
+        loadMovieCards(sm);
+        validate();
+        repaint();
     }
+    
+    public int getRows()
+    {
+        return nRows;
+    }
+    
+    public int getCols()
+    {
+        return nCols;
+    }
+    
+    public void setParent(Container parent)
+    {
+//        this.parent = parent;
+    }
+    
+    public boolean isIdle()
+    {
+        return size == movies.size();
+    }
+    
+    public void clearList(){
+        removeAll();
+        movies.clear();
+        
+    }
+    public void loadMovieCards()
+    {
+        if(searchAction != null)
+        {
+            loadMovieCards(searchAction);
+            return;
+        }
+        
+        int listSize = movies.size();
+        List<Integer> addingMovies = search(size, unit);
+//        List<Integer> addingMovies = Repository.findTopRatedMovieIds(size, unit);
+        size += unit;
+        
+        for (int i = 0; i < addingMovies.size(); i++) {
 
-    private void updateMovies() {
-        Container parent = getParent();
+            executor.execute(new MovieCardProducer(addingMovies.get(i), movies, this, true));
+            System.out.println("Adding[" + i +  "] into list");
+        }
+    }
+    
+    public void loadMovieCards(SearchMovies sm) {
+        searchAction = sm;
+        int listSize = movies.size();
+        List<Integer> addingMovies = sm.search(size, unit);
+//        List<Integer> addingMovies = Repository.findTopRatedMovieIds(size, unit);
+        size += unit;
         
-        
-        
-//        int nCols = Math.min(
-//                Math.max(getWidth() / 230, 1),
-//                Math.max(parent.getWidth() / 230, 1));
-//        int nRows = Math.max(
-//                Math.max(getHeight(), getWidth() * getHeight() / (nCols * 230)) / 250, 1);
-        
-        int nCols = Math.max(getWidth() / 230, 1);
-        int nRows = Math.max(getHeight() / 250, 1);
-//        if(parent.getWidth() > getWidth())
-//        {
-//            nCols = Math.max(getWidth() / 230, 1);
-//            nRows = Math.max(getHeight() / 250, 1);
-//        }
-//        else{
-//            nCols = Math.max(getWidth() / 230, 1);
-//        }
+        for (int i = 0; i < addingMovies.size(); i++) {
 
-        int totalSize = nCols * nRows;
+            executor.execute(new MovieCardProducer(addingMovies.get(i), movies, this, true));
+            System.out.println("Adding[" + i +  "] into list");
+        }
+    }
+    
+    public void updateMovies() {
+       
+            
+            nCols = Math.max(Math.min(getWidth(), getParent().getWidth()) / 230, 1);
+
+            
+//        int nCols = 2;
+        nRows = size / nCols + (size % nCols == 0 ? 0 : 1);
+
+
+//        int totalSize = nCols * nRows;
+        int totalSize = unit;
         int currentSize = getComponentCount();
         GridLayout layout = (GridLayout) getLayout();
         layout.setColumns(Math.max(nCols, 1));
         layout.setRows(Math.max(nRows, 1));
         setPreferredSize(new Dimension(230 * nCols, 250 * nRows));
+//        setSize(new Dimension(230 * nCols, 250 * nRows));
+
         
+//        if(parent != null)
+//            parent.setPreferredSize(new Dimension(230 * nCols, 250 * nRows + 100));
+        System.out.println(getPreferredSize().toString());
+        System.out.println(getSize().toString());
         System.out.println("[B]Total ( " + nCols + ", " + nRows + ") " + totalSize);
         System.out.println("[B]Current " + currentSize);
         
@@ -106,50 +179,26 @@ public class MovieListPanel2 extends javax.swing.JPanel {
             return;
         }
         
-        int listSize = movies.size();
-        
-        List<Movie> addingMovies;
-//        if(debug == false)
-        addingMovies = Repository.findTopRatedMovies(listSize, (totalSize - listSize));
-//        else
-//            addingMovies = Repository.provideTestMovies((totalSize - listSize));
-        
-        for (int i = 0; i < addingMovies.size(); i++) {
-//            MovieCard card = new MovieCard(addingMovies.get(i));
-//            movies.add(card);
-            executor.execute(new ThreadPoolSample.MovieCardProducer(addingMovies.get(i), movies, this, true));
-            currentSize++;
-//            executor.execute(new ThreadPoolSample.MovieCardProducer(addingMovies.get(addingMovies.size() - i - 1), movies, this, false));
-            System.out.println("Adding[" + addingMovies.get(i).getId() +  "] into list");
-        }
-
-//        for (int i = addingMovies.size() / 2; i < addingMovies.size(); i++) {
-//            
-//            executor.execute(new ThreadPoolSample.MovieCardProducer(addingMovies.get(i), movies, this, false));
-//            System.out.println("Extra[" + addingMovies.get(i).getId() +  "] into list");
-//        }
-        
-        for (int i = currentSize; i < totalSize; i++) {
-            add(movies.get(i));
-        }
-        
-        for(int i = totalSize; i < currentSize; i++)
-        {
-            remove(movies.get(i));
-        }
-        
         System.out.println("[R]Current " + getComponentCount() + "\n\n\n");
 
-        
         validate();
         repaint();
     }
-
+    
+    @Override
+    public List<Integer> search(int start, int size) {
+        return SearchMovies.topRated(start, size);
+    }
+    
+    
+    
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(800, 300));
-        MovieListPanel2 movieListPanel = new MovieListPanel2(5);
+        MovieGridPanel1 movieListPanel = new MovieGridPanel1(10, 5, (int start, int size)->{
+            return Repository.findTopRatedMovieIds(start, size);
+        });
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieListPanel);
@@ -169,12 +218,12 @@ public class MovieListPanel2 extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    protected void initComponents() {
 
-        movieCard1 = new Output.ListView.MovieCard();
-        movieCard3 = new Output.ListView.MovieCard();
-        movieCard2 = new Output.ListView.MovieCard();
-        movieCard4 = new Output.ListView.MovieCard();
+        movieCard1 = new Output.GridView.MovieCard();
+        movieCard3 = new Output.GridView.MovieCard();
+        movieCard2 = new Output.GridView.MovieCard();
+        movieCard4 = new Output.GridView.MovieCard();
 
         setBackground(new java.awt.Color(51, 51, 51));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -182,7 +231,7 @@ public class MovieListPanel2 extends javax.swing.JPanel {
                 formComponentResized(evt);
             }
         });
-        setLayout(new java.awt.GridLayout(2, 2));
+        setLayout(new java.awt.GridLayout(1, 0));
         add(movieCard1);
         add(movieCard3);
         add(movieCard2);
@@ -195,9 +244,12 @@ public class MovieListPanel2 extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private Output.ListView.MovieCard movieCard1;
-    private Output.ListView.MovieCard movieCard2;
-    private Output.ListView.MovieCard movieCard3;
-    private Output.ListView.MovieCard movieCard4;
+    private Output.GridView.MovieCard movieCard1;
+    private Output.GridView.MovieCard movieCard2;
+    private Output.GridView.MovieCard movieCard3;
+    private Output.GridView.MovieCard movieCard4;
     // End of variables declaration//GEN-END:variables
+
+
+    
 }

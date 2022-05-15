@@ -2,23 +2,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package Output.ListView;
+package Output.GridView;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import javax.swing.JFrame;
 
 /**
  *
  * @author fes77
  */
-public class MovieScrollPanel1 extends javax.swing.JPanel {
+public class MovieScrollPanel2 extends javax.swing.JPanel {
 
     /**
      * Creates new form MovieScrollPanel
      */
-    public MovieScrollPanel1() {
+    public MovieScrollPanel2() {
         initComponents();
     }
 
@@ -26,7 +25,7 @@ public class MovieScrollPanel1 extends javax.swing.JPanel {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(800, 300));
-        MovieScrollPanel1 movieListPanel = new MovieScrollPanel1();
+        MovieScrollPanel2 movieListPanel = new MovieScrollPanel2();
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieListPanel);
@@ -39,12 +38,12 @@ public class MovieScrollPanel1 extends javax.swing.JPanel {
 //        }
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
-        
-        setPreferredSize(new Dimension(movieListPanel.getCols() * 230, movieListPanel.getRows() * 300));
-    }
+//    @Override
+//    protected void paintComponent(Graphics g) {
+//        super.paintComponent(g); //To change body of generated methods, choose Tools | Templates.
+//        
+//        setPreferredSize(new Dimension(movieListPanel.getCols() * 230, movieListPanel.getRows() * 250));
+//    }
     
     
     
@@ -59,41 +58,33 @@ public class MovieScrollPanel1 extends javax.swing.JPanel {
 
         movieListScrollPane = new javax.swing.JScrollPane();
         containerPanel = new javax.swing.JPanel();
-        movieListPanel = new Output.ListView.MovieListPanel(20, 5);
-        jButton2 = new javax.swing.JButton();
+        movieListPanel = new Output.GridView.MovieGridPanel(20, 5);
+        jButton1 = new javax.swing.JButton();
 
         movieListScrollPane.getVerticalScrollBar().setUnitIncrement(25);
 
-        containerPanel.addContainerListener(new java.awt.event.ContainerAdapter() {
-            public void componentAdded(java.awt.event.ContainerEvent evt) {
-                containerPanelComponentAdded(evt);
-            }
-        });
-
         movieListPanel.setPreferredSize(new java.awt.Dimension(500, 1000));
+        movieListPanel.setParent(containerPanel);
 
-        jButton2.setText("jButton2");
+        jButton1.setText("jButton1");
 
         javax.swing.GroupLayout containerPanelLayout = new javax.swing.GroupLayout(containerPanel);
         containerPanel.setLayout(containerPanelLayout);
         containerPanelLayout.setHorizontalGroup(
             containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(movieListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 1131, Short.MAX_VALUE)
             .addGroup(containerPanelLayout.createSequentialGroup()
-                .addContainerGap(317, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addContainerGap(337, Short.MAX_VALUE))
-            .addGroup(containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(movieListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 729, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         containerPanelLayout.setVerticalGroup(
             containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, containerPanelLayout.createSequentialGroup()
-                .addGap(548, 548, 548)
-                .addComponent(jButton2))
-            .addGroup(containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(containerPanelLayout.createSequentialGroup()
-                    .addComponent(movieListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 545, Short.MAX_VALUE)
-                    .addGap(25, 25, 25)))
+            .addGroup(containerPanelLayout.createSequentialGroup()
+                .addComponent(movieListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(0, 0, 0))
         );
 
         movieListScrollPane.setViewportView(containerPanel);
@@ -102,25 +93,19 @@ public class MovieScrollPanel1 extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(movieListScrollPane)
+            .addComponent(movieListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 771, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(movieListScrollPane)
+            .addComponent(movieListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void containerPanelComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_containerPanelComponentAdded
-        // TODO add your handling code here:
-        setPreferredSize(new Dimension(movieListPanel.getCols() * 230, movieListPanel.getRows() * 300));
-        System.out.println("aaa");
-    }//GEN-LAST:event_containerPanelComponentAdded
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel containerPanel;
-    private javax.swing.JButton jButton2;
-    private Output.ListView.MovieListPanel movieListPanel;
+    private javax.swing.JButton jButton1;
+    private Output.GridView.MovieGridPanel movieListPanel;
     private javax.swing.JScrollPane movieListScrollPane;
     // End of variables declaration//GEN-END:variables
 }

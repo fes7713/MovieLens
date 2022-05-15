@@ -104,7 +104,7 @@ public class ImagePanel extends javax.swing.JPanel {
         }
         int imageHeight = image.getHeight(this);
         int imageWidth = image.getWidth(this);
-        
+        setPreferredSize(new Dimension(imageWidth, imageHeight));
         
         
         float aspectRatio = imageHeight /(float)imageWidth;

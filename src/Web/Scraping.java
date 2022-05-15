@@ -130,6 +130,12 @@ public class Scraping {
         return getPictureURL(body, movieId);
     }
     
+    public static String getPictureURL_HIGH(int movieId)
+    {
+        Element body = getTBDBBodyById(movieId);
+        return getPictureURL_HIGH(body, movieId);
+    }
+    
     public static String getPictureURL(Element tbdbBody, int movieId)
     {
         if(tbdbBody == null)
@@ -140,7 +146,24 @@ public class Scraping {
         
         Element poster = tbdbBody.getElementsByClass("poster").first();
         String url = poster.getElementsByTag("img").first().attr("data-src");
+        Message.WEBSCRAPING.printMessage("PICTURE[" + TMDB_BASELINK + url + "]");
+        return TMDB_BASELINK + url;
         
+    }
+    
+    public static String getPictureURL_HIGH(Element tbdbBody, int movieId)
+    {
+        if(tbdbBody == null)
+        {
+            Message.NO_MATCH_ERROR.printMessage("Duration for id[" + movieId +"] not found");
+            return "https://www.lwf.org/images/emptyimg.png";
+        }
+        
+        Element poster = tbdbBody.getElementsByClass("poster").first();
+        String url = poster.getElementsByTag("img").first().attr("data-srcset").split(", ")[1].replace(" 2x", "");
+//        System.out.println("\n\n\n");
+//        System.out.println(poster.getElementsByTag("img").first().attributes());
+        System.out.println(TMDB_BASELINK + url);
         Message.WEBSCRAPING.printMessage("PICTURE[" + TMDB_BASELINK + url + "]");
         return TMDB_BASELINK + url;
         
@@ -180,7 +203,7 @@ public class Scraping {
 //        System.out.println(Scraping.getDuration(1));
 //        System.out.println(Scraping.getReleaseYear(1));
         
-        System.out.println(Scraping.getPictureURL(2075));
+        System.out.println(Scraping.getPictureURL_HIGH(2));
         System.out.println(Scraping.getOverview(1));
     }
 }

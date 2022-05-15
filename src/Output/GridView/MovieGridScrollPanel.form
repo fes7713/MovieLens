@@ -33,9 +33,9 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="Output.ListView.MovieListPanel" name="movieListPanel">
+        <Component class="Output.GridView.MovieGridPanel" name="movieListPanel">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new Output.ListView.MovieListPanel(20, 4)"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new Output.GridView.MovieGridPanel(20, 4)"/>
           </AuxValues>
         </Component>
       </SubComponents>

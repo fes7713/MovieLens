@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package Output.ListView;
+package Output.GridView;
 
 import Data.Movie;
 import java.awt.Color;
@@ -128,10 +128,10 @@ public class MovieListPanel3 extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        movieCard1 = new Output.ListView.MovieCard();
-        movieCard3 = new Output.ListView.MovieCard();
-        movieCard2 = new Output.ListView.MovieCard();
-        movieCard4 = new Output.ListView.MovieCard();
+        movieCard1 = new Output.GridView.MovieCard();
+        movieCard3 = new Output.GridView.MovieCard();
+        movieCard2 = new Output.GridView.MovieCard();
+        movieCard4 = new Output.GridView.MovieCard();
 
         setBackground(new java.awt.Color(51, 51, 51));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -152,9 +152,9 @@ public class MovieListPanel3 extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private Output.ListView.MovieCard movieCard1;
-    private Output.ListView.MovieCard movieCard2;
-    private Output.ListView.MovieCard movieCard3;
-    private Output.ListView.MovieCard movieCard4;
+    private Output.GridView.MovieCard movieCard1;
+    private Output.GridView.MovieCard movieCard2;
+    private Output.GridView.MovieCard movieCard3;
+    private Output.GridView.MovieCard movieCard4;
     // End of variables declaration//GEN-END:variables
 }

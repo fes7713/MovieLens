@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package Output.ListView;
+package Output.GridView;
 
 import Data.Movie;
+import Output.StackView.MovieStackedPanel;
 import Web.Scraping;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,7 +18,7 @@ import org.jsoup.nodes.Element;
  *
  * @author fes77
  */
-public class MovieCard1 extends javax.swing.JPanel {
+public class MovieCard extends javax.swing.JPanel {
 
     /**
      * Creates new form MovieCard
@@ -25,37 +26,49 @@ public class MovieCard1 extends javax.swing.JPanel {
     Movie movie;
     Element body;
     
-    public MovieCard1() {
+    public MovieCard() {
         super();
         initComponents();
     }
     
-    public MovieCard1(int movieId) {
+    public MovieCard(int movieId) {
         this(Repository.findMovieById(movieId));
     }
     
-    public MovieCard1(Movie m) {
+    public MovieCard(Movie m) {
         super();
-        movie = m;
         initComponents();
-        body = Scraping.getTBDBBodyById(m.getId());
+        
+        setMovie(m);
+    }
+
+    public void setMovie(Movie m)
+    {
+        movie = m;
+        
+        setPreferredSize(new Dimension(230, 500));
         if(movie != null)
         {
-            imagePanel.setLink(Scraping.getPictureURL(movie.getId()));
-            titleLabel.setText(movie.getTitle());  
-            yearLabel.setText(Scraping.getReleaseYearText(movie.getId()));  
-            durationLabel.setText(Scraping.getDurationText(movie.getId()));  
+            
+            body = Scraping.getTBDBBodyById(movie.getId());
+            imagePanel.setLink(Scraping.getPictureURL(body, movie.getId()));
+            String title = movie.getTitle();
+            if(title.length() > 23)
+                title = title.substring(0, 23) + "...";
+            titleLabel.setText(title);  
+            yearLabel.setText(Scraping.getReleaseYearText(body, movie.getId()));  
+            durationLabel.setText(Scraping.getDurationText(body, movie.getId()));  
             ratingCircle.setRating(Repository.findAverageRatingById(movie.getId()));
         }
     }
-
+    
     public static void main(String[] args)
     {
         Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(100, 200));
-        MovieCard1 movieCard = new MovieCard1(2075);
+        MovieCard movieCard = new MovieCard(2075);
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieCard);
@@ -73,10 +86,10 @@ public class MovieCard1 extends javax.swing.JPanel {
 
         jDialog1 = new javax.swing.JDialog();
         titleLabel = new javax.swing.JLabel();
+        imagePanel = new Output.ZoomImagePanel();
+        ratingCircle = new Icon.RatingCircle();
         yearLabel = new javax.swing.JLabel();
         durationLabel = new javax.swing.JLabel();
-        imagePanel = new Output.ImagePanel();
-        ratingCircle = new Icon.RatingCircle();
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -90,20 +103,18 @@ public class MovieCard1 extends javax.swing.JPanel {
         );
 
         setBackground(new java.awt.Color(51, 51, 51));
+        setMinimumSize(new java.awt.Dimension(230, 250));
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         titleLabel.setBackground(new java.awt.Color(255, 0, 51));
         titleLabel.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         titleLabel.setForeground(new java.awt.Color(255, 153, 51));
-        titleLabel.setText("Shawshanks");
+        titleLabel.setText("Shawshanksasdasdasdasdasdasdasdas");
         titleLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 1));
-
-        yearLabel.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        yearLabel.setForeground(new java.awt.Color(255, 255, 255));
-        yearLabel.setText("2021");
-
-        durationLabel.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        durationLabel.setForeground(new java.awt.Color(255, 255, 255));
-        durationLabel.setText("123 mins");
 
         ratingCircle.setMaximumSize(new java.awt.Dimension(150, 150));
 
@@ -115,24 +126,42 @@ public class MovieCard1 extends javax.swing.JPanel {
         );
         ratingCircleLayout.setVerticalGroup(
             ratingCircleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 132, Short.MAX_VALUE)
+            .addGap(0, 108, Short.MAX_VALUE)
         );
+
+        yearLabel.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        yearLabel.setForeground(new java.awt.Color(255, 255, 255));
+        yearLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        yearLabel.setText("10/17/2014 (US) ");
+
+        durationLabel.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        durationLabel.setForeground(new java.awt.Color(255, 255, 255));
+        durationLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        durationLabel.setText("123 mins");
 
         javax.swing.GroupLayout imagePanelLayout = new javax.swing.GroupLayout(imagePanel);
         imagePanel.setLayout(imagePanelLayout);
         imagePanelLayout.setHorizontalGroup(
             imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, imagePanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(ratingCircle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap()
+                .addGroup(imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(yearLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(durationLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ratingCircle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         imagePanelLayout.setVerticalGroup(
             imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, imagePanelLayout.createSequentialGroup()
-                .addContainerGap(427, Short.MAX_VALUE)
-                .addComponent(ratingCircle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(411, Short.MAX_VALUE)
+                .addComponent(yearLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(durationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, imagePanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(ratingCircle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -143,14 +172,7 @@ public class MovieCard1 extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(durationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20))
-                            .addComponent(yearLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -159,15 +181,18 @@ public class MovieCard1 extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(yearLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(durationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(titleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(titleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        if(MovieStackedPanel.STACK_PANEL != null && movie != null)
+        {
+            System.out.println("Adding movie detail pane to stack");
+            MovieStackedPanel.STACK_PANEL.addMovie(movie.getId());
+        }
+    }//GEN-LAST:event_formMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

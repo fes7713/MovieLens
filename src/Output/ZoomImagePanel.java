@@ -4,7 +4,7 @@
  */
 package Output;
 
-import Output.ListView.MovieCard;
+import Output.GridView.MovieCard;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;

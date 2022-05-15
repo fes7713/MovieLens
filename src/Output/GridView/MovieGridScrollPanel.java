@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package Output.ListView;
+package Output.GridView;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,14 +12,14 @@ import javax.swing.JFrame;
  *
  * @author fes77
  */
-public class MovieScrollPanel extends javax.swing.JPanel {
+public class MovieGridScrollPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form MovieScrollPanel
      */
     
 
-    public MovieScrollPanel() {
+    public MovieGridScrollPanel() {
         initComponents();
         movieScrollPane.getVerticalScrollBar().addAdjustmentListener((e) -> {
             int extent = movieScrollPane.getVerticalScrollBar().getModel().getExtent();
@@ -37,7 +37,7 @@ public class MovieScrollPanel extends javax.swing.JPanel {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(800, 600));
-        MovieScrollPanel movieListPanel = new MovieScrollPanel();
+        MovieGridScrollPanel movieListPanel = new MovieGridScrollPanel();
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieListPanel);
@@ -69,7 +69,7 @@ public class MovieScrollPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         movieScrollPane = new javax.swing.JScrollPane();
-        movieListPanel = new Output.ListView.MovieListPanel(20, 4);
+        movieListPanel = new Output.GridView.MovieGridPanel(20, 4);
 
         movieScrollPane.getVerticalScrollBar().setUnitIncrement(25);
         movieScrollPane.setViewportView(movieListPanel);
@@ -88,7 +88,7 @@ public class MovieScrollPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private Output.ListView.MovieListPanel movieListPanel;
+    private Output.GridView.MovieGridPanel movieListPanel;
     private javax.swing.JScrollPane movieScrollPane;
     // End of variables declaration//GEN-END:variables
 }

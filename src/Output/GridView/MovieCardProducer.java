@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Output.ListView;
+package Output.GridView;
 
 import Data.Movie;
+import Output.ListView.MovieListView;
 import java.util.List;
 import movielens.Repository;
 
@@ -15,16 +16,17 @@ import movielens.Repository;
 public class MovieCardProducer implements Runnable {
         private int movieId;
         List<MovieCard> rtnList;
-        MovieListPanel container;
+        MovieListView container;
         boolean add2Container;
         
-        public MovieCardProducer(Integer movieId, List<MovieCard> rtnList, MovieListPanel container, boolean add2Container) 
+        public MovieCardProducer(Integer movieId, List<MovieCard> rtnList, MovieListView container, boolean add2Container) 
         { 
             this.movieId = movieId;
             this.rtnList = rtnList;
             this.container = container;
             this.add2Container = add2Container;
         }
+        
         
         @Override
         public void run() {

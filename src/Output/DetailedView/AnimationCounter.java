@@ -4,8 +4,9 @@
  */
 package Output.DetailedView;
 
-import Output.ListView.*;
 import Data.Movie;
+import Output.GridView.MovieCard;
+import Output.GridView.MovieGridPanel;
 import java.util.List;
 import movielens.Repository;
 
@@ -16,10 +17,10 @@ import movielens.Repository;
 public class AnimationCounter implements Runnable {
         private int movieId;
         List<MovieCard> rtnList;
-        MovieListPanel container;
+        MovieGridPanel container;
         boolean add2Container;
         
-        public AnimationCounter(Integer movieId, List<MovieCard> rtnList, MovieListPanel container, boolean add2Container) 
+        public AnimationCounter(Integer movieId, List<MovieCard> rtnList, MovieGridPanel container, boolean add2Container) 
         { 
             this.movieId = movieId;
             this.rtnList = rtnList;

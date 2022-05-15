@@ -27,16 +27,16 @@
     <Property name="rows" type="int" value="1"/>
   </Layout>
   <SubComponents>
-    <Component class="Output.ListView.MovieCard" name="movieCard1">
+    <Component class="Output.GridView.MovieCard" name="movieCard1">
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="MovieListPanel_movieCard1"/>
       </AuxValues>
     </Component>
-    <Component class="Output.ListView.MovieCard" name="movieCard3">
+    <Component class="Output.GridView.MovieCard" name="movieCard3">
     </Component>
-    <Component class="Output.ListView.MovieCard" name="movieCard2">
+    <Component class="Output.GridView.MovieCard" name="movieCard2">
     </Component>
-    <Component class="Output.ListView.MovieCard" name="movieCard4">
+    <Component class="Output.GridView.MovieCard" name="movieCard4">
     </Component>
   </SubComponents>
 </Form>

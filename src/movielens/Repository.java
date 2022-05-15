@@ -300,6 +300,36 @@ public class Repository {
         return movie;
     }
     
+    public static List<Integer> findMovieByQuery(String query, int start, int size) {
+        if(size <= 0)
+            return new ArrayList();
+        List<Integer> ids = new ArrayList<>();
+        
+        if(query.contains("LIMIT"))
+                query += " LIMIT "
+                    + size;
+        if(query.contains("OFFSET"))
+                query += " OFFSET "
+                    + start;
+
+        processQuery(query, 
+                (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> 
+                {
+                    try{
+                        int id = rs.getObject(Keys.MOVIEID, Integer.TYPE);
+                        ids.add(id);
+                    }
+                    catch(SQLException e){
+                        int errorCode = e.getErrorCode();
+                        String errorMessage = e.getMessage();
+                        JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
+                    }
+                    return null;
+                }
+        );  
+        return ids;
+    }
+    
     public static Set<Genre> findGenresById(int movieId)
     {
         Set<Genre> genres = new HashSet();

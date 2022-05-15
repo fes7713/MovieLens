@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package Output.ListView;
+package Output.GridView;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,20 +12,22 @@ import javax.swing.JFrame;
  *
  * @author fes77
  */
-public class MovieScrollPanel2 extends javax.swing.JPanel {
+public class MovieScrollPanel3 extends javax.swing.JPanel {
 
     /**
      * Creates new form MovieScrollPanel
      */
-    public MovieScrollPanel2() {
+    
+
+    public MovieScrollPanel3() {
         initComponents();
     }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(new Dimension(800, 300));
-        MovieScrollPanel2 movieListPanel = new MovieScrollPanel2();
+        frame.setSize(new Dimension(800, 600));
+        MovieScrollPanel3 movieListPanel = new MovieScrollPanel3();
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieListPanel);
@@ -58,13 +60,16 @@ public class MovieScrollPanel2 extends javax.swing.JPanel {
 
         movieListScrollPane = new javax.swing.JScrollPane();
         containerPanel = new javax.swing.JPanel();
-        movieListPanel = new Output.ListView.MovieListPanel(20, 5);
+        movieListPanel = new Output.GridView.MovieGridPanel(20, 5);
         jButton1 = new javax.swing.JButton();
 
-        movieListScrollPane.getVerticalScrollBar().setUnitIncrement(25);
-
         movieListPanel.setPreferredSize(new java.awt.Dimension(500, 1000));
-        movieListPanel.setParent(containerPanel);
+        movieListPanel.setParent(movieListScrollPane);
+        movieListPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                movieListPanelComponentResized(evt);
+            }
+        });
 
         jButton1.setText("jButton1");
 
@@ -72,7 +77,7 @@ public class MovieScrollPanel2 extends javax.swing.JPanel {
         containerPanel.setLayout(containerPanelLayout);
         containerPanelLayout.setHorizontalGroup(
             containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(movieListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 1131, Short.MAX_VALUE)
+            .addComponent(movieListPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 1299, Short.MAX_VALUE)
             .addGroup(containerPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
@@ -81,7 +86,7 @@ public class MovieScrollPanel2 extends javax.swing.JPanel {
         containerPanelLayout.setVerticalGroup(
             containerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(containerPanelLayout.createSequentialGroup()
-                .addComponent(movieListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
+                .addComponent(movieListPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 755, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
                 .addGap(0, 0, 0))
@@ -93,19 +98,24 @@ public class MovieScrollPanel2 extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(movieListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 771, Short.MAX_VALUE)
+            .addComponent(movieListScrollPane)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(movieListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
+            .addComponent(movieListScrollPane)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void movieListPanelComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_movieListPanelComponentResized
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_movieListPanelComponentResized
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel containerPanel;
     private javax.swing.JButton jButton1;
-    private Output.ListView.MovieListPanel movieListPanel;
+    private Output.GridView.MovieGridPanel movieListPanel;
     private javax.swing.JScrollPane movieListScrollPane;
     // End of variables declaration//GEN-END:variables
 }

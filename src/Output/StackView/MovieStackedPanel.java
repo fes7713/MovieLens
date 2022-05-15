@@ -5,7 +5,7 @@
 package Output.StackView;
 
 import Output.DetailedView.MovieDetailPanel;
-import Output.ListView.MovieScrollPanel;
+import Output.GridView.MovieGridScrollPanel;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.util.Scanner;
@@ -27,7 +27,7 @@ public class MovieStackedPanel extends javax.swing.JPanel {
     
     public MovieStackedPanel() {
         initComponents();
-        add(new MovieScrollPanel());
+        add(new MovieGridScrollPanel());
         layout = (CardLayout)getLayout();
         movieStack = new Stack<>();
         STACK_PANEL = this;
