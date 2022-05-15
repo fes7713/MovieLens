@@ -5,7 +5,9 @@
 package Output.StackView;
 
 import Output.DetailedView.MovieDetailPanel;
-import Output.GridView.MovieGridScrollPanel;
+import Output.ListView.SearchMovies;
+import Output.ScrollView.MovieScrollPanel;
+import Output.ScrollView.Scroll;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.util.Scanner;
@@ -26,12 +28,80 @@ public class MovieStackedPanel extends javax.swing.JPanel {
     Stack<JPanel> movieStack;
     
     public MovieStackedPanel() {
+        this(Scroll.GRID);
+    }
+    
+    public MovieStackedPanel(Scroll type) {
+        this(type, (int start, int size)->{
+            return SearchMovies.tagMostMatch(1, start, size);
+        });
+    }
+    
+    public MovieStackedPanel(Scroll type, SearchMovies sm) {
         initComponents();
-        add(new MovieGridScrollPanel());
+        add(new MovieScrollPanel(type, sm));
         layout = (CardLayout)getLayout();
         movieStack = new Stack<>();
         STACK_PANEL = this;
     }
+    
+//    
+//    
+//     public MovieScrollPanel(MovieScrollPanel.Scroll type, SearchMovies sm) {
+//        switch(type)
+//        {
+//            case GRID->
+//            {
+//                initComponents(new Output.GridView.MovieGridPanel(20, 4, sm));
+//                movieScrollPane.getVerticalScrollBar().addAdjustmentListener((e) -> {
+//                    int extent = movieScrollPane.getVerticalScrollBar().getModel().getExtent();
+//                    int value = movieScrollPane.getVerticalScrollBar().getValue()+extent;
+//                    int max = movieScrollPane.getVerticalScrollBar().getMaximum();
+//
+//                    System.out.println("Value: " + value + " Max: " + max);
+//
+//                    if(max == value && movieListPanel.isIdle())
+//                        movieListPanel.loadMovieCards();
+//                }); 
+//            }
+//            case LINEAR -> {
+//                initComponents(new Output.ListView.MovieSingleListPanel(20, 4, sm));
+//                movieScrollPane.getHorizontalScrollBar().addAdjustmentListener((e) -> {
+//                    int extent = movieScrollPane.getHorizontalScrollBar().getModel().getExtent();
+//                    int value = movieScrollPane.getHorizontalScrollBar().getValue()+extent;
+//                    int max = movieScrollPane.getHorizontalScrollBar().getMaximum();
+//
+//                    System.out.println("Value: " + value + " Max: " + max);
+//
+//                    if(max == value && movieListPanel.isIdle())
+//                        movieListPanel.loadMovieCards();
+//                }); 
+//            }
+//            default -> throw new AssertionError(type.name());
+//            
+//        }
+//        
+//    }
+//    
+//    public MovieGridPanel(int size, int threadSize, SearchMovies sm) {
+//        initComponents();
+//        removeAll();
+//
+////        GridLayout layout = (GridLayout) getLayout();
+////        layout.setColumns(Math.max(getWidth() / 230, 1));
+////        layout.setRows(Math.max(getHeight() / 250, 1));
+//        
+//        if(Repository.isConnected() == false)
+//            Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
+//        
+//        movies = new LinkedList();
+//        executor = Executors.newFixedThreadPool(threadSize);
+//        this.unit = size;
+//        searchAction = sm;
+//        loadMovieCards(sm);
+//        validate();
+//        repaint();
+//    }
     
     public void addMovie(int movieId)
     {
@@ -60,7 +130,7 @@ public class MovieStackedPanel extends javax.swing.JPanel {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(1000, 800));
-        MovieStackedPanel stackPanel = new MovieStackedPanel();
+        MovieStackedPanel stackPanel = new MovieStackedPanel(Scroll.GRID);
 //            cell.setBackground(new Color(34, 34, 34));
 //        frame.setBackground(new Color(34, 34, 34));
         frame.add(stackPanel);

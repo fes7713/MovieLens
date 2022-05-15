@@ -305,13 +305,13 @@ public class Repository {
             return new ArrayList();
         List<Integer> ids = new ArrayList<>();
         
-        if(query.contains("LIMIT"))
+        if(!query.contains("LIMIT"))
                 query += " LIMIT "
                     + size;
-        if(query.contains("OFFSET"))
+        if(!query.contains("OFFSET"))
                 query += " OFFSET "
                     + start;
-
+        
         processQuery(query, 
                 (ResultSet rs, ResultSetMetaData rsmd, int nRow, int nCol) -> 
                 {
@@ -840,7 +840,10 @@ public class Repository {
             for(String t: text)
             {
                 separated = commaSeparator(t, 3, 1);
-                movies.add(new Movie(Integer.parseInt(separated[0]), separated[1], separated[2].split("|")));
+//                String[] arr = separated[2].split("\\|");
+//                for(int i = 0; i < arr.length; i++)
+//                    System.out.println(arr[i]);
+                movies.add(new Movie(Integer.parseInt(separated[0]), separated[1], separated[2].split("\\|")));
             }
         } catch (IOException e) {
             String errorMessage = e.getMessage();
@@ -855,6 +858,17 @@ public class Repository {
         List<Movie> movies = loadMovies(false, false);
         
         insertMovies(movies);
+//        for(Movie movie: movies)
+//        {
+//            insertGenres(movie.getId(), movie.getGenres());
+//        }
+    }
+    
+    public static void insertGenresFromFile()
+    {
+        List<Movie> movies = loadMovies(false, false);
+        
+//        insertMovies(movies);
         for(Movie movie: movies)
         {
             insertGenres(movie.getId(), movie.getGenres());
@@ -966,7 +980,8 @@ public class Repository {
         // TODO code application logic here
         Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
             
-        System.out.println(Repository.findRateCountById(1));
+//        System.out.println(Repository.findRateCountById(1));
+
 //        Repository.loadMovies(false, false);
 ////        System.out.println(Repository.insertLinks(2, 30, 50));
 //        System.out.println(Repository.findImdbIdById(2));
@@ -978,6 +993,7 @@ public class Repository {
 //            System.out.println(m);
     
 //        Repository.insertLinkFromFile();
+        Repository.insertGenresFromFile();
     }
     
 }

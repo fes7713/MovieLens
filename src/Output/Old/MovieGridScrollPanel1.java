@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package Output.GridView;
+package Output.Old;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,14 +12,14 @@ import javax.swing.JFrame;
  *
  * @author fes77
  */
-public class MovieGridScrollPanel extends javax.swing.JPanel {
+public class MovieGridScrollPanel1 extends javax.swing.JPanel {
 
     /**
      * Creates new form MovieScrollPanel
      */
     
 
-    public MovieGridScrollPanel() {
+    public MovieGridScrollPanel1() {
         initComponents();
         movieScrollPane.getVerticalScrollBar().addAdjustmentListener((e) -> {
             int extent = movieScrollPane.getVerticalScrollBar().getModel().getExtent();
@@ -37,7 +37,7 @@ public class MovieGridScrollPanel extends javax.swing.JPanel {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(800, 600));
-        MovieGridScrollPanel movieListPanel = new MovieGridScrollPanel();
+        MovieGridScrollPanel1 movieListPanel = new MovieGridScrollPanel1();
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieListPanel);

@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Output.GridView;
+package Output.Old;
 
 import Data.Movie;
+import Output.GridView.MovieCard;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;

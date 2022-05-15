@@ -197,7 +197,7 @@ public class MovieGridPanel extends MovieListView implements SearchMovies{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(800, 300));
         MovieGridPanel movieListPanel = new MovieGridPanel(10, 5, (int start, int size)->{
-            return Repository.findTopRatedMovieIds(start, size);
+            return SearchMovies.genreMostMatch(1, start, size);
         });
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));

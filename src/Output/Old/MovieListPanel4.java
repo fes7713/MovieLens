@@ -2,11 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package Output.GridView;
+package Output.Old;
 
 import Data.Movie;
-import Output.ListView.MovieListView;
-import Output.ListView.SearchMovies;
+import Output.GridView.MovieCard;
+import Output.GridView.MovieCardProducer;
+import Output.GridView.MovieGridPanel;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -22,22 +23,23 @@ import movielens.Repository;
  *
  * @author fes77
  */
-public class MovieGridPanel1 extends MovieListView implements SearchMovies{
+public class MovieListPanel4 extends javax.swing.JPanel {
 
     /**
-     * Creates new form MovieGridPanel
+     * Creates new form MovieListPanel
      */
+    Container parent;
     List<MovieCard> movies;
     ExecutorService executor;
     int unit;
     int size;
     int nCols;
     int nRows;
-    SearchMovies searchAction;
+    
     
     boolean debug = false;
     
-    public MovieGridPanel1()
+    public MovieListPanel4()
     {
         initComponents();
         removeAll();
@@ -57,13 +59,7 @@ public class MovieGridPanel1 extends MovieListView implements SearchMovies{
         unit = 20;
     }
     
-    public MovieGridPanel1(int size, int threadSize) {
-        this(size, threadSize, (int start, int unitSize)->{
-            return SearchMovies.topRated(start, size);
-        });
-    }
-    
-    public MovieGridPanel1(int size, int threadSize, SearchMovies sm) {
+    public MovieListPanel4(int size, int threadSize) {
         initComponents();
         removeAll();
 
@@ -77,8 +73,7 @@ public class MovieGridPanel1 extends MovieListView implements SearchMovies{
         movies = new LinkedList();
         executor = Executors.newFixedThreadPool(threadSize);
         this.unit = size;
-        searchAction = sm;
-        loadMovieCards(sm);
+        loadMovieCards();
         validate();
         repaint();
     }
@@ -95,58 +90,40 @@ public class MovieGridPanel1 extends MovieListView implements SearchMovies{
     
     public void setParent(Container parent)
     {
-//        this.parent = parent;
+        this.parent = parent;
     }
     
-    public boolean isIdle()
+    private void loadMovieCards()
     {
-        return size == movies.size();
-    }
-    
-    public void clearList(){
-        removeAll();
-        movies.clear();
-        
-    }
-    public void loadMovieCards()
-    {
-        if(searchAction != null)
-        {
-            loadMovieCards(searchAction);
-            return;
-        }
-        
         int listSize = movies.size();
-        List<Integer> addingMovies = search(size, unit);
-//        List<Integer> addingMovies = Repository.findTopRatedMovieIds(size, unit);
+        List<Integer> addingMovies = Repository.findTopRatedMovieIds(size, unit);
         size += unit;
+        System.out.println(addingMovies.size() +"adasdasdasdasd");
         
         for (int i = 0; i < addingMovies.size(); i++) {
 
-            executor.execute(new MovieCardProducer(addingMovies.get(i), movies, this, true));
+            executor.execute(new MovieCardProducer(addingMovies.get(i), movies, (MovieGridPanel)null, true));
             System.out.println("Adding[" + i +  "] into list");
         }
-    }
-    
-    public void loadMovieCards(SearchMovies sm) {
-        searchAction = sm;
-        int listSize = movies.size();
-        List<Integer> addingMovies = sm.search(size, unit);
-//        List<Integer> addingMovies = Repository.findTopRatedMovieIds(size, unit);
-        size += unit;
         
-        for (int i = 0; i < addingMovies.size(); i++) {
-
-            executor.execute(new MovieCardProducer(addingMovies.get(i), movies, this, true));
-            System.out.println("Adding[" + i +  "] into list");
-        }
     }
     
     public void updateMovies() {
-       
+        
+        if(parent == null)
             
             nCols = Math.max(Math.min(getWidth(), getParent().getWidth()) / 230, 1);
-
+        else
+        {
+            nCols = Math.max(Math.min(getWidth(), parent.getWidth()) / 230, 1);
+            if(getWidth() > parent.getWidth())
+            {
+                System.out.println("Smaller : " + parent.getWidth() / 230);
+            }
+            else{
+                System.out.println("Biigger : " + parent.getWidth() / 230);
+            }
+        }
             
 //        int nCols = 2;
         nRows = size / nCols + (size % nCols == 0 ? 0 : 1);
@@ -159,6 +136,8 @@ public class MovieGridPanel1 extends MovieListView implements SearchMovies{
         layout.setColumns(Math.max(nCols, 1));
         layout.setRows(Math.max(nRows, 1));
         setPreferredSize(new Dimension(230 * nCols, 250 * nRows));
+        if(parent == null)
+            getParent().setMaximumSize(new Dimension(parent.getWidth(), nRows * 250));
 //        setSize(new Dimension(230 * nCols, 250 * nRows));
 
         
@@ -184,21 +163,11 @@ public class MovieGridPanel1 extends MovieListView implements SearchMovies{
         validate();
         repaint();
     }
-    
-    @Override
-    public List<Integer> search(int start, int size) {
-        return SearchMovies.topRated(start, size);
-    }
-    
-    
-    
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(800, 300));
-        MovieGridPanel1 movieListPanel = new MovieGridPanel1(10, 5, (int start, int size)->{
-            return Repository.findTopRatedMovieIds(start, size);
-        });
+        MovieListPanel4 movieListPanel = new MovieListPanel4(10, 5);
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieListPanel);
@@ -218,7 +187,7 @@ public class MovieGridPanel1 extends MovieListView implements SearchMovies{
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    protected void initComponents() {
+    private void initComponents() {
 
         movieCard1 = new Output.GridView.MovieCard();
         movieCard3 = new Output.GridView.MovieCard();
@@ -249,7 +218,4 @@ public class MovieGridPanel1 extends MovieListView implements SearchMovies{
     private Output.GridView.MovieCard movieCard3;
     private Output.GridView.MovieCard movieCard4;
     // End of variables declaration//GEN-END:variables
-
-
-    
 }

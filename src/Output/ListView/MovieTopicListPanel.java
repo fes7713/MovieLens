@@ -4,7 +4,12 @@
  */
 package Output.ListView;
 
+import Data.Genre;
 import Data.Movie;
+import Output.ScrollView.Scroll;
+import java.awt.Color;
+import java.awt.Dimension;
+import javax.swing.JFrame;
 
 /**
  *
@@ -17,20 +22,72 @@ public class MovieTopicListPanel extends javax.swing.JPanel {
      */
     
     
-    
+    Movie movie;
+    Genre genre;
+    String tag;
+    Scroll type;
     public MovieTopicListPanel() {
-        initComponents();
+        
 //        relatedMoviesScrollPanel.scrollRectToVisible(focused);
 
+        movie = new Movie(1, "Toy Story");
+        type = Scroll.LINEAR;
+        initComponents();
+        prepareTopic();
     }
     
-    public MovieTopicListPanel(Movie m) {
+    // Related video to movie
+    public MovieTopicListPanel(Scroll type, Movie m) {
+        this.type = type;
+        movie = m;
         initComponents();
+        prepareTopic();
+    }
+    
+    public MovieTopicListPanel(Scroll type, Genre g) {
+        this.type = type;
+        genre = g;
+        initComponents();
+        prepareTopic();
+    }
+    
+    public MovieTopicListPanel(Scroll type, String tag) {
+        this.type = type;
+        this.tag = tag;
+        initComponents();
+        prepareTopic();
+    }
+    
+    public void prepareTopic()
+    {
+        if(movie != null)
+            topicLabel.setText("Similar movies to " + movie.getTitle());
+        else if(genre != null)
+            topicLabel.setText("Genre: " + genre);
+        else if(tag != null)
+            topicLabel.setText("Tag: " + tag);
+        else
+            topicLabel.setText("Top rated movies");
         
-//        DefaultListModel<MovieCard> model = new DefaultListModel();
-        
-//        relatedMoviesScrollPanel.scrollRectToVisible(focused);
-
+    }
+    
+    
+    
+    public static void main(String[] args) {
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(new Dimension(800, 600));
+        MovieTopicListPanel movieListPanel = new MovieTopicListPanel();
+//            cell.setBackground(new Color(34, 34, 34));
+        frame.setBackground(new Color(34, 34, 34));
+        frame.add(movieListPanel);
+        frame.setVisible(true);
+//        Scanner sk = new Scanner(System.in);
+//        while(true)
+//        {
+//            if(sk.nextInt() == 1)
+//                frame.repaint();
+//        }
     }
 
     /**
@@ -45,145 +102,102 @@ public class MovieTopicListPanel extends javax.swing.JPanel {
         jComboBox1 = new javax.swing.JComboBox<>();
         crossIcon2 = new Icon.CrossIcon();
         jScrollPane1 = new javax.swing.JScrollPane();
+        jSplitPane1 = new javax.swing.JSplitPane();
         controlePanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        relatedMoviesScrollPanel = new javax.swing.JScrollPane();
-        relatedMoviesPanel = new javax.swing.JPanel();
-        crossIcon1 = new Icon.CrossIcon();
-        crossIcon3 = new Icon.CrossIcon();
-        crossIcon4 = new Icon.CrossIcon();
-        crossIcon5 = new Icon.CrossIcon();
-        crossIcon6 = new Icon.CrossIcon();
+        topicLabel = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        movieScrollPanel1 = new Output.ScrollView.MovieScrollPanel(
+            5, 4, type, (int start, int size)->{
+                if(movie != null)
+                {
+                    return SearchMovies.genreMostMatch(movie.getId(), start, size);
+                }
+                else if(genre != null)
+                {
+                    return SearchMovies.searchByGenre(genre, start, size);
+                }
+                else if(tag != null)
+                {
+                    return SearchMovies.searchByTag(tag, start, size);
+                }
+                return SearchMovies.topRated(start, size);
+            });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+            jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        javax.swing.GroupLayout crossIcon2Layout = new javax.swing.GroupLayout(crossIcon2);
-        crossIcon2.setLayout(crossIcon2Layout);
-        crossIcon2Layout.setHorizontalGroup(
-            crossIcon2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        crossIcon2Layout.setVerticalGroup(
-            crossIcon2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+            javax.swing.GroupLayout crossIcon2Layout = new javax.swing.GroupLayout(crossIcon2);
+            crossIcon2.setLayout(crossIcon2Layout);
+            crossIcon2Layout.setHorizontalGroup(
+                crossIcon2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 100, Short.MAX_VALUE)
+            );
+            crossIcon2Layout.setVerticalGroup(
+                crossIcon2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 100, Short.MAX_VALUE)
+            );
 
-        jLabel1.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
-        jLabel1.setText("Topic");
+            setBackground(new java.awt.Color(51, 51, 51));
 
-        javax.swing.GroupLayout controlePanelLayout = new javax.swing.GroupLayout(controlePanel);
-        controlePanel.setLayout(controlePanelLayout);
-        controlePanelLayout.setHorizontalGroup(
-            controlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(controlePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        controlePanelLayout.setVerticalGroup(
-            controlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
-        );
+            controlePanel.setBackground(new java.awt.Color(51, 51, 51));
 
-        relatedMoviesPanel.setLayout(new javax.swing.BoxLayout(relatedMoviesPanel, javax.swing.BoxLayout.LINE_AXIS));
+            topicLabel.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
+            topicLabel.setForeground(new java.awt.Color(255, 255, 255));
+            topicLabel.setText("Topic");
 
-        javax.swing.GroupLayout crossIcon1Layout = new javax.swing.GroupLayout(crossIcon1);
-        crossIcon1.setLayout(crossIcon1Layout);
-        crossIcon1Layout.setHorizontalGroup(
-            crossIcon1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 120, Short.MAX_VALUE)
-        );
-        crossIcon1Layout.setVerticalGroup(
-            crossIcon1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 236, Short.MAX_VALUE)
-        );
+            jLabel2.setBackground(new java.awt.Color(51, 51, 51));
+            jLabel2.setForeground(new java.awt.Color(51, 153, 255));
+            jLabel2.setText("More movies");
 
-        relatedMoviesPanel.add(crossIcon1);
+            javax.swing.GroupLayout controlePanelLayout = new javax.swing.GroupLayout(controlePanel);
+            controlePanel.setLayout(controlePanelLayout);
+            controlePanelLayout.setHorizontalGroup(
+                controlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(controlePanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(topicLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 973, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel2)
+                    .addContainerGap())
+            );
+            controlePanelLayout.setVerticalGroup(
+                controlePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(topicLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, controlePanelLayout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2)
+                    .addContainerGap())
+            );
 
-        javax.swing.GroupLayout crossIcon3Layout = new javax.swing.GroupLayout(crossIcon3);
-        crossIcon3.setLayout(crossIcon3Layout);
-        crossIcon3Layout.setHorizontalGroup(
-            crossIcon3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 120, Short.MAX_VALUE)
-        );
-        crossIcon3Layout.setVerticalGroup(
-            crossIcon3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 236, Short.MAX_VALUE)
-        );
+            movieScrollPanel1.setBackground(new java.awt.Color(51, 51, 51));
 
-        relatedMoviesPanel.add(crossIcon3);
-
-        javax.swing.GroupLayout crossIcon4Layout = new javax.swing.GroupLayout(crossIcon4);
-        crossIcon4.setLayout(crossIcon4Layout);
-        crossIcon4Layout.setHorizontalGroup(
-            crossIcon4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 120, Short.MAX_VALUE)
-        );
-        crossIcon4Layout.setVerticalGroup(
-            crossIcon4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 236, Short.MAX_VALUE)
-        );
-
-        relatedMoviesPanel.add(crossIcon4);
-
-        javax.swing.GroupLayout crossIcon5Layout = new javax.swing.GroupLayout(crossIcon5);
-        crossIcon5.setLayout(crossIcon5Layout);
-        crossIcon5Layout.setHorizontalGroup(
-            crossIcon5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 120, Short.MAX_VALUE)
-        );
-        crossIcon5Layout.setVerticalGroup(
-            crossIcon5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 236, Short.MAX_VALUE)
-        );
-
-        relatedMoviesPanel.add(crossIcon5);
-
-        javax.swing.GroupLayout crossIcon6Layout = new javax.swing.GroupLayout(crossIcon6);
-        crossIcon6.setLayout(crossIcon6Layout);
-        crossIcon6Layout.setHorizontalGroup(
-            crossIcon6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 120, Short.MAX_VALUE)
-        );
-        crossIcon6Layout.setVerticalGroup(
-            crossIcon6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 236, Short.MAX_VALUE)
-        );
-
-        relatedMoviesPanel.add(crossIcon6);
-
-        relatedMoviesScrollPanel.setViewportView(relatedMoviesPanel);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(controlePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(relatedMoviesScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(controlePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(relatedMoviesScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE))
-        );
-    }// </editor-fold>//GEN-END:initComponents
+            javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+            this.setLayout(layout);
+            layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(movieScrollPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGap(19, 19, 19)
+                    .addComponent(controlePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            );
+            layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(controlePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(movieScrollPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE))
+            );
+        }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel controlePanel;
-    private Icon.CrossIcon crossIcon1;
     private Icon.CrossIcon crossIcon2;
-    private Icon.CrossIcon crossIcon3;
-    private Icon.CrossIcon crossIcon4;
-    private Icon.CrossIcon crossIcon5;
-    private Icon.CrossIcon crossIcon6;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPanel relatedMoviesPanel;
-    private javax.swing.JScrollPane relatedMoviesScrollPanel;
+    private javax.swing.JSplitPane jSplitPane1;
+    private Output.ScrollView.MovieScrollPanel movieScrollPanel1;
+    private javax.swing.JLabel topicLabel;
     // End of variables declaration//GEN-END:variables
 }
