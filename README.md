@@ -78,6 +78,34 @@ With help of threads, I could load image much faster and update UI independent t
 ![ezgif com-gif-maker (10)](https://user-images.githubusercontent.com/71058334/168519641-e4ba61f4-32f9-4256-ba50-0bc2b8356337.gif)
 
 
+# Serch functions
+There are 3 types of search functions in this app
+1. Genre search
+2. Tag search
+3. Keyword search
+
+<img width="1247" alt="image" src="https://user-images.githubusercontent.com/71058334/168520371-214f6de0-374c-4779-80be-1860fa4628a6.png" width=600px>
+
+Genre and tag search can be initiated by clicking genre icon or tag icon in detailed view. They are interactive icons and directs user to search results when clicked.
+
+<img width="836" alt="image" src="https://user-images.githubusercontent.com/71058334/168520567-d6f5d1b2-c52e-4433-8cf2-613b3eace05f.png" width=600px>
+
+Keyword search can be started from search window
+
+<img width="299" alt="image" src="https://user-images.githubusercontent.com/71058334/168520645-ca4ca95e-cdee-4feb-a78c-1943a1fc7cf6.png" width=300px>
+
+This keyword search is premitive function that it only takes title in account and ignores genre and tag information. I might be able to improve this function in the future.
+
+Also, for searchig algorithm, I simply used MySQL to find matching and order the result set so I did not spend my time developing efficient seaching algorithm.
+
+# Rating circle
+This is my favorite icon in this project. It animates when mouses hovers on it and changes color depending on the rating. Green for great rating and yellow for okay, and red for bad rating.
+
+<img width="741" alt="image" src="https://user-images.githubusercontent.com/71058334/168521578-d203501c-1564-42b3-999e-1fe421f8fcf1.png" width=600px>
+
+
+
+
 
 
 
