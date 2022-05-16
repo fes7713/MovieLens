@@ -11,7 +11,7 @@ This app can show some information about movies such as genre, rating, tag, trai
 
 # Available functionalities.
 
-| Keyword | Description |
+| Keyword | Description 
 ---- | ---- | ----
 | List view of movies | Show bunch of movies to users with card style. Card contains basic infomration of movie, title, 
 release date and duration. Circle icon on bottom right of card show rating of movie. 
