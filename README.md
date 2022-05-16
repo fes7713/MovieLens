@@ -24,10 +24,11 @@ release date and duration. Circle icon on bottom right of card show rating of mo
 
 | Keyword | Description 
 ---- | ---- 
-| List view of movies | Length of maximum message 
-| Movie Thumnails | Port number for server 
-| Detailed view of movies | Size of connection buffer 
+| List view of movies |  Show bunch of movies to users with card style. Card contains basic infomration of movie, title, release date and duration. Circle icon on bottom right of card show rating of movie. 
+| Movie Thumnails | Thumbnail of movie is set to the background of cards so that user can easily identify movies and interact with it.
+| Detailed view of movies | User can go to detailed view from card view by clicking card in list view. Detailed view shows more information about the movie to user.
 | Related movies | Number of threads | Compulsary
+| Genre search | User can interfact with genre icons attached to each movie in detailed view. By clicking genre button of specific genre, user can search movies with the same genre information attached.
 | Tag search | Terminator charactor to close client
 | Keyword search | By typing keyword in search box located at the top of list view and middle of detailed view, users can search moviews by name.
 
