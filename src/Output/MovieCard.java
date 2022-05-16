@@ -110,7 +110,7 @@ public class MovieCard extends javax.swing.JPanel {
         titleLabel.setBackground(new java.awt.Color(255, 0, 51));
         titleLabel.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         titleLabel.setForeground(new java.awt.Color(255, 153, 51));
-        titleLabel.setText("Shawshanksasdasdasdasdasdasdasdas");
+        titleLabel.setText("Loading Movie Card");
         titleLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 1));
 
         ratingCircle.setMaximumSize(new java.awt.Dimension(150, 150));

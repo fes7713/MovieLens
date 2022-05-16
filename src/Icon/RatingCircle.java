@@ -41,7 +41,7 @@ public class RatingCircle extends HoverableIcon {
      * Creates new form RatingCircle
      */
     public RatingCircle() {
-        this(7);
+        this(0);
     }
     
     public RatingCircle(float rateOutOf10) {
