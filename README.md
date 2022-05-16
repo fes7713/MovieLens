@@ -27,7 +27,7 @@ release date and duration. Circle icon on bottom right of card show rating of mo
 | Tag search | Just like genre search, user can search movies by tag created by other users. Color from green to red shows the popularity of tag. Green tag indicates that many users puts the same tag on the movie.
 | Keyword search | By typing keyword in search box located at the top of list view and middle of detailed view, users can search moviews by name.
 
-> 引用  List view with genre search action
+> List view with genre search action
 <img width="1261" alt="image" src="https://user-images.githubusercontent.com/71058334/168511505-da666867-9999-4d2a-9393-a8a9928d41ae.png" width=600px>
 
 > Detailed view with genre search action
