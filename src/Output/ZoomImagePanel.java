@@ -155,7 +155,7 @@ public class ZoomImagePanel extends ImagePanel{
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(500, 500));
-        ImagePanel image = new ZoomImagePanel("https://image.tmdb.org/t/p/w600_and_h900_bestv2/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg");
+        ImagePanel image = new ZoomImagePanel("https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg?cs=srgb&dl=pexels-simon-berger-1323550.jpg&fm=jpg");
         
 //            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));

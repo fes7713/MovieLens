@@ -107,12 +107,14 @@ public class MovieStackedPanel extends javax.swing.JPanel {
     public void addMovie(int movieId)
     {
         MovieScrollDetailPanel panel = new MovieScrollDetailPanel(movieId);
+        add(panel);
+        layout.last(this);
         movieStack.push(panel);
 //        layout.addLayoutComponent(panel, panel.toString());
 ////        layout.show(this, panel.toString());
 //        layout.next(this);
-        add(panel);
-        layout.last(this);
+        
+        
     }
     
     public void previous()

@@ -112,22 +112,61 @@ public class MovieDetailPanel extends javax.swing.JPanel {
         
         
         Element body = Scraping.getTBDBBodyById(id);
-        setPicture(Scraping.getPictureURL_HIGH(body, id));
-        setYear(Scraping.getReleaseYearText(body, id));
-        setDuration(Scraping.getDurationText(body, id));
-        setOverview(Scraping.getOverview(body, id));
+        Thread thread1 = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                setPicture(Scraping.getPictureURL_HIGH(body, id));
+            }
+        };
+        thread1.start();
         
-        setRating(Repository.findAverageRatingById(id));
-        setRatingCount(Repository.findRateCountById(id));
-        int imdbId = Repository.findImdbIdById(id);
-        int tmdbId = Repository.findTmdbIdById(id);
-        String videoLink = null, imdbLink = null, tmdbLink = null;
-        videoLink = Scraping.getTrailerLink(id);
-        if(imdbId != 0)
-            imdbLink = Scraping.IMDB_LINK + String.format("%07d", imdbId);
-        if(tmdbId != 0)
-            tmdbLink = Scraping.TMDB_LINK + tmdbId;
-        setLinks(videoLink, imdbLink, tmdbLink);
+        Thread thread2 = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                setYear(Scraping.getReleaseYearText(body, id));
+                setDuration(Scraping.getDurationText(body, id));
+                setOverview(Scraping.getOverview(body, id));
+            }
+        };
+        thread2.start();
+        Thread thread3 = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                setRating(Repository.findAverageRatingById(id));
+                setRatingCount(Repository.findRateCountById(id));
+                int imdbId = Repository.findImdbIdById(id);
+                int tmdbId = Repository.findTmdbIdById(id);
+                String videoLink = null, imdbLink = null, tmdbLink = null;
+                videoLink = Scraping.getTrailerLink(id);
+                if(imdbId != 0)
+                    imdbLink = Scraping.IMDB_LINK + String.format("%07d", imdbId);
+                if(tmdbId != 0)
+                    tmdbLink = Scraping.TMDB_LINK + tmdbId;
+                setLinks(videoLink, imdbLink, tmdbLink);
+            }
+        };
+        thread3.start();
+        
+//        Thread thread4 = new Thread()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                
+//            }
+//        };
+//        thread4.start();
+        
+        
+        
+        
+        
         validate();
         repaint();
     }
@@ -147,10 +186,11 @@ public class MovieDetailPanel extends javax.swing.JPanel {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(1000, 800));
+        frame.setVisible(true);
         MovieDetailPanel detailPanel = new MovieDetailPanel(2);
 
         frame.add(detailPanel);
-        frame.setVisible(true);
+        
         detailPanel.prepareDetailedMovie();
         Scanner sk = new Scanner(System.in);
         while(true)
