@@ -28,3 +28,28 @@ release date and duration. Circle icon on bottom right of card show rating of mo
 | Keyword search | By typing keyword in search box located at the top of list view and middle of detailed view, users can search moviews by name.
 
 <img width="1261" alt="image" src="https://user-images.githubusercontent.com/71058334/168511505-da666867-9999-4d2a-9393-a8a9928d41ae.png" width=600px>
+> List view with genre search action
+
+<img width="1258" alt="image" src="https://user-images.githubusercontent.com/71058334/168512571-d461e36f-943c-4bac-9c78-301a931ba3ec.png" width=600px>
+> Detailed view with genre search action
+
+<img width="1259" alt="image" src="https://user-images.githubusercontent.com/71058334/168512690-a6ff7503-58b7-496a-a0dd-2e1f78d3b9b0.png" width=600px>
+> Related movies in detailed view
+> 
+# Launch
+In order to start application, you need to have Java 17 installed on your pc. Compiling is needed to test this project. 
+Since I used Apatch Netbeans to develop this application, it is easier to use Netbeans to compile and run this project. 
+1. Download project file from this repository
+2. Import project
+3. Compile and run MovieLens.java under movelens package in src folder.
+
+# UI design 
+Designing the app is the biggest part that I spent my time. Many students often tend to focus on programming part of project but I like to spend on UI and UX designing as much as core programming of application and I think that this is very important thing when it comes to making application. The reason why I say is not only the fact that final product looks good and appearing but also the fact that application is meant to be used by wide range of peole. <br>
+In my application, I developed user friendly icons and simple designs.
+## Key design ideas
+1. Icon
+<img width="736" alt="image" src="https://user-images.githubusercontent.com/71058334/168516146-da7a6f59-70c3-4069-98f9-afaa160e422f.png" width=450px>
+
+3. Brief animation for clickable icons
+4. Loading animation
+
