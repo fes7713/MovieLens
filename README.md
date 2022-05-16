@@ -27,15 +27,15 @@ release date and duration. Circle icon on bottom right of card show rating of mo
 | Tag search | Just like genre search, user can search movies by tag created by other users. Color from green to red shows the popularity of tag. Green tag indicates that many users puts the same tag on the movie.
 | Keyword search | By typing keyword in search box located at the top of list view and middle of detailed view, users can search moviews by name.
 
+> 引用  List view with genre search action
 <img width="1261" alt="image" src="https://user-images.githubusercontent.com/71058334/168511505-da666867-9999-4d2a-9393-a8a9928d41ae.png" width=600px>
-> List view with genre search action
 
-<img width="1258" alt="image" src="https://user-images.githubusercontent.com/71058334/168512571-d461e36f-943c-4bac-9c78-301a931ba3ec.png" width=600px>
 > Detailed view with genre search action
+<img width="1258" alt="image" src="https://user-images.githubusercontent.com/71058334/168512571-d461e36f-943c-4bac-9c78-301a931ba3ec.png" width=600px>
 
-<img width="1259" alt="image" src="https://user-images.githubusercontent.com/71058334/168512690-a6ff7503-58b7-496a-a0dd-2e1f78d3b9b0.png" width=600px>
 > Related movies in detailed view
-> 
+<img width="1259" alt="image" src="https://user-images.githubusercontent.com/71058334/168512690-a6ff7503-58b7-496a-a0dd-2e1f78d3b9b0.png" width=600px>
+
 # Launch
 In order to start application, you need to have Java 17 installed on your pc. Compiling is needed to test this project. 
 Since I used Apatch Netbeans to develop this application, it is easier to use Netbeans to compile and run this project. 
