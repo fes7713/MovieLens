@@ -4,14 +4,11 @@
  */
 package Icon;
 
-import Icon.AnimationType;
-import Icon.Clickable;
+import Resource.Message;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -30,7 +27,7 @@ public class ClickableIcon extends HoverableIcon implements Clickable{
         try {
             Browser.BrowserSupport.openWebpage(new URL("https://www.google.co.jp/"));
         } catch (MalformedURLException ex) {
-            Logger.getLogger(ClickableIcon.class.getName()).log(Level.SEVERE, null, ex);
+            Message.ERROR.printMessage(ex);
         }
     }
     

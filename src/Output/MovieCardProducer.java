@@ -6,17 +6,17 @@ package Output;
 
 import Data.Movie;
 import Output.ListView.MovieListView;
-import java.util.List;
 import Repository.Repository;
+import java.util.List;
 
 /**
  *
  * @author fes77
  */
 public class MovieCardProducer implements Runnable {
-        private int movieId;
-        List<MovieCard> rtnList;
-        MovieListView container;
+        private final int movieId;
+        private final List<MovieCard> rtnList;
+        private final MovieListView container;
         boolean add2Container;
         
         public MovieCardProducer(Integer movieId, List<MovieCard> rtnList, MovieListView container, boolean add2Container) 
@@ -44,9 +44,6 @@ public class MovieCardProducer implements Runnable {
                 {
                     container.add(card);
                     container.updateMovies();
-//                    container.validate();
-//                    container.repaint();
-    //                System.out.println("Container size : " + container.getComponentCount());
                 }
             }
             card.setMovie(movie);

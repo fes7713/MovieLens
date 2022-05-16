@@ -24,38 +24,26 @@ public class MovieTopicListPanel extends javax.swing.JPanel {
      */
     
     
-    Movie movie;
-    Genre genre;
-    String tag;
-    String search;
-    Scroll type;
-    int size;
+    private Movie movie;
+    private Genre genre;
+    private String tag;
+    private String search;
+    private Scroll type;
+    private int size;
     
     public MovieTopicListPanel() {
-        
-//        relatedMoviesScrollPanel.scrollRectToVisible(focused);
-
-//        movie = new Movie(1, "Toy Story");
         type = Scroll.LINEAR;
         initComponents();
         prepareTopic();
     }
     
     public MovieTopicListPanel(Scroll type) {
-        
-//        relatedMoviesScrollPanel.scrollRectToVisible(focused);
-
-//        movie = new Movie(1, "Toy Story");
         this.type = type;
         initComponents();
         prepareTopic();
     }
     
     public MovieTopicListPanel(Scroll type, int size) {
-        
-//        relatedMoviesScrollPanel.scrollRectToVisible(focused);
-
-//        movie = new Movie(1, "Toy Story");
         this.size = size;
         this.type = type;
         initComponents();
@@ -101,7 +89,6 @@ public class MovieTopicListPanel extends javax.swing.JPanel {
     
     public MovieTopicListPanel(Scroll type, String tag, int size, boolean search ) {
         this.type = type;
-//        this.tag = tag;
         this.size = size;
         this.search = tag ;
         System.out.println("aaaa");

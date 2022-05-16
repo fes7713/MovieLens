@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -40,13 +39,6 @@ public class ImagePanel extends javax.swing.JPanel {
     public final static Color INITAL_CIRCLE_COLOR = new Color(38, 166, 209);
     
     public ImagePanel() {
-//        try {
-//            //        this("data/Sample movie.jpg");
-//            image = ImageIO.read(new File("data/Sample movie.jpg"));
-//        } catch (IOException ex) {
-//            Logger.getLogger(ImagePanel.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-    
         initComponents();
         loadingAnimation = new Thread();
     }
@@ -81,11 +73,6 @@ public class ImagePanel extends javax.swing.JPanel {
         
         if(image == null || loadingAnimation.isAlive())
         {
-//            loadImage();
-//            if(image == null)
-//                throw new NullPointerException("Could not get image");
-            
-            System.out.println("Hello");
             Color color = INITAL_CIRCLE_COLOR;
             float outerRadius = length / 3f;
             float circleRadius = length / 4f;
@@ -126,40 +113,7 @@ public class ImagePanel extends javax.swing.JPanel {
             sx2 = (int)(imageHeight / targetRatio) + sx1;
         }
         
-//        System.out.println("PicWidth:" + image.getWidth(this) + " PicHeight: " + image.getHeight(this));
-//        System.out.println("Width:" + getWidth() + " Height: " + getHeight());
-//        
-//        System.out.println("sx1:" + sx1 + " sy1:" + sy1 + " sx2:" + sx2 + " sy2:" + sy2);
-//        System.out.println("Diff sx:" + (sx2 - sx1) + " sy:" + (sy2 - sy1));
-//        System.out.println("Aspect sy/sx:" + ((sy2 - sy1)/(float)(sx2 - sx1)));
-//        System.out.println("Aspect Ratio:" + getHeight() / (float)getWidth());
-//        System.out.println("Ratio:" + getHeight() / (float)getWidth() / ((sy2 - sy1)/(float)(sx2 - sx1)));
-////        
-//        
-//        if(zoomFlag)
             g2d.drawImage(image, 0, 0, getWidth(), getHeight(), sx1, sy1, sx2, sy2, this);
-//        else
-//            g2d.drawImage(image, 
-//                    (int)(width * MARGIN_PERCENTAGE), (int)(height * MARGIN_PERCENTAGE), 
-//                    (int)(width * (1 -  MARGIN_PERCENTAGE)), (int)(height * (1 - MARGIN_PERCENTAGE)), 
-//                    sx1, sy1, sx2, sy2, this);
-//        
-//        if(zoomFlag == false)
-//        {
-//            Point2D start = new Point2D.Float(
-//                    (int)(width * MARGIN_PERCENTAGE), 
-//                    (int)(height * MARGIN_PERCENTAGE));
-//            Point2D end = new Point2D.Float(
-//                    (int)(width * MARGIN_PERCENTAGE), 
-//                    (int)(height * (1 - MARGIN_PERCENTAGE)));
-//            float[] dist = {0.0f, 0.5f, 1f};
-//            Color[] colors = {new Color(0, 0, 0, 0), new Color(0, 0, 0, 150), new Color(0, 0, 0, 220)};
-//            LinearGradientPaint p =
-//                new LinearGradientPaint(start, end, dist, colors);
-//            g2d.setPaint(p);
-//            g2d.fillRect((int)(width * MARGIN_PERCENTAGE), (int)(height * MARGIN_PERCENTAGE), 
-//                    (int)(width * (1 - 2 * MARGIN_PERCENTAGE)), (int)(height * (1 - 2 * MARGIN_PERCENTAGE))); 
-//        }
     }
     
     public void setLink(String link)
@@ -254,13 +208,9 @@ public class ImagePanel extends javax.swing.JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(500, 500));
         ImagePanel imagePanel = new ImagePanel(image);
-        
-//            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(imagePanel);
         frame.setVisible(true);
-        
-        Scanner sk = new Scanner(System.in);
     }
 
     /**

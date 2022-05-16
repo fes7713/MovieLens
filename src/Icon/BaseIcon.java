@@ -64,10 +64,6 @@ public class BaseIcon extends javax.swing.JPanel {
         int bgStartY = height / 2 - length / 2 + margin;
         g2d.setColor(bgColor);
         g2d.fillOval(bgStartX, bgStartY, bgSize, bgSize);
-//        g2d.setColor(Color.BLACK);
-//        g2d.fillOval(outerStartX, outerStartY, outerSize, outerSize);
-        
-        
     }
     
     @Override

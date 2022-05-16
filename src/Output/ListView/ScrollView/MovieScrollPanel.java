@@ -80,16 +80,9 @@ public class MovieScrollPanel extends javax.swing.JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(800, 500));
         MovieScrollPanel movieListPanel = new MovieScrollPanel(Scroll.LINEAR);
-//            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieListPanel);
         frame.setVisible(true);
-//        Scanner sk = new Scanner(System.in);
-//        while(true)
-//        {
-//            if(sk.nextInt() == 1)
-//                frame.repaint();
-//        }
     }
     
     

@@ -73,9 +73,6 @@ public class ZoomImagePanel extends ImagePanel{
         
         if(image == null || loadingAnimation.isAlive())
         {
-//            loadImage();
-//            if(image == null)
-//                throw new NullPointerException("Could not get image");
             
             Color color = INITAL_CIRCLE_COLOR;
             float outerRadius = length / 3f;
@@ -113,11 +110,9 @@ public class ZoomImagePanel extends ImagePanel{
             sy2 = (int)(imageWidth * targetRatio) + sy1;
         }
         else{
-//            System.out.println("Down");
             sx1 = (int)(imageWidth - imageHeight / targetRatio) / 2;
             sx2 = (int)(imageHeight / targetRatio) + sx1;
         }
-        System.out.println(zoomFlag);
         if(zoomFlag)
         {
             g2d.drawImage(image, 0, 0, getWidth(), getHeight(), sx1, sy1, sx2, sy2, this);

@@ -4,18 +4,19 @@
  */
 package Web;
 
+import Repository.Repository;
 import Resource.Message;
 import java.io.IOException;
-import Repository.Repository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class Scraping {
-    public static final String IMDB_LINK = "http://www.imdb.com/title/tt0";
+    public static final String IMDB_LINK = "http://www.imdb.com/title/tt";
     public static final String TMDB_LINK = "https://www.themoviedb.org/movie/";
     public static final String TMDB_BASELINK = "https://www.themoviedb.org";
+    public static final String IMDB_BASELINK = "https://www.imdb.com";
 
     // Nuulable
     public static Element getIMDBBodyById(int movieId)
@@ -26,7 +27,7 @@ public class Scraping {
         
         Document document;
         try {
-            document = Jsoup.connect(IMDB_LINK + imdbId).get();
+            document = Jsoup.connect(IMDB_LINK + String.format("%07d", imdbId)).get();
         } catch (IOException ex) {
             Message.ERROR.printMessage(ex);
             return null;
@@ -44,7 +45,6 @@ public class Scraping {
         Document document;
         try {
             document = Jsoup.connect(TMDB_LINK + tmdbId).get();
-//            document = Jsoup.connect("https://www.themoviedb.org/movie/862").get();
 
         } catch (IOException ex) {
             Message.ERROR.printMessage(ex);
@@ -161,9 +161,8 @@ public class Scraping {
         
         Element poster = tbdbBody.getElementsByClass("poster").first();
         String url = poster.getElementsByTag("img").first().attr("data-srcset").split(", ")[1].replace(" 2x", "");
-//        System.out.println("\n\n\n");
-//        System.out.println(poster.getElementsByTag("img").first().attributes());
-        System.out.println(TMDB_BASELINK + url);
+
+//        System.out.println(TMDB_BASELINK + url);
         Message.WEBSCRAPING.printMessage("PICTURE[" + TMDB_BASELINK + url + "]");
         return TMDB_BASELINK + url;
         
@@ -189,21 +188,30 @@ public class Scraping {
     }
     
     
+    public static String getTrailerLink(int movieId)
+    {
+        Element body = getIMDBBodyById(movieId);
+        return getTrailerLink(body, movieId);
+    }
+    
+    public static String getTrailerLink(Element imdbBody, int movieId)
+    {
+        if(imdbBody == null)
+        {
+            Message.NO_MATCH_ERROR.printMessage("Duration for id[" + movieId +"] not found");
+            return "https://www.lwf.org/images/emptyimg.png";
+        }
+        
+        Element video = imdbBody.getElementsByClass("ipc-slate").first();
+        return IMDB_BASELINK + video.getElementsByTag("a").first().attr("href");
+    }
     
     public static void main(String[] args) throws IOException {
-//        Document document = Jsoup.connect("https://www.themoviedb.org/movie/228150-fury").get();
-//        Element body = document.body();
-//        System.out.println(body.text());
-//        Elements courses = body.getElementsByClass("release");
-//        for (Element course : courses) {
-//            System.out.println(course.text());
-//        }
         Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
-//
-//        System.out.println(Scraping.getDuration(1));
-//        System.out.println(Scraping.getReleaseYear(1));
         
         System.out.println(Scraping.getPictureURL_HIGH(2));
-        System.out.println(Scraping.getOverview(1));
+        System.out.println(String.format("%07d", 1));
+        System.out.println(Scraping.getTrailerLink(1356));
+        
     }
 }

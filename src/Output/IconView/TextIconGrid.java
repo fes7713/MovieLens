@@ -5,10 +5,10 @@
 package Output.IconView;
 
 import Icon.TextIcon;
+import Repository.Repository;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JFrame;
-import Repository.Repository;
 
 /**
  *
@@ -33,16 +33,10 @@ public class TextIconGrid extends javax.swing.JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(800, 500));
         TextIconGrid movieListPanel = new TextIconGrid();
-//            cell.setBackground(new Color(34, 34, 34));
+        
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieListPanel);
         frame.setVisible(true);
-//        Scanner sk = new Scanner(System.in);
-//        while(true)
-//        {
-//            if(sk.nextInt() == 1)
-//                frame.repaint();
-//        }
     }
     /**
      * This method is called from within the constructor to initialize the form.

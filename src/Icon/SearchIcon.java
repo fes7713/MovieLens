@@ -42,19 +42,10 @@ public class SearchIcon extends TextIcon{
     @Override
     public void onClickAction(MouseEvent e) {
         if(MovieStackedPanel.STACK_PANEL != null)
-        {
-                
-//            Component parent = getParent().getParent().getParent().getParent().getParent();
-//            System.out.println(parent.getClass().getSimpleName());
-            
-//            if(parent instanceof MovieScrollDetailPanel)
-//            {
-                MovieStackedPanel.STACK_PANEL.reset(new MovieTopicListPanel(Scroll.GRID, textField.getText(), 22, true));
-                textField.setText("");
-                
-//            }
-                
-                
+        {   
+            MovieStackedPanel.STACK_PANEL.reset(new MovieTopicListPanel(Scroll.GRID, textField.getText(), 22, true));
+            textField.setText("");
+
         }
     }
     

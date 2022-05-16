@@ -6,13 +6,13 @@ package Output.IconView;
 
 import Data.Genre;
 import Icon.TextIcon;
+import Repository.Repository;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.List;
 import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import Repository.Repository;
 
 /**
  *
@@ -49,7 +49,7 @@ public class TagGenrePanel extends javax.swing.JPanel {
         
         for(int i = 0; i < tags.size(); i++)
         {
-            tagGrid.add(new TextIcon(tags.get(i).toString(), TextIcon.evalRateColor(10f * (tags.size() - i) / tags.size())));
+            tagGrid.add(new TextIcon(tags.get(i), TextIcon.evalRateColor(10f * (tags.size() - i) / tags.size())));
         }
         
         for(int i = tagGrid.getComponentCount(); i < 16; i++)
@@ -68,16 +68,10 @@ public class TagGenrePanel extends javax.swing.JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(800, 300));
         TagGenrePanel movieListPanel = new TagGenrePanel(1);
-//            cell.setBackground(new Color(34, 34, 34));
+
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieListPanel);
         frame.setVisible(true);
-//        Scanner sk = new Scanner(System.in);
-//        while(true)
-//        {
-//            if(sk.nextInt() == 1)
-//                frame.repaint();
-//        }
     }
     
     /**

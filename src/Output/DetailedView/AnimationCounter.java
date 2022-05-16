@@ -5,19 +5,19 @@
 package Output.DetailedView;
 
 import Data.Movie;
-import Output.MovieCard;
 import Output.ListView.GridView.MovieGridPanel;
-import java.util.List;
+import Output.MovieCard;
 import Repository.Repository;
+import java.util.List;
 
 /**
  *
  * @author fes77
  */
 public class AnimationCounter implements Runnable {
-        private int movieId;
-        List<MovieCard> rtnList;
-        MovieGridPanel container;
+        private final int movieId;
+        private final List<MovieCard> rtnList;
+        private final MovieGridPanel container;
         boolean add2Container;
         
         public AnimationCounter(Integer movieId, List<MovieCard> rtnList, MovieGridPanel container, boolean add2Container) 
@@ -44,9 +44,6 @@ public class AnimationCounter implements Runnable {
                 {
                     container.add(card);
                     container.updateMovies();
-//                    container.validate();
-//                    container.repaint();
-    //                System.out.println("Container size : " + container.getComponentCount());
                 }
             }
         }

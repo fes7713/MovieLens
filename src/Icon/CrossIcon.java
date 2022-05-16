@@ -62,19 +62,6 @@ public class CrossIcon extends ClickableIcon
         
         if(MovieStackedPanel.STACK_PANEL != null)
         {
-//            Component parent = getParent();
-//            System.out.println(parent.getClass().getSimpleName());
-//            if(parent instanceof MovieDetailPanel)
-//            {
-//                Component grandParent = parent.getParent();
-//                if(grandParent instanceof MovieScrollDetailPanel)
-//                    MovieStackedPanel.STACK_PANEL.remove(grandParent);
-//                else
-//                    MovieStackedPanel.STACK_PANEL.remove(parent);
-//            }
-//            if(MovieStackedPanel.STACK_PANEL.peekTop() instanceof MovieScrollDetailPanel)
-            
-//                MovieStackedPanel.STACK_PANEL.backHome();
                 
             Component parent = getParent().getParent().getParent().getParent().getParent();
             System.out.println(parent.getClass().getSimpleName());

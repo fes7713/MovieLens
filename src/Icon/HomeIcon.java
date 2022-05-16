@@ -54,8 +54,6 @@ public class HomeIcon extends TextIcon{
     public void onClickAction(MouseEvent e) {
         if(MovieStackedPanel.STACK_PANEL != null)
         {
-            
-//            if(parent instanceof MovieScrollDetailPanel)
                 MovieStackedPanel.STACK_PANEL.reset();
             System.out.println("Resetting");
                 

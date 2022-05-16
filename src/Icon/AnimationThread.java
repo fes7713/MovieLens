@@ -4,16 +4,14 @@
  */
 package Icon;
 
+import Resource.Message;
 import static java.lang.Thread.sleep;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author fes77
  */
 public class AnimationThread extends Thread{
-//    AnimationType type;
     int start;
     int target;
     double speed;
@@ -137,11 +135,6 @@ public class AnimationThread extends Thread{
     
     @Override
     public void run() {
-//        super.run();
-
-        
-
-
         int frames = 0;
         while(updater.isHover() & start * Integer.signum((int)(speed * 100000)) < target * Integer.signum((int)(speed * 100000)))
         {
@@ -149,7 +142,7 @@ public class AnimationThread extends Thread{
             try {
                 sleep(1);
             } catch (InterruptedException ex) {
-                Logger.getLogger(BaseIcon.class.getName()).log(Level.SEVERE, null, ex);
+                Message.ERROR.printMessage(ex);
             }
             speed *= acc;
 

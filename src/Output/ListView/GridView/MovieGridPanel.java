@@ -4,13 +4,13 @@
  */
 package Output.ListView.GridView;
 
-import Output.MovieCardProducer;
-import Output.MovieCard;
 import Data.Movie;
 import Output.ListView.MovieListView;
+import Output.MovieCard;
+import Output.MovieCardProducer;
+import Repository.Repository;
 import Repository.SearchMovies;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.LinkedList;
@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.swing.JFrame;
-import Repository.Repository;
 
 /**
  *
@@ -29,15 +28,15 @@ public class MovieGridPanel extends MovieListView implements SearchMovies{
     /**
      * Creates new form MovieGridPanel
      */
-    List<MovieCard> movies;
-    ExecutorService executor;
-    int unit;
-    int size;
-    int nCols;
-    int nRows;
-    SearchMovies searchAction;
+    private List<MovieCard> movies;
+    private ExecutorService executor;
+    private int unit;
+    private int size;
+    private int nCols;
+    private int nRows;
+    private SearchMovies searchAction;
     
-    boolean debug = false;
+    private boolean debug = false;
     
     public MovieGridPanel()
     {
@@ -51,11 +50,6 @@ public class MovieGridPanel extends MovieListView implements SearchMovies{
         {
             add(new MovieCard(new Movie(0, "Sample Movie")));
         }
-        
-        
-//        GridLayout layout = (GridLayout) getLayout();
-//        layout.setColumns(Math.max(getWidth() / 230, 1));
-//        layout.setRows(Math.max(getHeight() / 250, 1));
         unit = 20;
     }
     
@@ -68,10 +62,6 @@ public class MovieGridPanel extends MovieListView implements SearchMovies{
     public MovieGridPanel(int size, int threadSize, SearchMovies sm) {
         initComponents();
         removeAll();
-
-//        GridLayout layout = (GridLayout) getLayout();
-//        layout.setColumns(Math.max(getWidth() / 230, 1));
-//        layout.setRows(Math.max(getHeight() / 250, 1));
         
         if(Repository.isConnected() == false)
             Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
@@ -93,11 +83,6 @@ public class MovieGridPanel extends MovieListView implements SearchMovies{
     public int getCols()
     {
         return nCols;
-    }
-    
-    public void setParent(Container parent)
-    {
-//        this.parent = parent;
     }
     
     public boolean isIdle()
@@ -149,31 +134,20 @@ public class MovieGridPanel extends MovieListView implements SearchMovies{
             
             nCols = Math.max(Math.min(getWidth(), getParent().getWidth()) / 230, 1);
 
-            
-//        int nCols = 2;
         nRows = size / nCols + (size % nCols == 0 ? 0 : 1);
 
-
-//        int totalSize = nCols * nRows;
         int totalSize = unit;
         int currentSize = getComponentCount();
         GridLayout layout = (GridLayout) getLayout();
         layout.setColumns(Math.max(nCols, 1));
         layout.setRows(Math.max(nRows, 1));
-        setPreferredSize(new Dimension(230 * nCols, 250 * nRows));
-//        setSize(new Dimension(230 * nCols, 250 * nRows));
-
+        setPreferredSize(new Dimension(230 * nCols, 400 * nRows));
         
-//        if(parent != null)
-//            parent.setPreferredSize(new Dimension(230 * nCols, 250 * nRows + 100));
-        System.out.println(getPreferredSize().toString());
-        System.out.println(getSize().toString());
         System.out.println("[B]Total ( " + nCols + ", " + nRows + ") " + totalSize);
         System.out.println("[B]Current " + currentSize);
         
         if(debug)
             return;
-        
         
         if(currentSize == totalSize)
         {

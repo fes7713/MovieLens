@@ -10,7 +10,6 @@ import Repository.Repository;
 import Web.Scraping;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.util.Scanner;
 import javax.swing.JFrame;
 import org.jsoup.nodes.Element;
 
@@ -23,8 +22,8 @@ public class MovieCard extends javax.swing.JPanel {
     /**
      * Creates new form MovieCard
      */
-    Movie movie;
-    Element body;
+    private Movie movie;
+    private Element body;
     
     public MovieCard() {
         super();
@@ -69,11 +68,9 @@ public class MovieCard extends javax.swing.JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(100, 200));
         MovieCard movieCard = new MovieCard(2075);
-//            cell.setBackground(new Color(34, 34, 34));
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieCard);
         frame.setVisible(true);
-        Scanner sk = new Scanner(System.in);
     }
     /**
      * This method is called from within the constructor to initialize the form.

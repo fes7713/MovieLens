@@ -4,17 +4,12 @@
  */
 package Icon;
 
-import Icon.AnimationThread;
-import Icon.AnimationType;
-import Icon.BaseIcon;
-import Icon.Hoverable;
+import Resource.Message;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -129,7 +124,7 @@ public class HoverableIcon extends BaseIcon implements Hoverable{
             try {
                 thread.join();
         } catch (InterruptedException ex) {
-            Logger.getLogger(BaseIcon.class.getName()).log(Level.SEVERE, null, ex);
+            Message.ERROR.printMessage(ex);
         }
         
         thread = new AnimationThread(animationType, new AnimationThread.AnimationUpdater(){
@@ -154,7 +149,7 @@ public class HoverableIcon extends BaseIcon implements Hoverable{
         try {
             thread.join();
         } catch (InterruptedException ex) {
-            Logger.getLogger(BaseIcon.class.getName()).log(Level.SEVERE, null, ex);
+            Message.ERROR.printMessage(ex);
         }
         zoomCounter = 0;
         repaint();
@@ -171,71 +166,3 @@ public class HoverableIcon extends BaseIcon implements Hoverable{
 
     }
 }
-
-
-/*
-case LINEAR_GROW_FIT ->{
-                        start = 600;
-                        target = 1200;
-                        speed = 20;
-                        acc = 1;
-                        
-                    }
-                    case LINEAR_GROW_CLICK -> {
-                        start = 400;
-                        target = 1000;
-                        speed = 30;
-                        acc = 1;
-                    }
-                    case DESC_GROW_CLICK -> {
-                                        // Grow click 37 frames Good
-//                start = 400;
-//                target = 1000;
-//                speed = 70;
-//                acc = 0.9f;
-                
-                // Grow click 30 frames
-//                start = 400;
-//                target = 1000;
-//                speed = 100;
-//                acc = 0.860989f;
-
-                // Grow click 47 frames
-//                start = 400;
-//                target = 1000;
-//                speed = 50;
-//                acc = 0.9278f;
-                        // Grow click 75 frames
-                        start = 400;
-                        target = 1000;
-                        speed = 30;
-                        acc = 0.95637d;
-                    }
-                    case LINEAR_SHRINK_CLICK -> {
-                        //Shrink Click 30 frames
-                        start = 1000;
-                        target = 400;
-                        start = 1000;
-                        speed = -20;
-                        acc = 1;
-                    }
-                    case LINEAR_SHRINK_FIT -> {
-                        // Shrink fit 30 frames
-                        start = 1200;
-                        target = 600;
-                        speed = -20;
-                        acc = 1;
-                    }
-                    case LINEAR_GROW_FROM_0 -> {
-                        // Grow water circle
-                        start = 0;
-                        target = 1000;
-                        speed = 20;
-                        acc = 1;
-                    }
-                    case DESC_GROW_FROM_0 -> {
-                        start = 0;
-                        target = 1000;
-                        speed = 20;
-                        acc = 0.99f;
-*/

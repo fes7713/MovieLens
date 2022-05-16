@@ -4,9 +4,13 @@
  */
 package Icon;
 
+import Resource.Message;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.net.MalformedURLException;
+import java.net.URL;
 import javax.swing.JFrame;
 
 /**
@@ -22,12 +26,34 @@ public class PlayIcon extends ClickableIcon {
     
     public static float PADDING_CIRCLE_PERCENTAGE = 0.75f;
     public final static Color INITAL_CIRCLE_COLOR = new Color(38, 166, 209);
-
+    private URL url;
     
     
     public PlayIcon() {
         super();
         color = INITAL_CIRCLE_COLOR;
+    }
+    
+    public void setLink(String url)
+    {
+        try {
+            this.url = new URL(url);
+            color = INITAL_CIRCLE_COLOR;
+        } catch (MalformedURLException ex) {
+            Message.ERROR.printMessage(ex);
+            color = INITAL_CIRCLE_COLOR.darker();
+        }
+        validate();
+        repaint();
+
+    }
+    
+    public void setLink(URL url)
+    {
+        this.url = url;
+        color = INITAL_CIRCLE_COLOR;
+        validate();
+        repaint();
     }
     
     public void setColor(Color color)
@@ -65,6 +91,11 @@ public class PlayIcon extends ClickableIcon {
                     (int)(height / 2 - shift)},
                 3);
     }
+    
+    @Override
+    public void onClickAction(MouseEvent e) {
+        Browser.BrowserSupport.openWebpage(url);
+    }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame();
@@ -76,4 +107,5 @@ public class PlayIcon extends ClickableIcon {
         frame.setVisible(true);
 
     }
+
 }

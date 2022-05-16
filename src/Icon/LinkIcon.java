@@ -24,16 +24,13 @@ public class LinkIcon extends ClickableIcon{
     public static final Color INITIAL_LINK_COLOR = new Color(209, 169, 38);
     public static float PADDING_RECT_PERCENTAGE = 0.7f;
     public static float ARROW_PERCENTAGE = 0.22f;
-        URL url;
+    private URL url;
     
     public LinkIcon()
     {
         super();
         color = INITIAL_LINK_COLOR;
-//        try {
-//            url = new URL("https://www.google.co.jp/a");
-//        } catch (MalformedURLException ex) {
-//            Logger.getLogger(LinkIcon.class.getName()).log(Level.SEVERE, null, ex);
+
             color = color.darker();
 //        }
     }
@@ -123,8 +120,8 @@ public class LinkIcon extends ClickableIcon{
                 new int[]{
                     (int)(width / 2d - lengthRect / 2d - shift), // bottom left
                     (int)(width / 2d - lengthRect / 2d - shift), // bottom right
-                    (int)(width / 2d - shift), // bottom middle
-                    (int)(width / 2d + thickness / 4d * 3 - shift), // bottom right
+                    (int)(width / 2d + thickness / 4d * 3- shift), // bottom middle
+                    (int)(width / 2d - shift), // bottom right
                 }
                 ,
                 new int[]{
@@ -156,26 +153,6 @@ public class LinkIcon extends ClickableIcon{
         );
         
         
-        
-        
-        
-        
-//        g2d.drawPolygon(new int[]{
-//                    (int)(width / 2d - lengthRect / 2),
-//                    (int)(width / 2d + lengthArrow),
-//                    (int)(width / 2d + lengthArrow),
-//                    (int)(width / 2d + lengthArrow - lengthHead),
-//                    (int)(width / 2d + lengthArrow)
-//                }
-//                ,             
-//                new int[]{
-//                    (int)(height / 2d + lengthRect / 2),
-//                    (int)(height / 2d - lengthArrow),
-//                    (int)(height / 2d - lengthArrow + lengthHead),
-//                    (int)(height / 2d - lengthArrow),
-//                    (int)(height / 2d - lengthArrow)
-//                },
-//                5);
         
         // Triangle on top right
         g2d.fillPolygon(new int[]{

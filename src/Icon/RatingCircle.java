@@ -5,6 +5,7 @@
 package Icon;
 
 import static Icon.BaseIcon.INITIAL_LINE_THICKNESS_PERCENTAGE;
+import Resource.Message;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -14,8 +15,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -110,16 +109,6 @@ public class RatingCircle extends HoverableIcon {
                     (int)(outerSize - thickness), 
                     (int)(outerSize - thickness), 90,  rateAngle );
         }
-            
-            
-//        if(hover)
-//            g2d.drawArc(
-//                            bgStartX + (int)(thickness * 1000f / zoomCounter), 
-//                            bgStartY + (int)(thickness * 1000f / zoomCounter), 
-//                            bgSize - (int)(thickness * 2 * 1000f / zoomCounter), 
-//                            bgSize - (int)(thickness * 2 * 1000f / zoomCounter), 90, rateAngle);
-        
-            
 
         // Rating strings
         Font fm = new Font("caribri" , Font.PLAIN , fontSize);
@@ -132,32 +121,6 @@ public class RatingCircle extends HoverableIcon {
         drawStringCenter(g2d, "/ 10", bgStartX + (int)(bgSize / 20f * 13), bgStartY + (int)(bgSize / 20f * 9));
     }
     
-    
-//    @Override
-//    public void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//        Graphics2D g2d = (Graphics2D)g;
-//        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//        
-//        
-//        // Guid Lines/
-//        // Uncomment it to show lines
-////        g2d.setColor(Color.BLACK);
-////        g2d.drawLine(
-////                bgStartX + bgSize / 2 + (int)(Math.cos(Math.toRadians(-rateAngle - 90)) * (innerSize + thickness) / 2), 
-////                0, 
-////                bgStartX + bgSize / 2 + (int)(Math.cos(Math.toRadians(-rateAngle - 90)) * (innerSize + thickness) / 2), 
-////                height
-////        );
-////        
-////        g2d.drawLine(
-////                0, 
-////                bgStartY + bgSize / 2 + (int)(Math.sin(Math.toRadians(-rateAngle - 90)) * (innerSize + thickness) / 2), 
-////                width, 
-////                bgStartY + bgSize / 2 + (int)(Math.sin(Math.toRadians(-rateAngle - 90)) * (innerSize + thickness) / 2)
-////        );
-//
-//    }
     
     public void setRating(float rateOutOf10)
     {
@@ -177,7 +140,7 @@ public class RatingCircle extends HoverableIcon {
             try {
                 ratingAnimationThread.join();
         } catch (InterruptedException ex) {
-            Logger.getLogger(BaseIcon.class.getName()).log(Level.SEVERE, null, ex);
+            Message.ERROR.printMessage(ex);
         }
         
         super.onHoverEnterAction(e);
@@ -204,7 +167,7 @@ public class RatingCircle extends HoverableIcon {
         try {
             ratingAnimationThread.join();
         } catch (InterruptedException ex) {
-            Logger.getLogger(BaseIcon.class.getName()).log(Level.SEVERE, null, ex);
+            Message.ERROR.printMessage(ex);
         }
         ratingAnimationRatio = 0;
         repaint();

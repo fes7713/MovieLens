@@ -5,11 +5,11 @@
 package Output.ListView.LinearView;
 
 import Output.ListView.MovieListView;
+import Repository.Repository;
 import Repository.SearchMovies;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JFrame;
-import Repository.Repository;
 
 /**
  *
@@ -41,16 +41,11 @@ public class MovieLinearPanel extends MovieListView {
         MovieLinearPanel movieListPanel = new MovieLinearPanel(10, 5, (int start, int size)->{
             return Repository.findTopRatedMovieIds(start, size);
         });
-//            cell.setBackground(new Color(34, 34, 34));
+        
         frame.setBackground(new Color(34, 34, 34));
         frame.add(movieListPanel);
         frame.setVisible(true);
-//        Scanner sk = new Scanner(System.in);
-//        while(true)
-//        {
-//            if(sk.nextInt() == 1)
-//                frame.repaint();
-//        }
+
     }
     /**
      * This method is called from within the constructor to initialize the form.
