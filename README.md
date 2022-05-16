@@ -103,6 +103,12 @@ This is my favorite icon in this project. It animates when mouses hovers on it a
 
 <img width="741" alt="image" src="https://user-images.githubusercontent.com/71058334/168521578-d203501c-1564-42b3-999e-1fe421f8fcf1.png" width=600px>
 
+# Database
+I used AWS RDS as my database storage for this project. I had an experience with AWS before so I did not have any problem with DB in this project. However, I could try integrating SQL in this apprication like using SQLite for example. 
+
+Here is the database structure for this project. 
+
+<img width="489" alt="image" src="https://user-images.githubusercontent.com/71058334/168521993-32824135-29dc-41ea-96f7-fc23f8de543f.png" width=600px>
 
 
 
