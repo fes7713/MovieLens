@@ -154,7 +154,7 @@ public class MovieTopicListPanel extends javax.swing.JPanel {
         topicLabel = new javax.swing.JLabel();
         searchField = new javax.swing.JTextField();
         searchIcon1 = new Icon.SearchIcon(searchField);
-        movieScrollPanel1 = new Output.ListView.ScrollView.MovieScrollPanel(
+        movieScrollPanel1 = new Output.ScrollView.MovieScrollPanel(
             size, 6, type, (int start, int size)->{
                 if(movie != null)
                 {

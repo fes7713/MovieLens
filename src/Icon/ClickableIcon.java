@@ -4,6 +4,8 @@
  */
 package Icon;
 
+import Icon.AnimationType;
+import Icon.Clickable;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.net.MalformedURLException;

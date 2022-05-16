@@ -4,6 +4,10 @@
  */
 package Icon;
 
+import Icon.AnimationThread;
+import Icon.AnimationType;
+import Icon.BaseIcon;
+import Icon.Hoverable;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;

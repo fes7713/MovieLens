@@ -4,11 +4,11 @@
  */
 package Output.DetailedView;
 
-import Output.ScrollView.Scroll;
+import Output.ListView.ScrollView.Scroll;
+import Repository.Repository;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JFrame;
-import movielens.Repository;
 
 /**
  *
@@ -60,7 +60,7 @@ public class MovieScrollDetailPanel extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         movieDetailPanel1 = new Output.DetailedView.MovieDetailPanel(movieId);
         movieTopicListPanel1 = new Output.ListView.MovieTopicListPanel(Scroll.LINEAR, Repository.findMovieById(movieId));
-        tagGenrePanel2 = new Output.DetailedView.TagGenrePanel(movieId);
+        tagGenrePanel2 = new Output.IconView.TagGenrePanel(movieId);
 
         scrollPane.getVerticalScrollBar().setUnitIncrement(25);
 
@@ -110,6 +110,6 @@ public class MovieScrollDetailPanel extends javax.swing.JPanel {
     private Output.DetailedView.MovieDetailPanel movieDetailPanel1;
     private Output.ListView.MovieTopicListPanel movieTopicListPanel1;
     private javax.swing.JScrollPane scrollPane;
-    private Output.DetailedView.TagGenrePanel tagGenrePanel2;
+    private Output.IconView.TagGenrePanel tagGenrePanel2;
     // End of variables declaration//GEN-END:variables
 }

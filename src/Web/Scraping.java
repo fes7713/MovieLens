@@ -6,7 +6,7 @@ package Web;
 
 import Resource.Message;
 import java.io.IOException;
-import movielens.Repository;
+import Repository.Repository;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

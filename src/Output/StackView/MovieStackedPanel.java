@@ -4,15 +4,13 @@
  */
 package Output.StackView;
 
-import Output.DetailedView.MovieDetailPanel;
 import Output.DetailedView.MovieScrollDetailPanel;
 import Output.ListView.MovieTopicListPanel;
-import Output.ScrollView.Scroll;
+import Output.ListView.ScrollView.Scroll;
 import Repository.SearchMovies;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.util.Scanner;
 import java.util.Stack;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -176,26 +174,8 @@ public class MovieStackedPanel extends javax.swing.JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(1000, 800));
         MovieStackedPanel stackPanel = new MovieStackedPanel(Scroll.GRID);
-//            cell.setBackground(new Color(34, 34, 34));
-//        frame.setBackground(new Color(34, 34, 34));
         frame.add(stackPanel);
         frame.setVisible(true);
-        Scanner sk = new Scanner(System.in);
-        while(true)
-        {
-            int i;
-            if((i = sk.nextInt()) != 0)
-            {
-                stackPanel.add(new MovieDetailPanel(i));
-                ((CardLayout)stackPanel.getLayout()).next(stackPanel);
-                System.out.println(stackPanel.getComponentCount());
-            }
-            else{
-//                ((CardLayout)stackPanel.getLayout()).previous(stackPanel);
-                stackPanel.remove(stackPanel.getComponentCount() - 1);
-                System.out.println(stackPanel.getComponentCount());
-            }
-        }
     }
 
     /**

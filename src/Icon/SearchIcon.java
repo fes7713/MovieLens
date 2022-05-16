@@ -5,7 +5,7 @@
 package Icon;
 
 import Output.ListView.MovieTopicListPanel;
-import Output.ScrollView.Scroll;
+import Output.ListView.ScrollView.Scroll;
 import Output.StackView.MovieStackedPanel;
 import java.awt.Color;
 import java.awt.Dimension;

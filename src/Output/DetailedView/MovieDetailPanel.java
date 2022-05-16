@@ -5,11 +5,11 @@
 package Output.DetailedView;
 
 import Data.Movie;
+import Repository.Repository;
 import Web.Scraping;
 import java.awt.Dimension;
 import java.util.Scanner;
 import javax.swing.JFrame;
-import movielens.Repository;
 import org.jsoup.nodes.Element;
 
 /**

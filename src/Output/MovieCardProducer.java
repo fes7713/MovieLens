@@ -2,11 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Output.DetailedView;
+package Output;
 
 import Data.Movie;
-import Output.MovieCard;
-import Output.ListView.GridView.MovieGridPanel;
+import Output.ListView.MovieListView;
 import java.util.List;
 import Repository.Repository;
 
@@ -14,13 +13,13 @@ import Repository.Repository;
  *
  * @author fes77
  */
-public class AnimationCounter implements Runnable {
+public class MovieCardProducer implements Runnable {
         private int movieId;
         List<MovieCard> rtnList;
-        MovieGridPanel container;
+        MovieListView container;
         boolean add2Container;
         
-        public AnimationCounter(Integer movieId, List<MovieCard> rtnList, MovieGridPanel container, boolean add2Container) 
+        public MovieCardProducer(Integer movieId, List<MovieCard> rtnList, MovieListView container, boolean add2Container) 
         { 
             this.movieId = movieId;
             this.rtnList = rtnList;
@@ -28,10 +27,11 @@ public class AnimationCounter implements Runnable {
             this.add2Container = add2Container;
         }
         
+        
         @Override
         public void run() {
             Movie movie = Repository.findMovieById(movieId);
-            MovieCard card = new MovieCard(movie);
+            MovieCard card = new MovieCard();
             
             synchronized(rtnList)
             {
@@ -49,6 +49,7 @@ public class AnimationCounter implements Runnable {
     //                System.out.println("Container size : " + container.getComponentCount());
                 }
             }
+            card.setMovie(movie);
         }
 }
     
