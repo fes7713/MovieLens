@@ -110,7 +110,20 @@ Here is the database structure for this project.
 
 <img width="489" alt="image" src="https://user-images.githubusercontent.com/71058334/168521993-32824135-29dc-41ea-96f7-fc23f8de543f.png" width=600px>
 
+# Future improvement
+- Since it was my first multithreaded apprication project, there are some parts that I think I could use thread to improve speed. For some database operation, I used main thread to load data but I think I can fully offload IO related operations to worker threads in the future. 
 
+- I like OOP programming and I used a lot of classes and interfaces to manage movie information. In the last semester I learned more about OOP and this time I tried to use more interface than before. It was very good practice but I feel that this time, my code is little messy and especially naming of classes are horrible I feel. I tried to group each class files by introducing packages to the project files and I would liek to improve file management more because i feel that I waisted so much time looking for a specific file.
+
+- Also, in this project, I spent too much time on UI designing so I hope I can improve designing steps in the future.
+
+- I did not have mich time so I could not do it this time but I could try more functionaloties using DB. For example, I first planned to make fovarite list and play list. I would be very easily just by creating new relational table in DB. Also, adding new rating from user or tag to movie would have been great function too.
+
+- I made desktop application this time but I want to try smart phone application in the future since it would come in more handy in that way.
+
+
+# Impression
+I really enjoyed this project although I spend whole 10 days in this project. Especially, trying multithreading in my application was amazing and i would definitly use more in my game programming in the future. Making UI always takes me a lot of time but it was definitly enjoyablbe. I think that this project was perfect dificult for me because it had both component of designing and core programming and topic was my favorite (GUI and database) and I learned so much stuff from this project.
 
 
 
