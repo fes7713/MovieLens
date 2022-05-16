@@ -53,3 +53,7 @@ In my application, I developed user friendly icons and simple designs.
 3. Brief animation for clickable icons
 4. Loading animation
 
+
+
+https://user-images.githubusercontent.com/71058334/168516884-18c97b9a-3d09-4806-9b2d-ad21d4d868fb.mp4
+
