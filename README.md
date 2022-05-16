@@ -22,10 +22,10 @@ release date and duration. Circle icon on bottom right of card show rating of mo
 | Tag search | Just like genre search, user can search movies by tag created by other users. Color from green to red shows the popularity of tag. Green tag indicates that many users puts the same tag on the movie.
 | Keyword search | By typing keyword in search box located at the top of list view and middle of detailed view, users can search moviews by name.
 
-| Arg | Description | Status
+| Keyword | Description | Status
 ---- | ---- | ----
-| DEFAULT_LEN | Length of maximum message | Optional
-| DEFAULT_PORT | Port number for server | Optional
-| BUFFER_LEN | Size of connection buffer | Compulsary
-| THREAD_NUM | Number of threads | Compulsary
-| TERMINATOR | Terminator charactor to close client | Compulsary
+| List view of movies | Length of maximum message | Optional
+| Movie Thumnails | Port number for server | Optional
+| Detailed view of movies | Size of connection buffer | Compulsary
+| Related movies | Number of threads | Compulsary
+| Tag search | Terminator charactor to close client | Compulsary
