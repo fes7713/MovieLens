@@ -55,6 +55,8 @@ In my application, I developed user friendly icons and simple designs.
 ![ezgif com-gif-maker (8)](https://user-images.githubusercontent.com/71058334/168517259-1d1ac6c4-1faf-4200-bd6c-6999cfd6fe19.gif)
 
 3. Loading animation
+
+
 ![ezgif com-gif-maker (9)](https://user-images.githubusercontent.com/71058334/168518073-5629ce61-7654-4b15-8dc5-bdb149aa6ab4.gif)
 
 I could use letters to tell user to wait for loading or give instruction that icon is interactable but it is not smart way. In term of giving instructions, icons are extremely useful because it does not require any written information and does not force user to focus on those instruction to understand.
@@ -71,6 +73,8 @@ I used threads mainly for IO operations.
 3. Loading image from internet.
 
 With help of threads, I could load image much faster and update UI independent to IO (Loading animation) -> Run animation in one thread and load image in another thread. Also, multiple images can be loaded at the same time, it was extremely useful and satisfying to explore movies without waiting.
+
+
 ![ezgif com-gif-maker (10)](https://user-images.githubusercontent.com/71058334/168519641-e4ba61f4-32f9-4256-ba50-0bc2b8356337.gif)
 
 
