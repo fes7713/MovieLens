@@ -7,8 +7,6 @@ package Repository;
 
 import Data.Genre;
 import Data.Movie;
-import Repository.Keys;
-import Repository.Tables;
 import Resource.Message;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -1006,8 +1004,16 @@ public class Repository {
         
         
         // TODO code application logic here
-        Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
-            
+//        Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
+        Repository.connect(Repository.Driver.MySQL ,"127.0.0.1", 3306, "mydb" , "root", "rsTTMA2sHyUL");
+        if(Repository.findTagsByIdOrdered(1).isEmpty())
+        {
+            Repository.insertMoviesFromFile();
+            Repository.insertRatingFromFile();
+            Repository.insertTagFromFile();
+            Repository.insertLinkFromFile();
+        }
+        
 //        System.out.println(Repository.findRateCountById(1));
 
 //        Repository.loadMovies(false, false);
