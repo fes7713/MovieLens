@@ -63,7 +63,8 @@ public class MovieCard extends javax.swing.JPanel {
     
     public static void main(String[] args)
     {
-        Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
+//        Repository.connect(Repository.Driver.MySQL ,"movie-lens.cpzst9uo9qun.ap-northeast-1.rds.amazonaws.com", 3306, "mydb" , "root", "rsTTMA2sHyUL");
+        Repository.connect(Repository.Driver.MySQL ,"127.0.0.1", 3306, "mydb" , "root", "rsTTMA2sHyUL");
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(new Dimension(100, 200));
